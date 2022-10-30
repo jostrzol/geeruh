@@ -5,7 +5,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo "branch: ${env.BRANCH_NAME}"
+                echo "job: ${env.JOB_NAME}"
                 sh 'java --version'
                 echo 'Building...'
             }
@@ -18,7 +18,7 @@ pipeline {
 
         stage('Deploy') {
             when {
-                expression { env.BRANCH_NAME == 'main' }
+                expression { env.JOB_NAME == 'Deployment' }
             }
             steps {
                 echo 'Deploying...'
