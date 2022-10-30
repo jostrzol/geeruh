@@ -3,7 +3,7 @@ pipeline {
     docker { image 'openjdk:17-jdk-slim' }
   }
   stages {
-    stage('Config Test 4') {
+    stage('Config Test 5') {
       steps {
         sh 'java --version'
       }
