@@ -22,23 +22,52 @@ pipeline {
             }
         }
 
-        stage('Checkstyle') {
-            steps {
-                echo './gradlew checkstyleMain'
-            }
-        }
+        stage('Tests') {
+            parallel {
+                stage('Checkstyle') {
+                    steps {
+                        sh './gradlew checkstyleMain'
+                    }
+                }
 
-        stage('Test') {
-            steps {
-                echo './gradlew test'
+                stage('Test') {
+                    steps {
+                        sh './gradlew test'
+                    }
+                }
             }
         }
-        stage('Deploy') {
-            when {
-                expression { env.JOB_NAME == 'Deployment' }
-            }
-            steps {
-                echo 'Deploying...'
+        stage('Final steps') {
+            parallel {
+                stage('PR Coverage to Github') {
+                    steps {
+                        script {
+                            currentBuild.result = 'SUCCESS'
+                        }
+                        step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+                    }
+                }
+
+                stage('Main Coverage to Github') {
+                    when {
+                        expression { env.JOB_NAME == 'Deployment' }
+                    }
+                    steps {
+                        script {
+                            currentBuild.result = 'SUCCESS'
+                        }
+                        step([$class: 'MasterCoverageAction', scmVars: [GIT_URL: env.GIT_URL]])
+                    }
+                }
+
+                stage('Deploy') {
+                    when {
+                        expression { env.JOB_NAME == 'Deployment' }
+                    }
+                    steps {
+                        echo 'Deploying...'
+                    }
+                }
             }
         }
     }
