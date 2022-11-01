@@ -12,7 +12,18 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'Testing...'
+                echo './gradlew test'
+            }
+            post {
+                success {
+                    script {
+                        // if we are in a PR
+                        if (env.CHANGE_ID) {
+                            // TODO: change from fixed to SonarQube (requires SonarQube configuration)
+                            publishCoverageGithub(filepath:'build/reports/jacoco/test/jacocoTestReport.xml', coverageXmlType: 'jacoco', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.10' ], coverageRateType: 'Line')
+                        }
+                    }
+                }
             }
         }
 
