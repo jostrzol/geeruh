@@ -6,7 +6,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'java'
-    id: 'maven-publish'
+    id 'maven-publish'
     id 'com.gradle.plugin-publish' version '1.0.0-rc-1'
 }
 
