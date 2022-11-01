@@ -24,23 +24,25 @@ pipeline {
 
         stage('Checkstyle') {
             steps {
-                echo './gradlew checkstyleMain'
+                sh './gradlew checkstyleMain'
             }
         }
 
         stage('Test') {
             steps {
-                echo './gradlew test'
-            }
-            post {
-                success {
-                    script {
-                        // TODO: change from fixed to SonarQube (requires SonarQube configuration)
-                        publishCoverageGithub(filepath:'build/reports/jacoco/test/jacocoTestReport.xml', coverageXmlType: 'jacoco', comparisonOption: [ value: 'optionFixedCoverage', fixedCoverage: '0.10' ], coverageRateType: 'Line')
-                    }
-                }
+                sh './gradlew test'
             }
         }
+
+        stage('PR Coverage to Github') {
+            steps {
+                script {
+                    currentBuild.result = 'SUCCESS'
+                 }
+                step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            }
+        }
+
         stage('Deploy') {
             when {
                 expression { env.JOB_NAME == 'Deployment' }
