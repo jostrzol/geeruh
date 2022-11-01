@@ -6,8 +6,8 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'java'
+    id: 'maven-publish'
 }
-apply from: 'maven-publish'
 
 group = 'pl.edu.pw.elka.paprykaisalami'
 version = '0.0.1-SNAPSHOT'
