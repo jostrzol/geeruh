@@ -49,9 +49,10 @@ tasks.named('test') {
 publishing {
     publications{
         maven(MavenPublication){
+            groupId = 'org.gradle.sample'
             artifactId = "geeruh"
-            from components.java
             version = '1'
+            from components.java
         }
     }
     repositories {
