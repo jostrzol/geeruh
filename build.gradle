@@ -6,6 +6,7 @@ plugins {
     id 'jacoco'
     id 'checkstyle'
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'pl.edu.pw.elka.paprykaisalami'
@@ -43,4 +44,21 @@ jacocoTestReport {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+publishing {
+    publications{
+        maven(MavenPublication){
+            artifactId = "geeruh"
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url = "http://20.4.227.77:8081/nexus/content/repositories/gradle-nexus-repo"
+            credentials {
+                username = "nexusUsername" 
+                password = "nexusPassword"
+            }
+        }
+    }
 }
