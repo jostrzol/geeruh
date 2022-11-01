@@ -38,8 +38,20 @@ pipeline {
             steps {
                 script {
                     currentBuild.result = 'SUCCESS'
-                 }
+                }
                 step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            }
+        }
+
+        stage('Main Coverage to Github') {
+            when {
+                expression { env.JOB_NAME == 'Deployment' }
+            }
+            steps {
+                script {
+                    currentBuild.result = 'SUCCESS'
+                }
+                step([$class: 'MasterCoverageAction', scmVars: [GIT_URL: env.GIT_URL]])
             }
         }
 
