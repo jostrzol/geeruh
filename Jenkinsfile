@@ -40,6 +40,9 @@ pipeline {
         stage('Final steps') {
             parallel {
                 stage('PR Coverage to Github') {
+                    when {
+                        expression { env.JOB_NAME != 'Deployment' }
+                    }
                     steps {
                         script {
                             currentBuild.result = 'SUCCESS'
