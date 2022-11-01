@@ -10,6 +10,13 @@ pipeline {
                 echo 'Building...'
             }
         }
+
+        stage('Checkstyle') {
+            steps {
+                echo './gradlew checkstyleMain'
+            }
+        }
+
         stage('Test') {
             steps {
                 echo 'Testing...'
