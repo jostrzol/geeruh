@@ -49,15 +49,13 @@ tasks.named('test') {
 publishing {
     publications{
         maven(MavenPublication){
-            groupId = 'org.gradle.sample'
-            artifactId = "geeruh"
-            version = '1'
-            from components.java
+            components.java
         }
     }
     repositories {
         maven {
-            url = "http://20.4.227.77:8081/nexus/content/repositories/gradle-nexus-repo"
+            url = "http://20.4.227.77:8081/repository/gradle-nexus-repo/"
+            allowInsecureProtocol = true
             credentials {
                 username = "nexusUsername" 
                 password = "nexusPassword"
