@@ -70,7 +70,7 @@ pipeline {
                     }
                     steps {
                         echo 'Deploying...'
-                        sh "./gradlew -PnexusUsername=$NEXUS_USR -PnexusPassword=$NEXUS_PSW publish"
+                        sh "./gradlew -PnexusUsername=${env.NEXUS_USR} -PnexusPassword=${env.NEXUS_PSW} publish"
                     }
                 }
             }
