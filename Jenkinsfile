@@ -8,6 +8,7 @@ pipeline {
     environment {
         HOME = '/home/azureuser'
         GRADLE_CACHE = '/tmp/gradle-user-home'
+        NEXUS = credentials('nexus-user-credentials')
     }
     stages {
         stage('Load cache') {
@@ -69,6 +70,7 @@ pipeline {
                     }
                     steps {
                         echo 'Deploying...'
+                        sh "./gradlew -PnexusUsername=$NEXUS_USR -PnexusPassword=$NEXUS_PSW publish"
                     }
                 }
             }
