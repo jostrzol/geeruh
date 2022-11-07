@@ -14,6 +14,12 @@ public class GeeruhController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GeeruhController.class);
 
+    @GetMapping
+    public Map<String, String> helloWorld() {
+        LOGGER.info("Handling helloWorld");
+        return Map.of("hello", "world");
+    }
+
     @GetMapping("user")
     public Map<String, String> helloUser() {
         LOGGER.info("Handling helloUser");
