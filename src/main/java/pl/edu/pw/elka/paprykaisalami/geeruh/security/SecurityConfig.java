@@ -34,6 +34,8 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/hello").permitAll()
+                .antMatchers("/hello/user").hasRole("USER")
+                .antMatchers("/hello/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -77,14 +79,20 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        UserDetails userDetails = User.builder()
+        UserDetails user = User.builder()
                 .passwordEncoder(passwordEncoder()::encode)
                 .username("user")
                 .password("password")
                 .roles("USER")
                 .build();
+        UserDetails admin = User.builder()
+                .passwordEncoder(passwordEncoder()::encode)
+                .username("admin")
+                .password("password")
+                .roles("ADMIN", "USER")
+                .build();
 
-        return new InMemoryUserDetailsManager(userDetails);
+        return new InMemoryUserDetailsManager(user, admin);
     }
 
     @Bean
