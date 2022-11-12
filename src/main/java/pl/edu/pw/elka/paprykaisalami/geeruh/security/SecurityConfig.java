@@ -31,6 +31,8 @@ public class SecurityConfig {
             )
             throws Exception {
         http
+                .cors()
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/hello").permitAll()
@@ -39,10 +41,8 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(
-                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                );
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
         return http.build();
     }
@@ -78,15 +78,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.builder()
-                .passwordEncoder(passwordEncoder()::encode)
+                .passwordEncoder(passwordEncoder::encode)
                 .username("user")
                 .password("password")
                 .roles("USER")
                 .build();
         UserDetails admin = User.builder()
-                .passwordEncoder(passwordEncoder()::encode)
+                .passwordEncoder(passwordEncoder::encode)
                 .username("admin")
                 .password("password")
                 .roles("ADMIN", "USER")

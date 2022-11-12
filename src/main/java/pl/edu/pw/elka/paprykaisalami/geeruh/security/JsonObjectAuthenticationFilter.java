@@ -21,7 +21,7 @@ public class JsonObjectAuthenticationFilter extends UsernamePasswordAuthenticati
         try {
             BufferedReader reader = request.getReader();
             String body = reader.lines().collect(Collectors.joining());
-            LoginCredentials authRequest = objectMapper.readValue(body, LoginCredentials.class);
+            LoginCredentialsDto authRequest = objectMapper.readValue(body, LoginCredentialsDto.class);
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     authRequest.getUsername(), authRequest.getPassword()
             );
