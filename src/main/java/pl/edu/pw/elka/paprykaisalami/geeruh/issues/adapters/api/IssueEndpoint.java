@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +30,7 @@ class IssueEndpoint {
     }
 
     @PostMapping
-    public IssueResponse create(@RequestBody final IssueRequest issueRequest) {
+    public IssueResponse create(@Valid @RequestBody final IssueRequest issueRequest) {
         return issueFacade.create(issueRequest);
     }
 }

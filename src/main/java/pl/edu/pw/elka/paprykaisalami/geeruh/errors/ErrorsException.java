@@ -19,7 +19,7 @@ public class ErrorsException extends RuntimeException {
     Set<Error> errors;
 
     public ResponseEntity<Object> toResponseEntity() {
-        val errorArray = errors.toArray(new Error[0]);
+        val errorArray = errors.toArray(Error[]::new);
         return Errors.of(errorArray)
                 .toResponseEntity(status);
     }

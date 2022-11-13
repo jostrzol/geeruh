@@ -1,21 +1,23 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api;
 
 import lombok.AllArgsConstructor;
-import lombok.Value;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import lombok.Getter;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+
 @AllArgsConstructor
-@Value
+@Getter
 class IssueRequest {
 
     @NotNull
     IssueType type;
 
-    @NotNull
+    @NotBlank
     String summary;
 
-    @Nullable
+    @Null
     String description;
 }
