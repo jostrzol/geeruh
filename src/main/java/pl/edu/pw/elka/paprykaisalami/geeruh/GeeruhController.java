@@ -1,5 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh;
 
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -18,23 +20,17 @@ import javax.persistence.Persistence;
 import pl.edu.pw.elka.paprykaisalami.geeruh.models.Status;
 import pl.edu.pw.elka.paprykaisalami.geeruh.repositories.StatusRepository;
 
+@Slf4j
+@AllArgsConstructor
 @Controller
 public class GeeruhController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GeeruhController.class);
-
-    protected static final String PERSISTANCE_UNIT = "geeruh.main.sn";
-
-    protected final EntityManagerFactory emf = Persistence.createEntityManagerFactory(PERSISTANCE_UNIT);
-
-    protected final EntityManager entityManager = emf.createEntityManager();
-
-    StatusRepository statusRepository = new StatusRepository(entityManager);
+    private final StatusRepository statusRepository;
 
 
     @RequestMapping(value = "/", method = GET)
     public @ResponseBody List<Status> getGreeting() {
-        LOGGER.info("Handling getGreeting");
+        log.info("Handling getGreeting");
         // var status = new Status("kod", "name");
         var status = new Status();
         status.setId(123);
