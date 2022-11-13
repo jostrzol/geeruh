@@ -9,6 +9,7 @@ pipeline {
         HOME = '/home/azureuser'
         GRADLE_CACHE = '/tmp/gradle-user-home'
         NEXUS = credentials('nexus-user-credentials')
+        LAUNCH = credentials('launch-azure')
     }
     stages {
         stage('Load cache') {
@@ -78,8 +79,15 @@ pipeline {
                     }
                     steps {
 						sh "apt-get update && apt-get install ssh -y"
-						sshagent (credentials: ['azure-launch']) {
-                        sh "ssh -tt -oStrictHostKeyChecking=no jenkins@20.86.0.224 './launch.sh'"
+						script{
+							remote = [:]
+							remote.name = "name"
+							remote.host = "20.86.0.224"
+							remote.allowAnyHosts = true
+							remote.failOnError = true
+							remote.user = env.LAUNCH_USR
+							remote.password = env.LAUNCH_PSW
+							sshCommand remote: remote, command: "./launch.sh"
 						}
                     }
                 }
