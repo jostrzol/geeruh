@@ -47,15 +47,12 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
-task sourcesJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = 'sources'
-}
 publishing {
     publications{
         maven(MavenPublication){
+            artifact ("/build/libs/geeruh-0.0.1-SNAPSHOT.jar")
+
             components.java
-            artifact sourcesJar
         }
     }
 
