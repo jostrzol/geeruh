@@ -69,8 +69,17 @@ pipeline {
                         expression { env.JOB_NAME == 'Deployment' }
                     }
                     steps {
-                        echo 'Deploying...'
                         sh "./gradlew -DnexusUsername=${env.NEXUS_USR} -DnexusPassword=${env.NEXUS_PSW} publish"
+                    }
+                }
+                stage('Launch') {
+                    when {
+                        expression { env.JOB_NAME == 'Deployment' }
+                    }
+                    steps {
+						sshagent (credentials: ['azure-launch']) {
+                        sh "ssh -tt  jenkins@20.86.0.224 'launch.sh'"
+						}
                     }
                 }
             }
