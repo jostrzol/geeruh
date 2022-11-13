@@ -50,8 +50,11 @@ publishing {
     publications{
         maven(MavenPublication){
             components.java
+            artifact sourcesJar
+            artifact javadocJar
         }
     }
+
     repositories {
         maven {
             url = "http://20.4.227.77:8081/repository/gradle-nexus-repo/"
