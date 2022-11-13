@@ -79,7 +79,7 @@ pipeline {
                     steps {
 						sh "apt-get update && apt-get install ssh -y"
 						sshagent (credentials: ['azure-launch']) {
-                        sh "ssh -tt  jenkins@20.86.0.224 'launch.sh'"
+                        sh "ssh -tt  jenkins@20.86.0.224 './launch.sh'"
 						}
                     }
                 }
