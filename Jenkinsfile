@@ -71,7 +71,6 @@ pipeline {
                     }
                     steps {
                         sh "./gradlew -DnexusUsername=${env.NEXUS_USR} -DnexusPassword=${env.NEXUS_PSW} publish"
-						sh "pwd"
                     }
                 }
                 stage('Launch') {
