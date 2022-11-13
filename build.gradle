@@ -46,12 +46,16 @@ jacocoTestReport {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
 publishing {
     publications{
         maven(MavenPublication){
             components.java
             artifact sourcesJar
-            artifact javadocJar
         }
     }
 
