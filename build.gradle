@@ -32,6 +32,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Nullability annotations
+    implementation 'org.jetbrains:annotations:23.0.0'
 }
 
 test {
