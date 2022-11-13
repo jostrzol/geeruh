@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.val;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ErrorsException;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
@@ -21,10 +22,6 @@ class IssueFacade {
 
     private final IssueService issueService;
 
-    private static ResponseStatusException notFound() {
-        return new ResponseStatusException(NOT_FOUND, "Issue not found");
-    }
-
     public List<IssueResponse> list() {
         val issues = issueService.list();
         return issues.stream()
@@ -34,7 +31,7 @@ class IssueFacade {
 
     public IssueResponse get(UUID issueId) {
         val issue = issueService.get(IssueId.of(issueId))
-                .orElseThrow(IssueFacade::notFound);
+                .orElseThrow(() -> ErrorsException.notFound("issue"));
         return IssueResponse.of(issue);
     }
 
