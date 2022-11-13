@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,11 +54,12 @@ public class SecurityConfig {
 
     @Bean
     public UsernamePasswordAuthenticationFilter authenticationFilter(
+            ObjectMapper objectMapper,
             AuthenticationSuccessHandler authenticationSuccessHandler,
             AuthenticationFailureHandler authenticationFailureHandler,
             AuthenticationManager authenticationManager
     ) {
-        JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter();
+        JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter(objectMapper);
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         filter.setAuthenticationFailureHandler(authenticationFailureHandler);
         filter.setAuthenticationManager(authenticationManager);

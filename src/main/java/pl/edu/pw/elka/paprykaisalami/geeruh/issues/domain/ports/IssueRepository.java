@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports;
 
 
+import org.jetbrains.annotations.Nullable;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
@@ -16,5 +17,5 @@ public interface IssueRepository {
 
     Optional<Issue> findById(IssueId issueId);
 
-    Issue save(IssueType type, Summary summary, Description description);
+    Issue save(IssueType type, Summary summary, @Nullable Description description);
 }

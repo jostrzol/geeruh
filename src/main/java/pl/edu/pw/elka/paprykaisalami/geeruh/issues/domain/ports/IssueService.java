@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports;
 
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
@@ -25,7 +26,7 @@ public class IssueService {
         return issueRepository.findById(issueId);
     }
 
-    public Issue create(IssueType type, Summary summary, Description description) {
+    public Issue create(IssueType type, Summary summary, @Nullable Description description) {
         return issueRepository.save(type, summary, description);
     }
 }

@@ -36,10 +36,11 @@ class IssueFacade {
     }
 
     public IssueResponse create(IssueRequest issueRequest) {
+        val description = issueRequest.getDescription();
         val issue = issueService.create(
                 issueRequest.getType(),
                 Summary.of(issueRequest.getSummary()),
-                Description.of(issueRequest.getDescription())
+                description == null ? null : Description.of(description)
         );
         return IssueResponse.of(issue);
     }

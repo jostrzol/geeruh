@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.inmemoryrepository;
 
 import lombok.val;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.*;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
@@ -25,7 +26,7 @@ public class InMemoryIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Issue save(IssueType type, Summary summary, Description description) {
+    public Issue save(IssueType type, Summary summary, @Nullable Description description) {
         val issueId = IssueId.of(UUID.randomUUID());
         val issue = Issue.builder()
                 .issueId(issueId)

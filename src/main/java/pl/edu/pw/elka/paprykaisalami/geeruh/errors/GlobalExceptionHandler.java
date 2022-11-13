@@ -25,24 +25,6 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
-    protected @NotNull ResponseEntity<Object> handleExceptionInternal(
-            @NotNull Exception ex,
-            Object body,
-            @NotNull HttpHeaders headers,
-            @NotNull HttpStatus status,
-            @NotNull WebRequest request) {
-        log.error("Internal Server Error!", ex);
-
-        val error = Error.builder()
-                .code(ErrorCodes.INTERNAL_ERROR)
-                .message("Server internal error")
-                .build();
-
-        return Errors.of(error)
-                .toResponseEntity(status);
-    }
-
-    @Override
     protected @NotNull ResponseEntity<Object> handleHttpMessageNotReadable(
             @NotNull HttpMessageNotReadableException ex,
             @NotNull HttpHeaders headers,
@@ -105,4 +87,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .toResponseEntity(status);
     }
 
+    @Override
+    protected @NotNull ResponseEntity<Object> handleExceptionInternal(
+            @NotNull Exception ex,
+            Object body,
+            @NotNull HttpHeaders headers,
+            @NotNull HttpStatus status,
+            @NotNull WebRequest request) {
+        log.error("Internal Server Error!", ex);
+
+        val error = Error.builder()
+                .code(ErrorCodes.INTERNAL_ERROR)
+                .message("Server internal error")
+                .build();
+
+        return Errors.of(error)
+                .toResponseEntity(status);
+    }
+
+    @ExceptionHandler(Exception.class)
+    protected @NotNull ResponseEntity<Object> handleException(
+            @NotNull Exception ex
+    ) {
+        log.error("Internal Server Error!", ex);
+
+        val error = Error.builder()
+                .code(ErrorCodes.INTERNAL_ERROR)
+                .message("Server internal error")
+                .build();
+
+        return Errors.of(error)
+                .toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
