@@ -24,21 +24,21 @@ pipeline {
             }
         }
 
-        // stage('Tests') {
-        //     parallel {
-        //         stage('Checkstyle') {
-        //             steps {
-        //                 sh './gradlew checkstyleMain'
-        //             }
-        //         }
+        stage('Tests') {
+            parallel {
+                stage('Checkstyle') {
+                    steps {
+                        sh './gradlew checkstyleMain'
+                    }
+                }
 
-        //         stage('Test') {
-        //             steps {
-        //                 sh './gradlew test'
-        //             }
-        //         }
-        //     }
-        // }
+                stage('Test') {
+                    steps {
+                        sh './gradlew test'
+                    }
+                }
+            }
+        }
         stage('Final steps') {
             parallel {
                 stage('PR Coverage to Github') {
