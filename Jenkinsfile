@@ -82,12 +82,12 @@ pipeline {
 						script{
 							remote = [:]
 							remote.name = "name"
-							remote.host = "20.86.0.224"
+							remote.host = "34.118.59.193"
 							remote.allowAnyHosts = true
 							remote.failOnError = true
 							remote.user = env.LAUNCH_USR
 							remote.password = env.LAUNCH_PSW
-							sshCommand remote: remote, command: "nohup ./launch.sh &> /dev/null"
+							sshCommand remote: remote, command: "sudo nohup ./launch.sh &> /dev/null"
 						}
                     }
                 }
