@@ -85,10 +85,9 @@ pipeline {
 							remote.host = "34.118.59.193"
 							remote.allowAnyHosts = true
 							remote.failOnError = true
-                            remote.sudo = true
 							remote.user = env.LAUNCH_USR
 							remote.password = env.LAUNCH_PSW
-							sshCommand remote: remote, command: "nohup ./launch.sh &> /dev/null"
+							sshCommand remote: remote, command: "nohup ./launch.sh &> /dev/null", sudo: true
 						}
                     }
                 }
