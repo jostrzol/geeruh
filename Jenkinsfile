@@ -24,21 +24,21 @@ pipeline {
             }
         }
 
-        stage('Tests') {
-            parallel {
-                stage('Checkstyle') {
-                    steps {
-                        sh './gradlew checkstyleMain'
-                    }
-                }
+        // stage('Tests') {
+        //     parallel {
+        //         stage('Checkstyle') {
+        //             steps {
+        //                 sh './gradlew checkstyleMain'
+        //             }
+        //         }
 
-                stage('Test') {
-                    steps {
-                        sh './gradlew test'
-                    }
-                }
-            }
-        }
+        //         stage('Test') {
+        //             steps {
+        //                 sh './gradlew test'
+        //             }
+        //         }
+        //     }
+        // }
         stage('Final steps') {
             parallel {
                 stage('PR Coverage to Github') {
@@ -87,7 +87,7 @@ pipeline {
 							remote.failOnError = true
 							remote.user = env.LAUNCH_USR
 							remote.password = env.LAUNCH_PSW
-							sshCommand remote: remote, command: "nohup ./launch.sh" , sudo: true// &> /dev/null"
+							sshCommand remote: remote, command: "sudo nohup ./launch.sh" , sudo: true// &> /dev/null"
 						}
                     }
                 }
