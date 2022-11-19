@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Primary
 @Component
-public class PersistentIssueRepository implements IssueRepository {
+class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
 

@@ -31,7 +31,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 @ToString
 @Entity
 @Table(name = "Issues")
-public class IssuePersistent {
+class IssuePersistent {
 
     @Id
     @GeneratedValue(generator = "UUID")
