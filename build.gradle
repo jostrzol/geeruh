@@ -32,7 +32,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.hibernate:hibernate-envers'
+    implementation 'org.springframework.data:spring-data-envers'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // Nullability annotations

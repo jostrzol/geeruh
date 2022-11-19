@@ -1,13 +1,11 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.AuditReaderFactory;
-import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionType;
-import org.hibernate.envers.query.AuditEntity;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.history.Revisions;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
@@ -21,8 +19,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Timestamp;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +31,8 @@ import java.util.stream.Collectors;
 class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
+
+    IssueRevisionRepository issueRevisionRepository;
 
     EntityManager entityManager;
 
@@ -73,30 +72,16 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public Optional<ArrayList<IssueHistoryEntry>> getHistory(IssueId issueId) {
-        AuditReader auditReader = AuditReaderFactory.get(entityManager);
-        var resultList = auditReader
-                .createQuery()
-                .forRevisionsOfEntity(IssuePersistent.class, false, true)
-                .add(AuditEntity.id().eq(issueId.getValue()))
-                .getResultList();
+    public Optional<List<IssueHistoryEntry>> getHistory(IssueId issueId) {
+        Revisions<Long, IssuePersistent> revisions = issueRevisionRepository.findRevisions(issueId.getValue());
 
-        var history = new ArrayList<IssueHistoryEntry>();
-        if (resultList != null) {
-            for (Object[] d : (Collection<Object[]>) resultList) {
-                final var entity = (IssuePersistent) d[0];
-                final var revision = (DefaultRevisionEntity) d[1];
-                final var revisionType = (RevisionType) d[2];
-                var issueHistoryEntry = IssueHistoryEntry
-                        .builder()
-                        .timestamp(Timestamp.of(revision.getRevisionDate()))
-                        .historicIssue(entity.toIssue())
-                        .type(IssueHistoryEntryType.values()[revisionType.ordinal()])
-                        .build();
-                history.add(issueHistoryEntry);
-            }
-        }
+
+        var history = revisions.stream().map(rev -> IssueHistoryEntry
+                .builder()
+                .timestamp(Timestamp.of(Date.from(rev.getMetadata().getRequiredRevisionInstant())))
+                .historicIssue(rev.getEntity().toIssue())
+                .type(IssueHistoryEntryType.values()[rev.getMetadata().getRevisionType().ordinal()])
+                .build()).collect(Collectors.toList());
 
         return Optional.of(history);
     }
@@ -104,4 +89,10 @@ class PersistentIssueRepository implements IssueRepository {
 
 @Component
 interface ActualPersistentIssueRepository extends JpaRepository<IssuePersistent, UUID> {
+}
+
+@Component
+interface IssueRevisionRepository
+        extends CrudRepository<IssuePersistent, UUID>,
+        RevisionRepository<IssuePersistent, UUID, Long> {
 }

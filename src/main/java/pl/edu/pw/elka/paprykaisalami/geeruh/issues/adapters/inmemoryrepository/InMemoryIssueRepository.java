@@ -54,7 +54,7 @@ public class InMemoryIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Optional<ArrayList<IssueHistoryEntry>> getHistory(IssueId issueId) {
+    public Optional<List<IssueHistoryEntry>> getHistory(IssueId issueId) {
         return Optional.empty();
     }
 }

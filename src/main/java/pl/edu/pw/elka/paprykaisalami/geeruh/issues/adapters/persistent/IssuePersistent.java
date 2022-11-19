@@ -31,6 +31,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 @Setter
 @ToString
 @Entity
+@Audited
 @Table(name = "Issues")
 class IssuePersistent {
 
@@ -41,15 +42,12 @@ class IssuePersistent {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
-    @Audited
     @Column(length = 120)
     private String summary;
 
-    @Audited
     @Column(length = 1000)
     private String description;
 
-    @Audited
     @Enumerated(EnumType.ORDINAL)
     private IssueType type;
 
@@ -65,15 +63,13 @@ class IssuePersistent {
     IssuePersistent(IssueType type, Summary summary, @Nullable Description description) {
         this.summary = summary.getValue();
         this.type = type;
-        this.description = description.getValue();
+        this.description = description != null ? description.getValue() : "";
     }
 
     IssuePersistent(Issue issue) {
         this.summary = issue.getSummary().getValue();
         this.type = issue.getType();
-        if (issue.getDescription() != null) {
-            this.description = issue.getDescription().getValue();
-        }
+        this.description = issue.getDescription().getValue();
     }
 
 }

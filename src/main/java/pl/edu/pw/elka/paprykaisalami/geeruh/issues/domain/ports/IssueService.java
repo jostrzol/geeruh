@@ -43,7 +43,7 @@ public class IssueService {
         return issueRepository.update(issue);
     }
 
-    public Optional<ArrayList<IssueHistoryEntry>> getHistory(IssueId issueId) {
+    public Optional<List<IssueHistoryEntry>> getHistory(IssueId issueId) {
         return issueRepository.getHistory(issueId);
     }
 }

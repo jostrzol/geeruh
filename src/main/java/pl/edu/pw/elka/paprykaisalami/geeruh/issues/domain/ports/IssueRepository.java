@@ -22,5 +22,5 @@ public interface IssueRepository {
 
     Optional<Issue> update(Issue issue);
 
-    Optional<ArrayList<IssueHistoryEntry>> getHistory(IssueId issueId);
+    Optional<List<IssueHistoryEntry>> getHistory(IssueId issueId);
 }
