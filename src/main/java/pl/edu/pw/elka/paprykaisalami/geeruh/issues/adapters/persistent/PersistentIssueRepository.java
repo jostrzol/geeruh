@@ -1,12 +1,15 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
 import lombok.AllArgsConstructor;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.*;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
 import java.util.List;
@@ -37,10 +40,23 @@ class PersistentIssueRepository implements IssueRepository {
 
     @Transactional
     @Override
-    public Issue save(IssueType type, Summary summary, @Nullable Description description) {
+    public Issue save(IssueType type, Summary summary, Description description) {
         var issuePersistent = new IssuePersistent(type, summary, description);
         return actualRepository.save(issuePersistent)
                 .toIssue();
+    }
+
+    @Override
+    public Optional<Issue> update(Issue issue) {
+        var issuePersistentRes = actualRepository.findById(issue.getIssueId().getValue());
+        if (issuePersistentRes.isEmpty()) {
+            return Optional.empty();
+        }
+        var issuePersistent = issuePersistentRes.get();
+        issuePersistent.setDescription(issue.getDescription().getValue());
+        issuePersistent.setSummary(issue.getSummary().getValue());
+        issuePersistent.setType(issue.getType());
+        return Optional.ofNullable(actualRepository.save(issuePersistent).toIssue());
     }
 }
 

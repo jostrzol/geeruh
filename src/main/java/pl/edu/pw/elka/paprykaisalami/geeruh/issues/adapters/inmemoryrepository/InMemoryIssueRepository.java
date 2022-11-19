@@ -1,12 +1,19 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.inmemoryrepository;
 
 import lombok.val;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.*;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class InMemoryIssueRepository implements IssueRepository {
@@ -26,7 +33,7 @@ public class InMemoryIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Issue save(IssueType type, Summary summary, @Nullable Description description) {
+    public Issue save(IssueType type, Summary summary, Description description) {
         val issueId = IssueId.of(UUID.randomUUID());
         val issue = Issue.builder()
                 .issueId(issueId)
@@ -36,5 +43,11 @@ public class InMemoryIssueRepository implements IssueRepository {
                 .build();
         issues.put(issueId, issue);
         return issue;
+    }
+
+    @Override
+    public Optional<Issue> update(Issue issue) {
+        issues.put(issue.getIssueId(), issue);
+        return Optional.of(issue);
     }
 }

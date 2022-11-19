@@ -61,7 +61,15 @@ class IssuePersistent {
     IssuePersistent(IssueType type, Summary summary, @Nullable Description description) {
         this.summary = summary.getValue();
         this.type = type;
-        this.description = description != null ? description.getValue() : "";
+        this.description = description.getValue();
+    }
+
+    IssuePersistent(Issue issue) {
+        this.summary = issue.getSummary().getValue();
+        this.type = issue.getType();
+        if (issue.getDescription() != null) {
+            this.description = issue.getDescription().getValue();
+        }
     }
 
 }

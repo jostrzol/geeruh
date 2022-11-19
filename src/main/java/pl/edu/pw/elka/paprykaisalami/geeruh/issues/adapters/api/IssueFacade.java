@@ -44,4 +44,16 @@ class IssueFacade {
         );
         return IssueResponse.of(issue);
     }
+
+
+    public IssueResponse update(UUID issueId, IssueRequest issueRequest) {
+        val description = issueRequest.getDescription();
+        val issue = issueService.update(
+                IssueId.of(issueId),
+                issueRequest.getType(),
+                Summary.of(issueRequest.getSummary()),
+                description == null ? null : Description.of(description)
+        ).orElseThrow(() -> ErrorsException.notFound("issue"));;
+        return IssueResponse.of(issue);
+    }
 }

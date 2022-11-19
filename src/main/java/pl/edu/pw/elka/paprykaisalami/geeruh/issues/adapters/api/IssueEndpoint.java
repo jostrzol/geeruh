@@ -29,6 +29,11 @@ class IssueEndpoint {
         return issueFacade.get(issueId);
     }
 
+    @PostMapping("{issueId}")
+    public IssueResponse update(@PathVariable final UUID issueId, @Valid @RequestBody final IssueRequest issueRequest) {
+        return issueFacade.update(issueId, issueRequest);
+    }
+
     @PostMapping
     public IssueResponse create(@Valid @RequestBody final IssueRequest issueRequest) {
         return issueFacade.create(issueRequest);

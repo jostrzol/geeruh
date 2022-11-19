@@ -18,6 +18,6 @@ public class Issue {
     @NonNull
     Summary summary;
 
-    @Nullable
+    @NonNull
     Description description;
 }
