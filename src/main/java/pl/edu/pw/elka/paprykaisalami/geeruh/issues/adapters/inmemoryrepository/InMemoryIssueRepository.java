@@ -4,11 +4,13 @@ import lombok.val;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEntry;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,5 +51,10 @@ public class InMemoryIssueRepository implements IssueRepository {
     public Optional<Issue> update(Issue issue) {
         issues.put(issue.getIssueId(), issue);
         return Optional.of(issue);
+    }
+
+    @Override
+    public Optional<ArrayList<IssueHistoryEntry>> getHistory(IssueId issueId) {
+        return Optional.empty();
     }
 }

@@ -6,10 +6,12 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEntry;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,5 +41,9 @@ public class IssueService {
                 .description(description)
                 .build();
         return issueRepository.update(issue);
+    }
+
+    public Optional<ArrayList<IssueHistoryEntry>> getHistory(IssueId issueId) {
+        return issueRepository.getHistory(issueId);
     }
 }

@@ -17,6 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;
 import org.jetbrains.annotations.Nullable;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
@@ -40,12 +41,15 @@ class IssuePersistent {
     @Type(type = "org.hibernate.type.UUIDCharType")
     private UUID id;
 
+    @Audited
     @Column(length = 120)
     private String summary;
 
+    @Audited
     @Column(length = 1000)
     private String description;
 
+    @Audited
     @Enumerated(EnumType.ORDINAL)
     private IssueType type;
 
