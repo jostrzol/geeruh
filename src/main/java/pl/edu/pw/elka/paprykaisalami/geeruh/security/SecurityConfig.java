@@ -1,5 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -32,33 +35,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(
             HttpSecurity http,
-            UsernamePasswordAuthenticationFilter authenticationFilter
-            )
-            throws Exception {
+            UsernamePasswordAuthenticationFilter authenticationFilter,
+            @Qualifier("delegatedAuthenticationEntryPoint") AuthenticationEntryPoint authenticationEntryPoint
+    ) throws Exception {
         http
                 .cors()
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/hello").permitAll()
-                .antMatchers("/hello/user").hasRole("USER")
-                .antMatchers("/hello/admin").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+                .authenticationEntryPoint(authenticationEntryPoint);
 
         return http.build();
     }
 
     @Bean
     public UsernamePasswordAuthenticationFilter authenticationFilter(
+            ObjectMapper objectMapper,
             AuthenticationSuccessHandler authenticationSuccessHandler,
             AuthenticationFailureHandler authenticationFailureHandler,
             AuthenticationManager authenticationManager
     ) {
-        JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter();
+        JsonObjectAuthenticationFilter filter = new JsonObjectAuthenticationFilter(objectMapper);
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         filter.setAuthenticationFailureHandler(authenticationFailureHandler);
         filter.setAuthenticationManager(authenticationManager);
