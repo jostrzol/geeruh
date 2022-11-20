@@ -72,18 +72,14 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Optional<List<IssueHistoryEntry>> getHistory(IssueId issueId) {
+    public List<IssueHistoryEntry> getHistory(IssueId issueId) {
         Revisions<Long, IssuePersistent> revisions = issueRevisionRepository.findRevisions(issueId.getValue());
-
-
-        var history = revisions.stream().map(rev -> IssueHistoryEntry
+        return revisions.stream().map(rev -> IssueHistoryEntry
                 .builder()
                 .timestamp(Timestamp.of(Date.from(rev.getMetadata().getRequiredRevisionInstant())))
                 .historicIssue(rev.getEntity().toIssue())
                 .type(IssueHistoryEntryType.values()[rev.getMetadata().getRevisionType().ordinal()])
                 .build()).collect(Collectors.toList());
-
-        return Optional.of(history);
     }
 }
 

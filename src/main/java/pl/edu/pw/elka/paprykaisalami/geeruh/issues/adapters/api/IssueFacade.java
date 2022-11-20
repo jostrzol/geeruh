@@ -58,8 +58,7 @@ class IssueFacade {
     }
 
     public List<IssueHistoryResponse> getHistory(UUID issueId) {
-        val history = issueService.getHistory(IssueId.of(issueId))
-                .orElseThrow(() -> ErrorsException.notFound("issue"));
+        val history = issueService.getHistory(IssueId.of(issueId));
         return history.stream().map(IssueHistoryResponse::of).collect(Collectors.toList());
     }
 }

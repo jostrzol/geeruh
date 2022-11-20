@@ -51,7 +51,7 @@ public class IssuesPersistentTests {
         var issue = issueService.create(IssueType.BUG, Summary.of("summary"), Description.of("desc"));
         issueService.update(issue.getIssueId(), IssueType.BUG, Summary.of("summary2"), Description.of("desc2")).get();
 
-        var history = issueService.getHistory(issue.getIssueId()).get();
+        var history = issueService.getHistory(issue.getIssueId());
 
         assertThat(history).anyMatch(h-> h.getHistoricIssue().getSummary().getValue().equals("summary"));
         assertThat(history).anyMatch(h-> h.getHistoricIssue().getSummary().getValue().equals("summary2"));
