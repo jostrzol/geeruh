@@ -68,7 +68,7 @@ class PersistentIssueRepository implements IssueRepository {
         issuePersistent.setDescription(issue.getDescription().getValue());
         issuePersistent.setSummary(issue.getSummary().getValue());
         issuePersistent.setType(issue.getType());
-        return Optional.ofNullable(actualRepository.save(issuePersistent).toIssue());
+        return Optional.of(actualRepository.save(issuePersistent).toIssue());
     }
 
     @Override
