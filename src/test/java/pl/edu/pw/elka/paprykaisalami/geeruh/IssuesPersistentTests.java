@@ -26,7 +26,16 @@ public class IssuesPersistentTests {
     }
 
     @Test
-    void ChangeIssue() {
+    void ListIssue() {
+        var issue = issueService.create(IssueType.BUG, Summary.of("summary"), Description.of("desc"));
+
+        var issueList = issueService.list();
+
+        assertThat(issueList).contains(issue);
+    }
+
+    @Test
+    void UpdateIssue() {
         var issue = issueService.create(IssueType.BUG, Summary.of("summary"), Description.of("desc"));
 
         var issueUpdated = issueService.update(issue.getIssueId(), IssueType.BUG, Summary.of("summary2"), Description.of("desc2")).get();
@@ -38,7 +47,7 @@ public class IssuesPersistentTests {
     }
 
     @Test
-    void IssueAuditing() {
+    void IssueHistory() {
         var issue = issueService.create(IssueType.BUG, Summary.of("summary"), Description.of("desc"));
         issueService.update(issue.getIssueId(), IssueType.BUG, Summary.of("summary2"), Description.of("desc2")).get();
 
