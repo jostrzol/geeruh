@@ -55,6 +55,6 @@ public class InMemoryIssueRepository implements IssueRepository {
 
     @Override
     public List<IssueHistoryEntry> getHistory(IssueId issueId) {
-        return null;
+        return List.of();
     }
 }
