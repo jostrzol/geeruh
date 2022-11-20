@@ -31,8 +31,6 @@ class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
 
-    IssueRevisionRepository issueRevisionRepository;
-
     EntityManager entityManager;
 
     @Override
@@ -72,7 +70,7 @@ class PersistentIssueRepository implements IssueRepository {
 
     @Override
     public List<IssueHistoryEntry> getHistory(IssueId issueId) {
-        Revisions<Long, IssuePersistent> revisions = issueRevisionRepository.findRevisions(issueId.getValue());
+        Revisions<Long, IssuePersistent> revisions = actualRepository.findRevisions(issueId.getValue());
         return revisions.stream().map(rev -> IssueHistoryEntry
                 .builder()
                 .timestamp(Date.from(rev.getMetadata().getRequiredRevisionInstant()))
@@ -83,11 +81,7 @@ class PersistentIssueRepository implements IssueRepository {
 }
 
 @Component
-interface ActualPersistentIssueRepository extends JpaRepository<IssuePersistent, UUID> {
-}
-
-@Component
-interface IssueRevisionRepository
-        extends CrudRepository<IssuePersistent, UUID>,
+interface ActualPersistentIssueRepository extends
+        JpaRepository<IssuePersistent, UUID>,
         RevisionRepository<IssuePersistent, UUID, Long> {
 }
