@@ -29,11 +29,11 @@ public class IssueService {
         return issueRepository.findById(issueId);
     }
 
-    public Issue create(IssueType type, Summary summary, @Nullable Description description) {
+    public Issue create(IssueType type, Summary summary, Description description) {
         return issueRepository.save(type, summary, description);
     }
 
-    public Optional<Issue>  update(IssueId issueId, IssueType type, Summary summary, Description description) {
+    public Optional<Issue> update(IssueId issueId, IssueType type, Summary summary, Description description) {
         val issue = Issue.builder()
                 .issueId(issueId)
                 .type(type)

@@ -34,6 +34,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.data:spring-data-envers'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.assertj:assertj-core'
+
 
     // Nullability annotations
     implementation 'org.jetbrains:annotations:23.0.0'
