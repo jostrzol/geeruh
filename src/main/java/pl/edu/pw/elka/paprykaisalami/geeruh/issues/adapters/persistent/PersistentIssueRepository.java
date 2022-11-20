@@ -15,7 +15,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEnt
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Timestamp;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
 import javax.persistence.EntityManager;
@@ -76,7 +75,7 @@ class PersistentIssueRepository implements IssueRepository {
         Revisions<Long, IssuePersistent> revisions = issueRevisionRepository.findRevisions(issueId.getValue());
         return revisions.stream().map(rev -> IssueHistoryEntry
                 .builder()
-                .timestamp(Timestamp.of(Date.from(rev.getMetadata().getRequiredRevisionInstant())))
+                .timestamp(Date.from(rev.getMetadata().getRequiredRevisionInstant()))
                 .historicIssue(rev.getEntity().toIssue())
                 .type(IssueHistoryEntryType.values()[rev.getMetadata().getRevisionType().ordinal()])
                 .build()).collect(Collectors.toList());

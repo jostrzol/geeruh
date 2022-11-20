@@ -21,7 +21,7 @@ class IssueHistoryResponse {
     public static IssueHistoryResponse of(IssueHistoryEntry issueHistoryEntry) {
         return IssueHistoryResponse.builder()
                 .historicIssue(IssueResponse.of(issueHistoryEntry.getHistoricIssue()))
-                .timestamp(issueHistoryEntry.getTimestamp().getValue())
+                .timestamp(issueHistoryEntry.getTimestamp())
                 .type(issueHistoryEntry.getType())
                 .build();
     }
