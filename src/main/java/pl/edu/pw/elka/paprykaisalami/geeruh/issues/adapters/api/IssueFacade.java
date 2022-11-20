@@ -40,7 +40,7 @@ class IssueFacade {
         val issue = issueService.create(
                 issueRequest.getType(),
                 Summary.of(issueRequest.getSummary()),
-                description == null ? null : Description.of(description)
+                Description.of(description == null ? "" : description)
         );
         return IssueResponse.of(issue);
     }
@@ -52,7 +52,7 @@ class IssueFacade {
                 IssueId.of(issueId),
                 issueRequest.getType(),
                 Summary.of(issueRequest.getSummary()),
-                description == null ? null : Description.of(description)
+                Description.of(description == null ? "" : description)
         ).orElseThrow(() -> ErrorsException.notFound("issue"));;
         return IssueResponse.of(issue);
     }

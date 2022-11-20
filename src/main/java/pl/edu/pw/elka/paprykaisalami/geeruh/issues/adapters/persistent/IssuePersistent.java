@@ -60,7 +60,7 @@ class IssuePersistent {
                 .build();
     }
 
-    IssuePersistent(IssueType type, Summary summary, @Nullable Description description) {
+    IssuePersistent(IssueType type, Summary summary, Description description) {
         this.summary = summary.getValue();
         this.type = type;
         this.description = description != null ? description.getValue() : "";
