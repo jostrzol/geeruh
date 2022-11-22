@@ -27,7 +27,7 @@ class IssueResponse {
                 .issueId(issue.getIssueId().getValue())
                 .type(issue.getType())
                 .summary(issue.getSummary().getValue())
-                .description(description == null ? null : description.getValue())
+                .description(description.getValue())
                 .build();
     }
 }

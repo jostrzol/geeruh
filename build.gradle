@@ -1,10 +1,10 @@
 //file:noinspection GroovyUnusedAssignment
 
 plugins {
-    id 'org.springframework.boot' version '2.7.5'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
     id 'jacoco'
     id 'checkstyle'
+    id 'org.springframework.boot' version '2.7.5'
     id 'java'
     id "io.freefair.lombok" version "6.5.1"
 }
@@ -31,11 +31,20 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.data:spring-data-envers'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // AssertJ
+    testImplementation 'org.assertj:assertj-core'
 
     // Nullability annotations
     implementation 'org.jetbrains:annotations:23.0.0'
+
+
+    // Database Drivers
+    runtimeOnly 'com.h2database:h2'
 }
 
 test {
@@ -53,8 +62,8 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 publishing {
-    publications{
-        maven(MavenPublication){
+    publications {
+        maven(MavenPublication) {
             components.java
         }
     }
@@ -63,8 +72,8 @@ publishing {
             url = "http://20.4.227.77:8081/repository/gradle-nexus-repo/"
             allowInsecureProtocol = true
             credentials {
-                username =  System.properties['nexusUsername']
-                password =  System.properties['nexusPassword']
+                username = System.properties['nexusUsername']
+                password = System.properties['nexusPassword']
             }
         }
     }
