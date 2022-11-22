@@ -10,7 +10,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

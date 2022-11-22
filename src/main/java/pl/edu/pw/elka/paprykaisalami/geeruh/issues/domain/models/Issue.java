@@ -1,7 +1,9 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models;
 
-import lombok.*;
-import org.jetbrains.annotations.Nullable;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 @Builder
 @Getter

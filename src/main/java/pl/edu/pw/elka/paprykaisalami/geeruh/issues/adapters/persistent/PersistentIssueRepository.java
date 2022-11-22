@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.history.Revisions;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
