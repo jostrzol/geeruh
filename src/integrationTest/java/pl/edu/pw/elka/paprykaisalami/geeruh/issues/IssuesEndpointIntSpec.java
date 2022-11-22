@@ -53,6 +53,21 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
 
     @Test
     @WithMockUser
+    void shouldCreateIssue_whenNoDescriptionProvided() throws Exception {
+        // given
+        val request = post("/issues")
+                .content(THIRD_ISSUE_NO_DESCRIPTION_STRING);
+
+
+        // expect
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(easyJson().isEqualTo(THIRD_ISSUE_NO_DESCRIPTION_STRING))
+                .andExpect(easyJson().node("description").isEqualTo(""));
+    }
+
+    @Test
+    @WithMockUser
     void shouldGetIssue() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);

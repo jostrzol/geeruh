@@ -23,4 +23,11 @@ public class IssueDataset {
             .put("type", SECOND_TYPE)
             .put("description", SECOND_DESCRIPTION);
     public static final String SECOND_ISSUE_STRING = SECOND_ISSUE.toString();
+
+    public static final String THIRD_SUMMARY = "Third Issue";
+    public static final String THIRD_TYPE = "TASK";
+    public static final JSONObject THIRD_ISSUE_NO_DESCRIPTION = new JSONObject()
+            .put("summary", THIRD_SUMMARY)
+            .put("type", THIRD_TYPE);
+    public static final String THIRD_ISSUE_NO_DESCRIPTION_STRING = THIRD_ISSUE_NO_DESCRIPTION.toString();
 }
