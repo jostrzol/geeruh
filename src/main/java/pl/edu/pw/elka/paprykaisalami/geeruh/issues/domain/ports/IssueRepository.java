@@ -8,7 +8,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +17,9 @@ public interface IssueRepository {
 
     Optional<Issue> findById(IssueId issueId);
 
-    Issue save(IssueType type, Summary summary, Description description);
+    Issue create(IssueType type, Summary summary, Description description);
 
-    Optional<Issue> update(Issue issue);
+    Issue save(Issue issue);
 
     List<IssueHistoryEntry> getHistory(IssueId issueId);
 }

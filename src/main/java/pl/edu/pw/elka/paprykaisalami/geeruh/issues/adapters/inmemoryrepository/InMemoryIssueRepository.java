@@ -35,7 +35,7 @@ public class InMemoryIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Issue save(IssueType type, Summary summary, Description description) {
+    public Issue create(IssueType type, Summary summary, Description description) {
         val issueId = IssueId.of(UUID.randomUUID());
         val issue = Issue.builder()
                 .issueId(issueId)
@@ -48,9 +48,9 @@ public class InMemoryIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Optional<Issue> update(Issue issue) {
+    public Issue save(Issue issue) {
         issues.put(issue.getIssueId(), issue);
-        return Optional.of(issue);
+        return issue;
     }
 
     @Override

@@ -63,13 +63,15 @@ class IssuePersistent {
     IssuePersistent(IssueType type, Summary summary, Description description) {
         this.summary = summary.getValue();
         this.type = type;
-        this.description = description != null ? description.getValue() : "";
+        this.description = description.getValue();
     }
 
-    IssuePersistent(Issue issue) {
-        this.summary = issue.getSummary().getValue();
-        this.type = issue.getType();
-        this.description = issue.getDescription().getValue();
+    public static IssuePersistent of(Issue issue) {
+        return new IssuePersistent(
+                issue.getIssueId().getValue(),
+                issue.getSummary().getValue(),
+                issue.getDescription().getValue(),
+                issue.getType()
+        );
     }
-
 }

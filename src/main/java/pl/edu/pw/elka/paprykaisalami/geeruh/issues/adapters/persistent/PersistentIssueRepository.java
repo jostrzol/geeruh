@@ -49,23 +49,16 @@ class PersistentIssueRepository implements IssueRepository {
 
     @Transactional
     @Override
-    public Issue save(IssueType type, Summary summary, Description description) {
+    public Issue create(IssueType type, Summary summary, Description description) {
         var issuePersistent = new IssuePersistent(type, summary, description);
         return actualRepository.save(issuePersistent)
                 .toIssue();
     }
 
     @Override
-    public Optional<Issue> update(Issue issue) {
-        var issuePersistentRes = actualRepository.findById(issue.getIssueId().getValue());
-        if (issuePersistentRes.isEmpty()) {
-            return Optional.empty();
-        }
-        var issuePersistent = issuePersistentRes.get();
-        issuePersistent.setDescription(issue.getDescription().getValue());
-        issuePersistent.setSummary(issue.getSummary().getValue());
-        issuePersistent.setType(issue.getType());
-        return Optional.of(actualRepository.save(issuePersistent).toIssue());
+    public Issue save(Issue issue) {
+        var issuePersistent = IssuePersistent.of(issue);
+        return actualRepository.save(issuePersistent).toIssue();
     }
 
     @Override
