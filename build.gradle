@@ -72,12 +72,12 @@ tasks.register('integrationTest', Test) {
     shouldRunAfter test
 }
 
-test {
+check {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
 
 jacocoTestReport {
-    dependsOn test // tests are required to run before generating the report
+    dependsOn check // tests are required to run before generating the report
     reports {
         xml.required = true
     }
