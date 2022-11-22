@@ -16,13 +16,24 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
 }
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    integrationTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom implementation
+    integrationTestRuntimeOnly.extendsFrom runtimeOnly
+
+    compileOnly.extendsFrom annotationProcessor
 }
 
 dependencies {
@@ -34,17 +45,31 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.data:spring-data-envers'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // AssertJ
-    testImplementation 'org.assertj:assertj-core'
 
     // Nullability annotations
     implementation 'org.jetbrains:annotations:23.0.0'
 
-
     // Database Drivers
     runtimeOnly 'com.h2database:h2'
+
+    // Unit tests
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
+    testImplementation 'org.assertj:assertj-core'
+
+    // Integration tests
+    integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
+    integrationTestImplementation 'org.springframework.security:spring-security-test'
+    integrationTestImplementation 'org.json:json:20220924'
+    integrationTestImplementation 'net.javacrumbs.json-unit:json-unit-spring:2.36.0'
+}
+
+tasks.register('integrationTest', Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    shouldRunAfter test
 }
 
 test {
@@ -61,6 +86,16 @@ jacocoTestReport {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
+tasks.named('integrationTest') {
+    useJUnitPlatform()
+}
+
+tasks.named('check') {
+    dependsOn integrationTest
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
