@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Builder(access = AccessLevel.PRIVATE)
 @Value
-class IssueResponse {
+public class IssueResponse {
 
     UUID issueId;
 
