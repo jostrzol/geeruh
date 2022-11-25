@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @RestController
 @RequestMapping("issues")
+@Tag(name = "Issues")
 class IssueEndpoint {
 
     private final IssueFacade issueFacade;
