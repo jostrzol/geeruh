@@ -1,23 +1,26 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
-import org.jetbrains.annotations.Nullable;
+import lombok.Setter;
 
 @Builder
-@Data
+@Getter
 public class Issue {
 
     @NonNull
     IssueId issueId;
 
     @NonNull
+    @Setter
     IssueType type;
 
     @NonNull
+    @Setter
     Summary summary;
 
     @NonNull
+    @Setter
     Description description;
 }
