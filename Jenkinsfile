@@ -9,6 +9,7 @@ pipeline {
         HOME = '/home/azureuser'
         GRADLE_CACHE = '/tmp/gradle-user-home'
         NEXUS = credentials('nexus-user-credentials')
+        LAUNCH = credentials('launch-azure')
     }
     stages {
         stage('Load cache') {
@@ -69,8 +70,25 @@ pipeline {
                         expression { env.JOB_NAME == 'Deployment' }
                     }
                     steps {
-                        echo 'Deploying...'
                         sh "./gradlew -DnexusUsername=${env.NEXUS_USR} -DnexusPassword=${env.NEXUS_PSW} publish"
+                    }
+                }
+                stage('Launch') {
+                    when {
+                        expression { env.JOB_NAME == 'Deployment' }
+                    }
+                    steps {
+						sh "apt-get update && apt-get install ssh -y"
+						script{
+							remote = [:]
+							remote.name = "name"
+							remote.host = "34.118.59.193"
+							remote.allowAnyHosts = true
+							remote.failOnError = true
+							remote.user = env.LAUNCH_USR
+							remote.password = env.LAUNCH_PSW
+							sshCommand remote: remote, command: "sudo nohup ./launch.sh &> /dev/null"
+						}
                     }
                 }
             }

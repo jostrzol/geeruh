@@ -84,9 +84,11 @@ tasks.named('integrationTest') {
 publishing {
     publications {
         maven(MavenPublication) {
+            artifact ("./build/libs/geeruh-0.0.1-SNAPSHOT.jar")
             components.java
         }
     }
+
     repositories {
         maven {
             url = "http://20.4.227.77:8081/repository/gradle-nexus-repo/"
