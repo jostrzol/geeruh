@@ -30,8 +30,6 @@ class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
 
-    EntityManager entityManager;
-
     @Override
     public List<Issue> findAll() {
         return actualRepository.findAll()
