@@ -53,6 +53,7 @@ dependencies {
 
     // Database Drivers
     runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
 
     // Unit tests
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'

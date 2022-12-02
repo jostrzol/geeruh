@@ -19,16 +19,16 @@ import java.util.Properties;
 @Configuration
 @EnableEnversRepositories(basePackages = "pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent")
 @EnableTransactionManagement
-@Profile("!prod")
-public class PersistenceConfig {
+@Profile("prod")
+public class PersistenceProdConfig {
 
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUsername("sa");
-        dataSource.setPassword("password");
-        dataSource.setUrl("jdbc:h2:mem:baza_dev;DB_CLOSE_DELAY=-1");
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("1234");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
         return dataSource;
     }
 
@@ -36,12 +36,12 @@ public class PersistenceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "create");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.setProperty("hibernate.show_sql", "true");
 
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
         hibernateJpaVendorAdapter.setGenerateDdl(true);
-        hibernateJpaVendorAdapter.setDatabase(Database.H2);
+        hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
 
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
