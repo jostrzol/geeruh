@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -22,22 +23,33 @@ import java.util.Properties;
 @Profile("prod")
 public class PersistenceProdConfig {
 
+    @Value("${PROD_DB_URL}")
+    private String prodDbUrl;
+
+    @Value("${PROD_DB_USERNAME}")
+    private String prodDbUsername;
+
+    @Value("${PROD_DB_PASSWORD}")
+    private String prodDbPassword;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("1234");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
+        dataSource.setUsername(prodDbUsername);
+        dataSource.setPassword(prodDbPassword);
+        dataSource.setUrl(prodDbUrl);
         return dataSource;
     }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        // `update` seems to work pretty well for incremental changes in DB
+        properties.setProperty("hibernate.hbm2ddl.auto", "create"); // create = drop-create
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
         properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
 
         HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
         hibernateJpaVendorAdapter.setGenerateDdl(true);
