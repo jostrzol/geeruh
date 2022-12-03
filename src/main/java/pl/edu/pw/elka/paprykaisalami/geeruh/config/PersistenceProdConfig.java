@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableEnversRepositories(basePackages = "pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent")
+@EnableEnversRepositories(basePackages = "pl.edu.pw.elka.paprykaisalami.geeruh")
 @EnableTransactionManagement
 @Profile("prod")
 public class PersistenceProdConfig {
@@ -57,7 +57,7 @@ public class PersistenceProdConfig {
 
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
         entityManagerFactory.setDataSource(dataSource);
-        entityManagerFactory.setPackagesToScan("pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent");
+        entityManagerFactory.setPackagesToScan("pl.edu.pw.elka.paprykaisalami.geeruh");
         entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter);
         entityManagerFactory.setJpaProperties(properties);
         return entityManagerFactory;
