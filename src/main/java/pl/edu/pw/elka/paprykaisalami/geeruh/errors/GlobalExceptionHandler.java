@@ -23,6 +23,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,6 +75,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
 
         return builder.build();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    protected @NotNull ResponseEntity<Object> handleConstraintViolated(
+            @NotNull ConstraintViolationException ex
+    ) {
+        val error = Error.builder()
+                .code(ErrorCodes.VALIDATION_ERROR)
+                .message(ex.getMessage())
+                .build();
+        return Errors.of(error)
+                .toResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @Override
