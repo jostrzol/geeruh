@@ -27,11 +27,11 @@ public class ProjectFacade {
     }
 
     public ProjectResponse update(String projectCode, ProjectRequest projectRequest) {
-        var project = projectService.create(
+        var project = projectService.update(
                 ProjectCode.of(projectCode),
                 projectRequest.getName(),
                 projectRequest.getDescription()
-        );
+        ).orElseThrow(() -> ErrorsException.notFound("project"));
         return ProjectResponse.of(project);
     }
 
