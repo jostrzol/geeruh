@@ -16,7 +16,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 
-import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,8 +28,6 @@ import java.util.stream.Collectors;
 class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
-
-    EntityManager entityManager;
 
     @Override
     public List<Issue> findAll() {
