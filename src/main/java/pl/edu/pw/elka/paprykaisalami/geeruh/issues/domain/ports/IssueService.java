@@ -8,6 +8,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEnt
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,8 @@ public class IssueService {
         return issueRepository.findById(issueId);
     }
 
-    public Issue create(IssueType type, Summary summary, Description description) {
-        return issueRepository.create(type, summary, description);
+    public Issue create(ProjectCode projectCode, IssueType type, Summary summary, Description description) {
+        return issueRepository.create(projectCode, type, summary, description);
     }
 
     public Optional<Issue> update(IssueId issueId, IssueType type, Summary summary, Description description) {

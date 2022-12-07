@@ -2,11 +2,11 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.history.Revisions;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEntry;
@@ -15,12 +15,12 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 
 import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -42,14 +42,14 @@ class PersistentIssueRepository implements IssueRepository {
 
     @Override
     public Optional<Issue> findById(IssueId issueId) {
-        return actualRepository.findById(issueId.getValue())
+        return actualRepository.findById(IssuePersistentId.of(issueId))
                 .map(IssuePersistent::toIssue);
     }
 
     @Transactional
     @Override
-    public Issue create(IssueType type, Summary summary, Description description) {
-        var issuePersistent = new IssuePersistent(type, summary, description);
+    public Issue create(ProjectCode projectCode, IssueType type, Summary summary, Description description) {
+        var issuePersistent = new IssuePersistent(projectCode, type, summary, description);
         return actualRepository.save(issuePersistent)
                 .toIssue();
     }
@@ -62,7 +62,7 @@ class PersistentIssueRepository implements IssueRepository {
 
     @Override
     public List<IssueHistoryEntry> getHistory(IssueId issueId) {
-        Revisions<Long, IssuePersistent> revisions = actualRepository.findRevisions(issueId.getValue());
+        var revisions = actualRepository.findRevisions(IssuePersistentId.of(issueId));
         return revisions.stream().map(rev -> IssueHistoryEntry
                 .builder()
                 .timestamp(Date.from(rev.getMetadata().getRequiredRevisionInstant()))
@@ -74,6 +74,6 @@ class PersistentIssueRepository implements IssueRepository {
 
 @Component
 interface ActualPersistentIssueRepository extends
-        JpaRepository<IssuePersistent, UUID>,
-        RevisionRepository<IssuePersistent, UUID, Long> {
+        JpaRepository<IssuePersistent, IssuePersistentId>,
+        RevisionRepository<IssuePersistent, IssuePersistentId, Long> {
 }

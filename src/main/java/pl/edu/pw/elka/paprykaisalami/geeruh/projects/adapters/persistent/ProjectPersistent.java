@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @ToString
 @Entity
 @Table(name = "Projects")
-class ProjectPersistent {
+public class ProjectPersistent {
 
     @Id
     @Column(name = "code", updatable = false, nullable = false)

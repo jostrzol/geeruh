@@ -1,46 +1,58 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import lombok.Value;
 import org.hibernate.envers.Audited;
-import org.jetbrains.annotations.Nullable;
+import org.hibernate.envers.NotAudited;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.ProjectPersistent;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
+@Data
 @Entity
 @Audited
 @Table(name = "Issues")
-class IssuePersistent {
+@IdClass(IssuePersistentId.class)
+public class IssuePersistent {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
-    @Column(name = "id", updatable = false, nullable = false)
-    @Type(type = "org.hibernate.type.UUIDCharType")
-    private UUID id;
+    private String projectCode;
+
+    @Id
+    @GeneratedValue
+    private Integer issueIndex;
+
+    @ManyToOne
+    @NotAudited
+    @JoinColumn(name = "projectCode", insertable = false, updatable = false)
+    private ProjectPersistent project;
 
     @Column(length = 120)
     private String summary;
@@ -51,27 +63,65 @@ class IssuePersistent {
     @Enumerated(EnumType.ORDINAL)
     private IssueType type;
 
+    IssuePersistent(
+            ProjectCode projectCode,
+            IssueType type,
+            Summary summary,
+            Description description
+    ) {
+        this.projectCode = projectCode.getValue();
+        this.summary = summary.getValue();
+        this.type = type;
+        this.description = description.getValue();
+    }
+
+    IssuePersistent(
+            ProjectCode projectCode,
+            Integer issueIndex,
+            IssueType type,
+            Summary summary,
+            Description description
+    ) {
+        this.projectCode = projectCode.getValue();
+        this.issueIndex = issueIndex;
+        this.summary = summary.getValue();
+        this.type = type;
+        this.description = description.getValue();
+    }
+
     public Issue toIssue() {
         return Issue.builder()
-                .issueId(IssueId.of(id))
+                .issueId(IssueId.of(ProjectCode.of(projectCode), issueIndex))
                 .type(type)
                 .summary(Summary.of(summary))
                 .description(Description.of(description))
                 .build();
     }
 
-    IssuePersistent(IssueType type, Summary summary, Description description) {
-        this.summary = summary.getValue();
-        this.type = type;
-        this.description = description.getValue();
-    }
-
     public static IssuePersistent of(Issue issue) {
         return new IssuePersistent(
-                issue.getIssueId().getValue(),
-                issue.getSummary().getValue(),
-                issue.getDescription().getValue(),
-                issue.getType()
+                issue.getIssueId().getProjectCode(),
+                issue.getIssueId().getIssueIndex(),
+                issue.getType(),
+                issue.getSummary(),
+                issue.getDescription()
         );
+    }
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    static class IssuePersistentId implements Serializable {
+
+        String projectCode;
+
+        Integer issueIndex;
+
+        public static IssuePersistentId of(IssueId issueId) {
+            return new IssuePersistentId(
+                    issueId.getProjectCode().getValue(),
+                    issueId.getIssueIndex()
+            );
+        }
     }
 }
