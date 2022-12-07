@@ -7,6 +7,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.5'
     id 'java'
     id "io.freefair.lombok" version "6.5.1"
+    id 'java-test-fixtures'
 }
 
 apply plugin: 'maven-publish'
@@ -57,10 +58,12 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
 
     // Unit tests
+    testImplementation sourceSets.testFixtures.output
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation 'org.assertj:assertj-core'
 
     // Integration tests
+    integrationTestImplementation sourceSets.testFixtures.output
     integrationTestImplementation 'org.springframework.boot:spring-boot-starter-test'
     integrationTestImplementation 'org.springframework.security:spring-security-test'
     integrationTestImplementation 'org.json:json:20220924'
