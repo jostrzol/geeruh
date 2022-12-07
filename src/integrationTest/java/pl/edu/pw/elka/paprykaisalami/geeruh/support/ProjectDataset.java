@@ -2,32 +2,19 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.support;
 
 import org.json.JSONObject;
 
-import java.util.UUID;
+public class ProjectDataset {
 
-public class IssueDataset {
+    public static final String FIRST_PROJECT_CODE = "FST";
+    public static final String FIRST_PROJECT_NAME = "First project";
+    public static final String FIRST_PROJECT_DESCRIPTION = "Important project";
+    public static final JSONObject FIRST_PROJECT = new JSONObject()
+            .put("name", FIRST_PROJECT_NAME)
+            .put("description", FIRST_PROJECT_DESCRIPTION);
+    public static final String FIRST_PROJECT_STRING = FIRST_PROJECT.toString();
 
-    public static final String FIRST_SUMMARY = "First issue";
-    public static final String FIRST_TYPE = "TASK";
-    public static final String FIRST_DESCRIPTION = "Important issue";
-    public static final JSONObject FIRST_ISSUE = new JSONObject()
-            .put("summary", FIRST_SUMMARY)
-            .put("type", FIRST_TYPE)
-            .put("description", FIRST_DESCRIPTION);
-    public static final String FIRST_ISSUE_STRING = FIRST_ISSUE.toString();
-
-    public static final String SECOND_SUMMARY = "Second issue";
-    public static final String SECOND_TYPE = "BUG";
-    public static final String SECOND_DESCRIPTION = "Even more important issue";
-    public static final JSONObject SECOND_ISSUE = new JSONObject()
-            .put("summary", SECOND_SUMMARY)
-            .put("type", SECOND_TYPE)
-            .put("description", SECOND_DESCRIPTION);
-    public static final String SECOND_ISSUE_STRING = SECOND_ISSUE.toString();
-
-    public static final String THIRD_SUMMARY = "Third Issue";
-    public static final String THIRD_TYPE = "TASK";
-    public static final JSONObject THIRD_ISSUE_NO_DESCRIPTION = new JSONObject()
-            .put("summary", THIRD_SUMMARY)
-            .put("type", THIRD_TYPE);
-    public static final String THIRD_ISSUE_NO_DESCRIPTION_STRING = THIRD_ISSUE_NO_DESCRIPTION.toString();
+    public static final String SECOND_PROJECT_CODE = "SND";
+    public static final String SECOND_PROJECT_NAME = "Second project";
+    public static final JSONObject SECOND_PROJECT_NO_DESCRIPTION = new JSONObject()
+            .put("name", SECOND_PROJECT_NAME);
+    public static final String SECOND_PROJECT_NO_DESCRIPTION_STRING = FIRST_PROJECT.toString();
 }
