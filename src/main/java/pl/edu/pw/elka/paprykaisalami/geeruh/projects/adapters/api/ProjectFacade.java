@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ErrorsException;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ProjectFacade {
 
     public ProjectResponse get(String projectCode) {
         var project = projectService.get(ProjectCode.of(projectCode))
-                .orElseThrow(() -> ErrorsException.notFound("project"));
+                .getOrElseThrow(DomainError::toException);
         return ProjectResponse.of(project);
     }
 
@@ -31,7 +32,7 @@ public class ProjectFacade {
                 ProjectCode.of(projectCode),
                 projectRequest.getName(),
                 projectRequest.getDescription()
-        ).orElseThrow(() -> ErrorsException.notFound("project"));
+        ).getOrElseThrow(DomainError::toException);
         return ProjectResponse.of(project);
     }
 

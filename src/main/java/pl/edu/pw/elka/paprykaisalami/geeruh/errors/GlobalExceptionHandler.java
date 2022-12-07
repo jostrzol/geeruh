@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
@@ -33,12 +31,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Object> handleAuthenticationException() {
-        val error = Error.builder()
+        val error = ApiError.builder()
                 .code(ErrorCodes.UNAUTHORIZED)
                 .message("Authentication failed.")
                 .build();
 
-        return Errors.of(error)
+        return ApiErrors.of(error)
                 .toResponseEntity(HttpStatus.UNAUTHORIZED);
     }
 
@@ -59,14 +57,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         val errors = ex.getBindingResult().getAllErrors().stream()
                 .map(GlobalExceptionHandler::fromJavaxError)
-                .toArray(Error[]::new);
+                .toArray(ApiError[]::new);
 
-        return Errors.of(errors)
+        return ApiErrors.of(errors)
                 .toResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    private static Error fromJavaxError(ObjectError error) {
-        val builder = Error.builder()
+    private static ApiError fromJavaxError(ObjectError error) {
+        val builder = ApiError.builder()
                 .code(ErrorCodes.VALIDATION_ERROR)
                 .message(error.getDefaultMessage());
 
@@ -81,11 +79,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected @NotNull ResponseEntity<Object> handleConstraintViolated(
             @NotNull ConstraintViolationException ex
     ) {
-        val error = Error.builder()
+        val error = ApiError.builder()
                 .code(ErrorCodes.VALIDATION_ERROR)
                 .message(ex.getMessage())
                 .build();
-        return Errors.of(error)
+        return ApiErrors.of(error)
                 .toResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
@@ -98,13 +96,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         val cause = ex.getRootCause();
         if (cause instanceof InvalidFormatException invalidFormatException) {
-            val error = Error.builder()
+            val error = ApiError.builder()
                     .code(ErrorCodes.VALIDATION_ERROR)
                     .message(invalidFormatException.getOriginalMessage())
                     .path(formatJacksonPath(invalidFormatException.getPath()))
                     .build();
 
-            return Errors.of(error)
+            return ApiErrors.of(error)
                     .toResponseEntity(HttpStatus.BAD_REQUEST);
         }
 
@@ -124,13 +122,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NotNull HttpStatus status,
             @NotNull WebRequest request
     ) {
-        val error = Error.builder()
+        val error = ApiError.builder()
                 .code(ErrorCodes.VALIDATION_ERROR)
                 .message(ex.getMessage())
                 .path(ex.getVariableName())
                 .build();
 
-        return Errors.of(error)
+        return ApiErrors.of(error)
                 .toResponseEntity(status);
     }
 
@@ -141,12 +139,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             @NotNull HttpStatus status,
             @NotNull WebRequest request
     ) {
-        val error = Error.builder()
+        val error = ApiError.builder()
                 .code(ErrorCodes.METHOD_NOT_SUPPORTED)
                 .message(formatMethodNotSupported(ex))
                 .build();
 
-        return Errors.of(error)
+        return ApiErrors.of(error)
                 .toResponseEntity(status);
     }
 
@@ -170,12 +168,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         log.error("Internal Server Error!", ex);
 
-        val error = Error.builder()
+        val error = ApiError.builder()
                 .code(ErrorCodes.INTERNAL_ERROR)
                 .message("Server internal error")
                 .build();
 
-        return Errors.of(error)
+        return ApiErrors.of(error)
                 .toResponseEntity(status);
     }
 
@@ -185,12 +183,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         log.error("Internal Server Error!", ex);
 
-        val error = Error.builder()
+        val error = ApiError.builder()
                 .code(ErrorCodes.INTERNAL_ERROR)
                 .message("Server internal error")
                 .build();
 
-        return Errors.of(error)
+        return ApiErrors.of(error)
                 .toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

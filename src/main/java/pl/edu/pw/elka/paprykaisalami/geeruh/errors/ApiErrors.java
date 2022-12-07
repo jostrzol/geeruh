@@ -11,15 +11,15 @@ import java.util.Set;
 @Jacksonized
 @Builder
 @Value
-class Errors {
+class ApiErrors {
 
-    Set<Error> errors;
+    Set<ApiError> errors;
 
     ResponseEntity<Object> toResponseEntity(HttpStatus status) {
         return new ResponseEntity<>(errors, status);
     }
 
-    static Errors of(Error... error) {
-        return new Errors(Set.of(error));
+    static ApiErrors of(ApiError... error) {
+        return new ApiErrors(Set.of(error));
     }
 }

@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.inmemoryrepository;
 
+import io.vavr.control.Either;
 import lombok.val;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
@@ -10,12 +11,12 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
@@ -32,9 +33,13 @@ public class InMemoryIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Optional<Issue> findById(IssueId issueId) {
+    public Either<DomainError, Issue> findById(IssueId issueId) {
         val issue = issues.get(issueId);
-        return Optional.ofNullable(issue);
+        if (issue == null) {
+            return Either.left(new NotFoundDomainError<>(Issue.class, issueId));
+        } else {
+            return Either.right(issue);
+        }
     }
 
     @Override

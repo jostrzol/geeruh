@@ -16,25 +16,11 @@ public class ErrorsException extends RuntimeException {
     HttpStatus status;
 
     @Singular
-    Set<Error> errors;
+    Set<ApiError> errors;
 
     public ResponseEntity<Object> toResponseEntity() {
-        val errorArray = errors.toArray(Error[]::new);
-        return Errors.of(errorArray)
+        val errorArray = errors.toArray(ApiError[]::new);
+        return ApiErrors.of(errorArray)
                 .toResponseEntity(status);
-    }
-
-    public static ErrorsException notFound(String resource) {
-        val code = String.format("%s_NOT_FOUND", resource.toUpperCase());
-        val message = String.format("Resource '%s' not found.", resource);
-
-        return ErrorsException.builder()
-                .status(HttpStatus.NOT_FOUND)
-                .error(Error.builder()
-                        .code(code)
-                        .message(message)
-                        .build()
-                )
-                .build();
     }
 }
