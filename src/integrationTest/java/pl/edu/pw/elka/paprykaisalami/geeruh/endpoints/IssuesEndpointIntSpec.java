@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.issues;
+package pl.edu.pw.elka.paprykaisalami.geeruh.endpoints;
 
 import lombok.val;
 import org.json.JSONObject;
