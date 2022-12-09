@@ -47,7 +47,6 @@ class PersistentIssueRepository implements IssueRepository {
                 .map(IssuePersistent::toIssue);
     }
 
-    @Transactional
     @Override
     public Issue create(ProjectCode projectCode, IssueType type, Summary summary, Description description) {
         var issuePersistent = new IssuePersistent(projectCode, type, summary, description);

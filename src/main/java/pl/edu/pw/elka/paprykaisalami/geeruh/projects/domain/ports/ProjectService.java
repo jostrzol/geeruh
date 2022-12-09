@@ -7,10 +7,12 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @AllArgsConstructor
 @Component
+@Transactional
 public class ProjectService {
 
     ProjectRepository projectRepository;
