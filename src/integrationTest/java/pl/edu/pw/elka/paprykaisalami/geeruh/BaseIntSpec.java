@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.val;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,9 +11,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api.ProjectResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.TestDbService;
 
 import java.io.IOException;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -52,5 +57,18 @@ public abstract class BaseIntSpec {
     @BeforeEach
     protected void clearDb() {
         testDbService.resetDatabase();
+    }
+
+    public ProjectResponse thereIsProject(String code, Object body) throws Exception {
+        var request = post("/projects/{code}", code)
+                .content(body.toString());
+
+        var reader = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        return mapContent(reader, ProjectResponse.class);
     }
 }

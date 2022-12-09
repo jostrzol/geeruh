@@ -46,12 +46,11 @@ class IssueFacade {
 
 
     public IssueResponse update(String rawIssueId, IssueRequest issueRequest) {
-        var description = issueRequest.getDescription();
         var issue = issueService.update(
                 parseIssueId(rawIssueId),
                 issueRequest.getType(),
                 Summary.of(issueRequest.getSummary()),
-                Description.of(description == null ? "" : description)
+                Description.of(issueRequest.getDescription())
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
