@@ -47,6 +47,7 @@ dependencies {
     implementation 'org.springframework.data:spring-data-envers'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
     implementation 'org.springdoc:springdoc-openapi-security:1.6.13'
+    implementation 'io.vavr:vavr:0.10.4'
 
     // Nullability annotations
     implementation 'org.jetbrains:annotations:23.0.0'

@@ -13,7 +13,7 @@ import java.util.UUID;
 @Value
 public class IssueResponse {
 
-    UUID issueId;
+    String issueId;
 
     IssueType type;
 
@@ -24,7 +24,7 @@ public class IssueResponse {
     public static IssueResponse of(Issue issue) {
         val description = issue.getDescription();
         return IssueResponse.builder()
-                .issueId(issue.getIssueId().getValue())
+                .issueId(issue.getIssueId().toString())
                 .type(issue.getType())
                 .summary(issue.getSummary().getValue())
                 .description(description.getValue())
