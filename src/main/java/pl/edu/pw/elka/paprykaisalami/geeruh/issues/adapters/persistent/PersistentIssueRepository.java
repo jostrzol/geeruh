@@ -20,7 +20,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
-import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,8 +30,6 @@ import java.util.stream.Collectors;
 class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
-
-    EntityManager entityManager;
 
     @Override
     public List<Issue> findAll() {

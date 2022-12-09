@@ -2,11 +2,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.Value;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
@@ -19,18 +15,15 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.Project
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 
@@ -57,10 +50,10 @@ public class IssuePersistent {
     @Column(length = 120)
     private String summary;
 
-    @Column(length = 1000)
+    @Lob
     private String description;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private IssueType type;
 
     IssuePersistent(
