@@ -3,6 +3,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEntry;
@@ -13,7 +14,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
-import javax.transaction.Transactional;
+
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,9 +26,13 @@ public class IssueService {
 
     private final IssueRepository issueRepository;
 
+    @Transactional(readOnly = true)
+
     public List<Issue> list() {
         return issueRepository.findAll();
     }
+
+    @Transactional(readOnly = true)
 
     public Either<DomainError, Issue> get(IssueId issueId) {
         return issueRepository.findById(issueId);
@@ -47,6 +52,8 @@ public class IssueService {
                     return issueRepository.save(issue);
                 });
     }
+
+    @Transactional(readOnly = true)
 
     public List<IssueHistoryEntry> getHistory(IssueId issueId) {
         return issueRepository.getHistory(issueId);

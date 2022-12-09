@@ -3,11 +3,11 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @AllArgsConstructor
@@ -17,10 +17,12 @@ public class ProjectService {
 
     ProjectRepository projectRepository;
 
+    @Transactional(readOnly = true)
     public List<Project> list() {
         return projectRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Either<DomainError, Project> get(ProjectCode projectCode) {
         return projectRepository.findByCode(projectCode);
     }
