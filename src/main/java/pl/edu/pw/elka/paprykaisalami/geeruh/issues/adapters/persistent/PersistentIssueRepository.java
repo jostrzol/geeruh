@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,11 +17,12 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
 import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -41,8 +43,10 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Optional<Issue> findById(IssueId issueId) {
+    public Either<DomainError, Issue> findById(IssueId issueId) {
         return actualRepository.findById(IssuePersistentId.of(issueId))
+                .<Either<DomainError, IssuePersistent>>map(Either::right)
+                .orElseGet(NotFoundDomainError.supplier(Issue.class, issueId))
                 .map(IssuePersistent::toIssue);
     }
 

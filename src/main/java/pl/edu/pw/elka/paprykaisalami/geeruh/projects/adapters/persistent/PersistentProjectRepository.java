@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent;
 
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,9 +8,10 @@ import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -28,8 +30,10 @@ class PersistentProjectRepository implements ProjectRepository {
     }
 
     @Override
-    public Optional<Project> findByCode(ProjectCode projectCode) {
+    public Either<DomainError, Project> findByCode(ProjectCode projectCode) {
         return actualRepository.findById(projectCode.getValue())
+                .<Either<DomainError, ProjectPersistent>>map(Either::right)
+                .orElseGet(NotFoundDomainError.supplier(Project.class, projectCode))
                 .map(ProjectPersistent::toProject);
     }
 

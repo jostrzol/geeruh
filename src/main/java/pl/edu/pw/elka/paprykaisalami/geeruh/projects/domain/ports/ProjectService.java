@@ -1,12 +1,13 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports;
 
+import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Component
@@ -18,7 +19,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Optional<Project> get(ProjectCode projectCode) {
+    public Either<DomainError, Project> get(ProjectCode projectCode) {
         return projectRepository.findByCode(projectCode);
     }
 
@@ -31,7 +32,7 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Optional<Project> update(ProjectCode projectCode, String name, String description) {
+    public Either<DomainError, Project> update(ProjectCode projectCode, String name, String description) {
         return projectRepository.findByCode(projectCode).map(
                 project -> {
                     project.setName(name);

@@ -8,6 +8,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,7 @@ class IssueFacade {
 
     public IssueResponse get(String rawIssueId) {
         var issue = issueService.get(parseIssueId(rawIssueId))
-                .orElseThrow(() -> ErrorsException.notFound("issue"));
+                .getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
 
@@ -39,20 +40,18 @@ class IssueFacade {
                 issueRequest.getType(),
                 Summary.of(issueRequest.getSummary()),
                 Description.of(description == null ? "" : description)
-        );
+        ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
 
 
     public IssueResponse update(String rawIssueId, IssueRequest issueRequest) {
-        var description = issueRequest.getDescription();
         var issue = issueService.update(
                 parseIssueId(rawIssueId),
                 issueRequest.getType(),
                 Summary.of(issueRequest.getSummary()),
-                Description.of(description == null ? "" : description)
-        ).orElseThrow(() -> ErrorsException.notFound("issue"));
-        ;
+                Description.of(issueRequest.getDescription())
+        ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
 

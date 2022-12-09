@@ -1,15 +1,15 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api;
 
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 
-@Builder(access = AccessLevel.PRIVATE)
-@Value
+import javax.validation.constraints.NotBlank;
+
+@Data
 public class ProjectRequest {
 
+    @NotBlank
     String name;
 
-    String description;
+    String description = "";
 }
