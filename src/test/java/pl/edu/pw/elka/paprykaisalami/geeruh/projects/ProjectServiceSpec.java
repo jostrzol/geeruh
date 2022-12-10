@@ -8,8 +8,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainErro
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.*;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.assertions.GeeruhAssertions.assertThat;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.ProjectDataset.*;
 
 public class ProjectServiceSpec extends BaseSpec {
 
@@ -23,35 +23,27 @@ public class ProjectServiceSpec extends BaseSpec {
         );
 
         // expect
-        assertThat(project).isEquivalentTo(FIRST_PROJECT);
+        assertThat(project).isEquivalentTo(firstProject());
     }
 
     @Test
     void shouldGetProject() {
         // given
-        var createdProject = projectService.create(
-                new ProjectCode(FIRST_PROJECT_CODE),
-                FIRST_PROJECT_NAME,
-                FIRST_PROJECT_DESCRIPTION
-        );
+        thereAreProjects(firstProject());
 
         // when
         var project = projectService.get(new ProjectCode(FIRST_PROJECT_CODE));
 
         // expect
         assertThat(project).hasRightValueSatisfying(p -> assertThat(p)
-                .isEquivalentTo(createdProject)
+                .isEquivalentTo(firstProject())
         );
     }
 
     @Test
     void shouldNotGetProject_whenAbsent() {
         // given
-        var createdProject = projectService.create(
-                new ProjectCode(FIRST_PROJECT_CODE),
-                FIRST_PROJECT_NAME,
-                FIRST_PROJECT_DESCRIPTION
-        );
+        thereAreProjects(firstProject());
 
         // when
         var project = projectService.get(new ProjectCode(SECOND_PROJECT_CODE));
@@ -63,18 +55,7 @@ public class ProjectServiceSpec extends BaseSpec {
     @Test
     void shouldListAllProjects() {
         // given
-        var project1 = projectService.create(
-                new ProjectCode(FIRST_PROJECT_CODE),
-                FIRST_PROJECT_NAME,
-                FIRST_PROJECT_DESCRIPTION
-        );
-
-        // and
-        var project2 = projectService.create(
-                new ProjectCode(SECOND_PROJECT_CODE),
-                SECOND_PROJECT_NAME,
-                SECOND_PROJECT_DESCRIPTION
-        );
+        thereAreProjects(firstProject(), secondProject());
 
         // when
         var projects = projectService.list();
@@ -82,7 +63,7 @@ public class ProjectServiceSpec extends BaseSpec {
         // expect
         assertThat(projects)
                 .usingRecursiveFieldByFieldElementComparator()
-                .containsExactlyInAnyOrder(project1, project2);
+                .containsExactlyInAnyOrder(firstProject(), secondProject());
     }
 
     @Test
@@ -97,11 +78,7 @@ public class ProjectServiceSpec extends BaseSpec {
     @Test
     void shouldUpdateProject() {
         // given
-        projectService.create(
-                new ProjectCode(FIRST_PROJECT_CODE),
-                FIRST_PROJECT_NAME,
-                FIRST_PROJECT_DESCRIPTION
-        );
+        thereAreProjects(firstProject());
 
         // when
         var project = projectService.update(

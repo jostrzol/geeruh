@@ -15,10 +15,6 @@ public class ProjectAssert extends AbstractAssert<ProjectAssert, Project> {
         super(actual, ProjectAssert.class);
     }
 
-    public static ProjectAssert assertThat(Project actual) {
-        return new ProjectAssert(actual);
-    }
-
     public ProjectAssert hasCode(String projectCode) {
         isNotNull();
 
