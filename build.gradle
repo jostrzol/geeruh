@@ -61,6 +61,7 @@ dependencies {
     testImplementation sourceSets.testFixtures.output
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     testImplementation 'org.assertj:assertj-core'
+    testImplementation "org.assertj:assertj-vavr:0.4.2"
 
     // Integration tests
     integrationTestImplementation sourceSets.testFixtures.output
