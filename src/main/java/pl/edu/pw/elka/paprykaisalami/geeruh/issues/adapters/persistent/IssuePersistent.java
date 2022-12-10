@@ -62,10 +62,10 @@ public class IssuePersistent {
             Summary summary,
             Description description
     ) {
-        this.projectCode = projectCode.getValue();
-        this.summary = summary.getValue();
+        this.projectCode = projectCode.value();
+        this.summary = summary.value();
         this.type = type;
-        this.description = description.getValue();
+        this.description = description.value();
     }
 
     IssuePersistent(
@@ -75,26 +75,26 @@ public class IssuePersistent {
             Summary summary,
             Description description
     ) {
-        this.projectCode = projectCode.getValue();
+        this.projectCode = projectCode.value();
         this.issueIndex = issueIndex;
-        this.summary = summary.getValue();
+        this.summary = summary.value();
         this.type = type;
-        this.description = description.getValue();
+        this.description = description.value();
     }
 
     public Issue toIssue() {
         return Issue.builder()
-                .issueId(IssueId.of(ProjectCode.of(projectCode), issueIndex))
+                .issueId(new IssueId(new ProjectCode(projectCode), issueIndex))
                 .type(type)
-                .summary(Summary.of(summary))
-                .description(Description.of(description))
+                .summary(new Summary(summary))
+                .description(new Description(description))
                 .build();
     }
 
     public static IssuePersistent of(Issue issue) {
         return new IssuePersistent(
-                issue.getIssueId().getProjectCode(),
-                issue.getIssueId().getIssueIndex(),
+                issue.getIssueId().projectCode(),
+                issue.getIssueId().issueIndex(),
                 issue.getType(),
                 issue.getSummary(),
                 issue.getDescription()
@@ -112,8 +112,8 @@ public class IssuePersistent {
 
         public static IssuePersistentId of(IssueId issueId) {
             return new IssuePersistentId(
-                    issueId.getProjectCode().getValue(),
-                    issueId.getIssueIndex()
+                    issueId.projectCode().value(),
+                    issueId.issueIndex()
             );
         }
     }

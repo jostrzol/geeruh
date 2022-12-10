@@ -1,14 +1,9 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models;
 
 
-import lombok.Value;
-import org.springframework.lang.NonNull;
+import lombok.NonNull;
 
-@Value(staticConstructor = "of")
-public class ProjectCode {
-
-    @NonNull
-    String value;
+public record ProjectCode(@NonNull String value) {
 
     @Override
     public String toString() {

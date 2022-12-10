@@ -84,7 +84,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldGetIssue() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
-        val issueId = issue.getIssueId().toString();
+        val issueId = issue.issueId().toString();
 
         // when
         val request = get("/issues/{id}", issueId);
@@ -119,7 +119,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldUpdateIssue() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
-        val issueId = issue.getIssueId().toString();
+        val issueId = issue.issueId().toString();
 
         // when
         val request = put("/issues/{id}", issueId)
@@ -137,7 +137,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldReportHistory() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
-        val issueId = issue.getIssueId().toString();
+        val issueId = issue.issueId().toString();
 
         // and
         thereIsIssueUpdate(SECOND_ISSUE, issueId);

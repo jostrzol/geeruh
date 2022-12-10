@@ -23,7 +23,7 @@ public class InitialData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         var firstProject = projectService.create(
-                ProjectCode.of("PIS"),
+                new ProjectCode("PIS"),
                 "Strona sklepu 'Papryka i Salami'",
                 "Projekt dotyczy strony internetowej tworzonej dla sklepu 'Papryka i Salami'"
         );
@@ -31,27 +31,27 @@ public class InitialData implements ApplicationRunner {
         var firstIssue = issueService.create(
                 firstProject.getProjectCode(),
                 IssueType.BUG,
-                Summary.of("Zmiana koloru guzika"),
-                Description.of("Guzik trzeba pilnie zmienić na zielony.")
+                new Summary("Zmiana koloru guzika"),
+                new Description("Guzik trzeba pilnie zmienić na zielony.")
         ).get();
         issueService.update(
                 firstIssue.getIssueId(),
                 IssueType.BUG,
-                Summary.of("Zmiana koloru guzików"),
-                Description.of("Guziki trzeba pilnie zmienić na zielony.")
+                new Summary("Zmiana koloru guzików"),
+                new Description("Guziki trzeba pilnie zmienić na zielony.")
         );
 
         var secondIssue = issueService.create(
                 firstProject.getProjectCode(),
                 IssueType.BUG,
-                Summary.of("Wycentrowanie logo"),
-                Description.of("Logo nie jest wycentrowane, proszę je wyśrodkować.")
+                new Summary("Wycentrowanie logo"),
+                new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
         ).get();
         issueService.update(
                 secondIssue.getIssueId(),
                 IssueType.TASK,
-                Summary.of("Wycentrowanie logo"),
-                Description.of("Logo nie jest wycentrowane, proszę je wyśrodkować.")
+                new Summary("Wycentrowanie logo"),
+                new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
         );
     }
 }
