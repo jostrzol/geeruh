@@ -3,6 +3,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueHistoryEntry;
@@ -13,8 +14,11 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
+@Validated
 @AllArgsConstructor
 @Component
 public class IssueService {
@@ -31,12 +35,26 @@ public class IssueService {
         return issueRepository.findById(issueId);
     }
 
-    public Either<DomainError, Issue> create(ProjectCode projectCode, IssueType type, Summary summary, Description description) {
+    @Transactional
+    @Valid
+    public Either<DomainError, Issue> create(
+            ProjectCode projectCode,
+            IssueType type,
+            Summary summary,
+            Description description
+    ) {
         return projectService.get(projectCode)
                 .map(p -> issueRepository.create(projectCode, type, summary, description));
     }
 
-    public Either<DomainError, Issue> update(IssueId issueId, IssueType type, Summary summary, Description description) {
+    @Transactional
+    @Valid
+    public Either<DomainError, Issue> update(
+            IssueId issueId,
+            IssueType type,
+            Summary summary,
+            Description description
+    ) {
         return issueRepository.findById(issueId).map(
                 issue -> {
                     issue.setType(type);

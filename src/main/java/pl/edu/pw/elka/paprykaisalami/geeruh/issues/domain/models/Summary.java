@@ -1,6 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models;
 
-import lombok.NonNull;
+import javax.validation.constraints.NotBlank;
 
-public record Summary(@NonNull String value) {
+public record Summary(@NotBlank String value) {
 }
