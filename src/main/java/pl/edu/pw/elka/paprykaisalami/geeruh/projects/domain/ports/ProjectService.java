@@ -3,13 +3,17 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
+import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 @AllArgsConstructor
+@Validated
 @Component
 public class ProjectService {
 
@@ -23,6 +27,8 @@ public class ProjectService {
         return projectRepository.findByCode(projectCode);
     }
 
+    @Transactional
+    @Valid
     public Project create(ProjectCode projectCode, String name, String description) {
         var project = Project.builder()
                 .projectCode(projectCode)
@@ -32,6 +38,8 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
+    @Transactional
+    @Valid
     public Either<DomainError, Project> update(ProjectCode projectCode, String name, String description) {
         return projectRepository.findByCode(projectCode).map(
                 project -> {

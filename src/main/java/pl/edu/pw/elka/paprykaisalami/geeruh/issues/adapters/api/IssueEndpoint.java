@@ -17,6 +17,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+import static pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode.PROJECT_CODE_REGEX;
+
 @Validated
 @AllArgsConstructor
 @RestController
@@ -53,7 +55,7 @@ class IssueEndpoint {
 
     @PostMapping
     public IssueResponse create(
-            @NotNull @Pattern(regexp = "^[A-Z]+$") @Size(min = 2, max = 5) final String projectCode,
+            @NotNull @Pattern(regexp = PROJECT_CODE_REGEX) @Size(min = 2, max = 5) final String projectCode,
             @Valid @RequestBody final IssueRequest issueRequest
     ) {
         return issueFacade.create(projectCode, issueRequest);

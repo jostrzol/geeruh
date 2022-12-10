@@ -18,6 +18,13 @@ public record ApiError(
         @Singular("withContext") Map<String, Object> context
 ) {
 
+    public static ApiError internalServerError() {
+        return ApiError.builder()
+                .code(ErrorCodes.INTERNAL_ERROR)
+                .message("Server internal error")
+                .build();
+    }
+
     public static class ApiErrorBuilder {
 
         public ApiErrorBuilder code(Object code) {
