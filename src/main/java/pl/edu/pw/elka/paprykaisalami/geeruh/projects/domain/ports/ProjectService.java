@@ -15,22 +15,21 @@ import java.util.List;
 @AllArgsConstructor
 @Validated
 @Component
-@Transactional
+@Transactional(readOnly = true)
 public class ProjectService {
 
     ProjectRepository projectRepository;
 
-    @Transactional(readOnly = true)
     public List<Project> list() {
         return projectRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     public Either<DomainError, Project> get(ProjectCode projectCode) {
         return projectRepository.findByCode(projectCode);
     }
 
     @Valid
+    @Transactional
     public Project create(ProjectCode projectCode, String name, String description) {
         var project = Project.builder()
                 .projectCode(projectCode)
@@ -41,6 +40,7 @@ public class ProjectService {
     }
 
     @Valid
+    @Transactional
     public Either<DomainError, Project> update(ProjectCode projectCode, String name, String description) {
         return projectRepository.findByCode(projectCode).map(
                 project -> {

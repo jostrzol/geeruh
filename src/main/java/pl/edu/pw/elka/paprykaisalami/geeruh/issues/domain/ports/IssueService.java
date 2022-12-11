@@ -21,26 +21,25 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @Component
-@Transactional
+@Transactional(readOnly = true)
 public class IssueService {
 
     private final ProjectService projectService;
 
     private final IssueRepository issueRepository;
 
-    @Transactional(readOnly = true)
 
     public List<Issue> list() {
         return issueRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
 
     public Either<DomainError, Issue> get(IssueId issueId) {
         return issueRepository.findById(issueId);
     }
 
     @Valid
+    @Transactional
     public Either<DomainError, Issue> create(
             ProjectCode projectCode,
             IssueType type,
@@ -52,6 +51,7 @@ public class IssueService {
     }
 
     @Valid
+    @Transactional
     public Either<DomainError, Issue> update(
             IssueId issueId,
             IssueType type,
@@ -66,8 +66,6 @@ public class IssueService {
                     return issueRepository.save(issue);
                 });
     }
-
-    @Transactional(readOnly = true)
 
     public List<IssueHistoryEntry> getHistory(IssueId issueId) {
         return issueRepository.getHistory(issueId);
