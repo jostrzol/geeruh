@@ -8,7 +8,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ErrorsException;
 
 import java.util.function.Supplier;
 
-public abstract class DomainError {
+public abstract sealed class DomainError {
 
     public ErrorsException toException() {
         return ErrorsException.builder()
@@ -22,7 +22,7 @@ public abstract class DomainError {
     }
 
     @AllArgsConstructor
-    public static class NotFoundDomainError<T, IdT> extends DomainError {
+    public static final class NotFoundDomainError<T, IdT> extends DomainError {
 
         Class<T> clazz;
 

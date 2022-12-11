@@ -1,11 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models;
 
-import lombok.NonNull;
-import lombok.Value;
+import javax.validation.constraints.NotNull;
 
-@Value(staticConstructor = "of")
-public class Description {
-
-    @NonNull
-    String value;
+public record Description(@NotNull String value) {
 }

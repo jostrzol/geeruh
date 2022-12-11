@@ -32,7 +32,7 @@ public class ProjectPersistent {
 
     public Project toProject() {
         return Project.builder()
-                .projectCode(ProjectCode.of(code))
+                .projectCode(new ProjectCode(code))
                 .name(name)
                 .description(description)
                 .build();
@@ -40,7 +40,7 @@ public class ProjectPersistent {
 
     public static ProjectPersistent of(Project project) {
         return new ProjectPersistent(
-                project.getProjectCode().getValue(),
+                project.getProjectCode().value(),
                 project.getName(),
                 project.getDescription()
         );

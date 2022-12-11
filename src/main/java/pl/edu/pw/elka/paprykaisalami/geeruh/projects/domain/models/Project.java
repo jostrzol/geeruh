@@ -3,21 +3,25 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
 public class Project {
 
-    @NonNull
-    ProjectCode projectCode;
+    @Valid
+    @NotNull
+    private ProjectCode projectCode;
 
-    @NonNull
+    @NotBlank
     @Setter
-    String name;
+    private String name;
 
-    @NonNull
+    @NotNull
     @Setter
-    String description;
+    private String description;
 }

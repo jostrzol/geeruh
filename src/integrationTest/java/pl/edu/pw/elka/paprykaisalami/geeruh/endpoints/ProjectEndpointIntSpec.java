@@ -1,7 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.endpoints;
 
 import lombok.val;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -9,16 +8,15 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.RequestBuilder;
 import pl.edu.pw.elka.paprykaisalami.geeruh.BaseIntSpec;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
 
 import java.util.stream.Stream;
 
 import static net.javacrumbs.jsonunit.spring.JsonUnitResultMatchers.json;
-import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueDataset.*;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.array;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.easyJson;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.*;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.*;
 
 public class ProjectEndpointIntSpec extends BaseIntSpec {

@@ -22,14 +22,14 @@ public class ProjectFacade {
     }
 
     public ProjectResponse get(String projectCode) {
-        var project = projectService.get(ProjectCode.of(projectCode))
+        var project = projectService.get(new ProjectCode(projectCode))
                 .getOrElseThrow(DomainError::toException);
         return ProjectResponse.of(project);
     }
 
     public ProjectResponse update(String projectCode, ProjectRequest projectRequest) {
         var project = projectService.update(
-                ProjectCode.of(projectCode),
+                new ProjectCode(projectCode),
                 projectRequest.getName(),
                 projectRequest.getDescription()
         ).getOrElseThrow(DomainError::toException);
@@ -38,7 +38,7 @@ public class ProjectFacade {
 
     public ProjectResponse create(String projectCode, ProjectRequest projectRequest) {
         var project = projectService.create(
-                ProjectCode.of(projectCode),
+                new ProjectCode(projectCode),
                 projectRequest.getName(),
                 projectRequest.getDescription()
         );
