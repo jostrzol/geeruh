@@ -1,20 +1,14 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models;
 
-import lombok.NonNull;
-import lombok.Value;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 
-@Value(staticConstructor = "of")
-public class IssueId {
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
-    @NonNull
-    ProjectCode projectCode;
-
-    @NonNull
-    Integer issueIndex;
+public record IssueId(@NotNull ProjectCode projectCode, @NotNull @PositiveOrZero Integer issueIndex) {
 
     @Override
     public String toString() {
-        return projectCode.getValue() + "-" + issueIndex;
+        return projectCode.value() + "-" + issueIndex;
     }
 }

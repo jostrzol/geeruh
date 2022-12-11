@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 import static net.javacrumbs.jsonunit.spring.JsonUnitResultMatchers.json;
 import static org.hamcrest.Matchers.matchesPattern;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueDataset.*;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT_CODE;
 
 public class IssuesEndpointIntSpec extends BaseIntSpec {
 
@@ -84,7 +84,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldGetIssue() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
-        val issueId = issue.getIssueId().toString();
+        val issueId = issue.issueId().toString();
 
         // when
         val request = get("/issues/{id}", issueId);
@@ -119,7 +119,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldUpdateIssue() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
-        val issueId = issue.getIssueId().toString();
+        val issueId = issue.issueId().toString();
 
         // when
         val request = put("/issues/{id}", issueId)
@@ -137,7 +137,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldReportHistory() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
-        val issueId = issue.getIssueId().toString();
+        val issueId = issue.issueId().toString();
 
         // and
         thereIsIssueUpdate(SECOND_ISSUE, issueId);

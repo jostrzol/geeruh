@@ -22,8 +22,13 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static pl.edu.pw.elka.paprykaisalami.geeruh.errors.ApiError.internalServerError;
 
 @Slf4j
 @ControllerAdvice
@@ -75,17 +80,41 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return builder.build();
     }
 
+    /**
+     * @return If the error happened in an api package then VALIDATION_ERROR.
+     * Otherwise, INTERNAL_ERROR.
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     protected @NotNull ResponseEntity<Object> handleConstraintViolated(
             @NotNull ConstraintViolationException ex
     ) {
-        val error = ApiError.builder()
-                .code(ErrorCodes.VALIDATION_ERROR)
-                .message(ex.getMessage())
-                .build();
+        var lastCalledGeeruhClass = Arrays.stream(ex.getStackTrace())
+                .map(StackTraceElement::getClassName)
+                .filter(className -> className.startsWith(GEERUH_PACKAGE))
+                .findFirst();
+
+        var lastCallWasInApiPackage = lastCalledGeeruhClass
+                .map(API_PACKAGE_PATTERN::matcher)
+                .filter(Matcher::find)
+                .isPresent();
+
+        ApiError error;
+
+        if (lastCallWasInApiPackage) {
+            error = ApiError.builder()
+                    .code(ErrorCodes.VALIDATION_ERROR)
+                    .message(ex.getMessage())
+                    .build();
+        } else {
+            error = internalServerError();
+        }
+
         return ApiErrors.of(error)
                 .toResponseEntity(HttpStatus.BAD_REQUEST);
     }
+
+    private static final String GEERUH_PACKAGE = "pl.edu.pw.elka.paprykaisalami.geeruh";
+    private static final Pattern API_PACKAGE_PATTERN = Pattern.compile("\\.api\\.");
 
     @Override
     protected @NotNull ResponseEntity<Object> handleHttpMessageNotReadable(
@@ -168,12 +197,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         log.error("Internal Server Error!", ex);
 
-        val error = ApiError.builder()
-                .code(ErrorCodes.INTERNAL_ERROR)
-                .message("Server internal error")
-                .build();
-
-        return ApiErrors.of(error)
+        return ApiErrors.of(internalServerError())
                 .toResponseEntity(status);
     }
 
@@ -183,12 +207,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         log.error("Internal Server Error!", ex);
 
-        val error = ApiError.builder()
-                .code(ErrorCodes.INTERNAL_ERROR)
-                .message("Server internal error")
-                .build();
-
-        return ApiErrors.of(error)
+        return ApiErrors.of(internalServerError())
                 .toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

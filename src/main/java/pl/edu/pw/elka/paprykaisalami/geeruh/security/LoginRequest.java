@@ -1,16 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.security;
 
 
-import lombok.Builder;
-import lombok.Value;
-import lombok.extern.jackson.Jacksonized;
+import lombok.NonNull;
 
-@Jacksonized
-@Builder
-@Value
-public class LoginRequest {
-
-    String username;
-
-    String password;
+public record LoginRequest(@NonNull String username, @NonNull String password) {
 }

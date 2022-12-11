@@ -31,7 +31,7 @@ class PersistentProjectRepository implements ProjectRepository {
 
     @Override
     public Either<DomainError, Project> findByCode(ProjectCode projectCode) {
-        return actualRepository.findById(projectCode.getValue())
+        return actualRepository.findById(projectCode.value())
                 .<Either<DomainError, ProjectPersistent>>map(Either::right)
                 .orElseGet(NotFoundDomainError.supplier(Project.class, projectCode))
                 .map(ProjectPersistent::toProject);

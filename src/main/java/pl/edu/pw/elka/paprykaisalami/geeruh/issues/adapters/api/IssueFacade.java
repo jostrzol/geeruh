@@ -36,10 +36,10 @@ class IssueFacade {
     public IssueResponse create(String projectCode, IssueRequest issueRequest) {
         var description = issueRequest.getDescription();
         var issue = issueService.create(
-                ProjectCode.of(projectCode),
+                new ProjectCode(projectCode),
                 issueRequest.getType(),
-                Summary.of(issueRequest.getSummary()),
-                Description.of(description == null ? "" : description)
+                new Summary(issueRequest.getSummary()),
+                new Description(description == null ? "" : description)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
@@ -49,8 +49,8 @@ class IssueFacade {
         var issue = issueService.update(
                 parseIssueId(rawIssueId),
                 issueRequest.getType(),
-                Summary.of(issueRequest.getSummary()),
-                Description.of(issueRequest.getDescription())
+                new Summary(issueRequest.getSummary()),
+                new Description(issueRequest.getDescription())
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
@@ -66,6 +66,6 @@ class IssueFacade {
         var projectCode = parts[0];
         var issueNumber = Integer.parseUnsignedInt(parts[1]);
 
-        return IssueId.of(ProjectCode.of(projectCode), issueNumber);
+        return new IssueId(new ProjectCode(projectCode), issueNumber);
     }
 }

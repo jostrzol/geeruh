@@ -2,25 +2,30 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Builder
 @Getter
 public class Issue {
 
-    @NonNull
+    @NotNull
+    @Valid
     IssueId issueId;
 
-    @NonNull
+    @NotNull
     @Setter
     IssueType type;
 
-    @NonNull
+    @NotNull
+    @Valid
     @Setter
     Summary summary;
 
-    @NonNull
+    @NotNull
+    @Valid
     @Setter
     Description description;
 }
