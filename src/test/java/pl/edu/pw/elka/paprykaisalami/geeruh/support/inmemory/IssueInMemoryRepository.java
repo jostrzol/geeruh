@@ -8,6 +8,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.idgenerators.IdGenerator;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.idgenerators.SequentialIntegerGenerator;
 
@@ -22,7 +23,7 @@ public class IssueInMemoryRepository extends BaseInMemoryRepository<Issue, Issue
     }
 
     @Override
-    public Issue create(ProjectCode projectCode, IssueType type, Summary summary, Description description) {
+    public Issue create(ProjectCode projectCode, StatusCode statusCode, IssueType type, Summary summary, Description description) {
         var issueId = new IssueId(projectCode, idGenerator.generateId());
         var issue = Issue.builder()
                 .issueId(issueId)

@@ -44,7 +44,3 @@ class PersistentStatusRepository implements StatusRepository {
         return actualRepository.save(statusPersistent).toStatus();
     }
 }
-
-@Component
-interface ActualPersistentStatusRepository extends JpaRepository<StatusPersistent, String> {
-}

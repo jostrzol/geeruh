@@ -38,11 +38,11 @@ public abstract class BaseSpec {
         projectRepository = new ProjectInMemoryRepository();
         projectService = new ProjectService(projectRepository);
 
-        issueRepository = new IssueInMemoryRepository();
-        issueService = new IssueService(projectService, issueRepository);
-
         statusRepository = new StatusInMemoryRepository();
         statusService = new StatusService(statusRepository);
+
+        issueRepository = new IssueInMemoryRepository();
+        issueService = new IssueService(projectService, statusService, issueRepository);
     }
 
     protected void thereAreProjects(Project... projects) {

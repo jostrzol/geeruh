@@ -13,11 +13,14 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.ProjectPersistent;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.StatusPersistent;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -47,6 +50,11 @@ public class IssuePersistent {
     @JoinColumn(name = "projectCode", insertable = false, updatable = false)
     private ProjectPersistent project;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "statusCode")
+    @NotAudited // TODO: status assignment should be audited
+    private StatusPersistent status;
+
     @Column(length = 120)
     private String summary;
 
@@ -58,11 +66,13 @@ public class IssuePersistent {
 
     IssuePersistent(
             ProjectCode projectCode,
+            StatusPersistent status,
             IssueType type,
             Summary summary,
             Description description
     ) {
         this.projectCode = projectCode.value();
+        this.status = status;
         this.summary = summary.value();
         this.type = type;
         this.description = description.value();
@@ -70,12 +80,14 @@ public class IssuePersistent {
 
     IssuePersistent(
             ProjectCode projectCode,
+            StatusPersistent status,
             Integer issueIndex,
             IssueType type,
             Summary summary,
             Description description
     ) {
         this.projectCode = projectCode.value();
+        this.status = status;
         this.issueIndex = issueIndex;
         this.summary = summary.value();
         this.type = type;
@@ -85,15 +97,17 @@ public class IssuePersistent {
     public Issue toIssue() {
         return Issue.builder()
                 .issueId(new IssueId(new ProjectCode(projectCode), issueIndex))
+                .statusCode(new StatusCode(status.getCode()))
                 .type(type)
                 .summary(new Summary(summary))
                 .description(new Description(description))
                 .build();
     }
 
-    public static IssuePersistent of(Issue issue) {
+    public static IssuePersistent of(Issue issue, StatusPersistent status) {
         return new IssuePersistent(
                 issue.getIssueId().projectCode(),
+                status,
                 issue.getIssueId().issueIndex(),
                 issue.getType(),
                 issue.getSummary(),

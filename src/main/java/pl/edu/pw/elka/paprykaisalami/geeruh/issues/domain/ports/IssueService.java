@@ -12,6 +12,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import javax.transaction.Transactional;
@@ -24,6 +26,8 @@ import java.util.List;
 public class IssueService {
 
     private final ProjectService projectService;
+
+    private final StatusService statusService;
 
     private final IssueRepository issueRepository;
 
@@ -39,18 +43,24 @@ public class IssueService {
     @Valid
     public Either<DomainError, Issue> create(
             ProjectCode projectCode,
+            StatusCode statusCode,
             IssueType type,
             Summary summary,
             Description description
     ) {
+        var status = statusService.get(statusCode);
+        if(status.isLeft()){
+            return Either.left(status.getLeft());
+        }
         return projectService.get(projectCode)
-                .map(p -> issueRepository.create(projectCode, type, summary, description));
+                .map(p -> issueRepository.create(projectCode, statusCode, type, summary, description));
     }
 
     @Transactional
     @Valid
     public Either<DomainError, Issue> update(
             IssueId issueId,
+            StatusCode statusCode,
             IssueType type,
             Summary summary,
             Description description
@@ -58,6 +68,7 @@ public class IssueService {
         return issueRepository.findById(issueId).map(
                 issue -> {
                     issue.setType(type);
+                    issue.setStatusCode(statusCode);
                     issue.setSummary(summary);
                     issue.setDescription(description);
                     return issueRepository.save(issue);
