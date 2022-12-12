@@ -39,7 +39,7 @@ public class InitialData implements ApplicationRunner {
         );
 
         var inProgressStatus = statusService.create(
-                new StatusCode("IN_PRG"),
+                new StatusCode("INP"),
                 "In Progress",
                 2
         );
