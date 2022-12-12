@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api.ProjectResponse;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.api.StatusResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.TestDbService;
 
 import java.io.IOException;
@@ -70,5 +71,18 @@ public abstract class BaseIntSpec {
                 .getContentAsByteArray();
 
         return mapContent(reader, ProjectResponse.class);
+    }
+
+    public StatusResponse thereIsStatus(String code, Object body) throws Exception {
+        var request = post("/statuses/{code}", code)
+            .content(body.toString());
+
+        var reader = mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsByteArray();
+
+        return mapContent(reader, StatusResponse.class);
     }
 }
