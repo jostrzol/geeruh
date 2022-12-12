@@ -2,19 +2,23 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports;
 
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.Status;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
+
 import java.util.List;
 
 @AllArgsConstructor
 @Validated
 @Component
+@Transactional(readOnly = true)
 public class StatusService {
 
     StatusRepository statusRepository;
