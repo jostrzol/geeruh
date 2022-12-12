@@ -32,15 +32,27 @@ public class InitialData implements ApplicationRunner {
                 "Projekt dotyczy strony internetowej tworzonej dla sklepu 'Papryka i Salami'"
         );
 
-        var firstStatus = statusService.create(
+        var openStatus = statusService.create(
                 new StatusCode("OPEN"),
                 "Open",
                 1
         );
 
+        var inProgressStatus = statusService.create(
+                new StatusCode("IN_PRG"),
+                "In Progress",
+                2
+        );
+
+        var closedStatus = statusService.create(
+                new StatusCode("CLOSED"),
+                "Closed",
+                3
+        );
+
         var firstIssue = issueService.create(
                 firstProject.getProjectCode(),
-                firstStatus.getStatusCode(),
+                openStatus.getStatusCode(),
                 IssueType.BUG,
                 new Summary("Zmiana koloru guzika"),
                 new Description("Guzik trzeba pilnie zmienić na zielony.")
@@ -48,22 +60,28 @@ public class InitialData implements ApplicationRunner {
 
         issueService.update(
                 firstIssue.getIssueId(),
-                firstStatus.getStatusCode(),
+                openStatus.getStatusCode(),
                 IssueType.BUG,
                 new Summary("Zmiana koloru guzików"),
                 new Description("Guziki trzeba pilnie zmienić na zielony.")
         );
-
         var secondIssue = issueService.create(
                 firstProject.getProjectCode(),
-                firstStatus.getStatusCode(),
+                openStatus.getStatusCode(),
                 IssueType.BUG,
                 new Summary("Wycentrowanie logo"),
                 new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
         ).get();
         issueService.update(
                 secondIssue.getIssueId(),
-                firstStatus.getStatusCode(),
+                inProgressStatus.getStatusCode(),
+                IssueType.TASK,
+                new Summary("Wycentrowanie logo"),
+                new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
+        );
+        issueService.update(
+                secondIssue.getIssueId(),
+                closedStatus.getStatusCode(),
                 IssueType.TASK,
                 new Summary("Wycentrowanie logo"),
                 new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
