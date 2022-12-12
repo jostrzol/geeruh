@@ -28,6 +28,7 @@ public class StatusPersistent {
 
     private String name;
 
+    @Column(unique = true)
     private Integer orderNumber;
 
     public Status toStatus() {
