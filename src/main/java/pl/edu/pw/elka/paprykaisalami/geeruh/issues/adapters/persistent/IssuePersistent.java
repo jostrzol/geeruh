@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
@@ -52,7 +54,7 @@ public class IssuePersistent {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "statusCode")
-    @NotAudited // TODO: status assignment should be audited
+    @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
     private StatusPersistent status;
 
     @Column(length = 120)
