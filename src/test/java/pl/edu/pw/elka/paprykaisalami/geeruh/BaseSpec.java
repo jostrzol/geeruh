@@ -9,8 +9,12 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.Status;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.IssueInMemoryRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.ProjectInMemoryRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.StatusInMemoryRepository;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -23,6 +27,9 @@ public abstract class BaseSpec {
     protected ProjectRepository projectRepository;
     protected ProjectService projectService;
 
+    protected StatusRepository statusRepository;
+    protected StatusService statusService;
+
     protected IssueRepository issueRepository;
     protected IssueService issueService;
 
@@ -31,13 +38,21 @@ public abstract class BaseSpec {
         projectRepository = new ProjectInMemoryRepository();
         projectService = new ProjectService(projectRepository);
 
+        statusRepository = new StatusInMemoryRepository();
+        statusService = new StatusService(statusRepository);
+
         issueRepository = new IssueInMemoryRepository();
-        issueService = new IssueService(projectService, issueRepository);
+        issueService = new IssueService(projectService, statusService, issueRepository);
     }
 
     protected void thereAreProjects(Project... projects) {
         Arrays.stream(projects)
                 .forEach(projectRepository::save);
+    }
+
+    protected void thereAreStatuses(Status... statuses) {
+        Arrays.stream(statuses)
+                .forEach(statusRepository::save);
     }
 
     protected void thereAreIssues(Issue... issues) {

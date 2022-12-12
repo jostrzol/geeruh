@@ -17,6 +17,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.ActualPersistentStatusRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
@@ -30,6 +32,8 @@ import java.util.stream.Collectors;
 class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
+
+    ActualPersistentStatusRepository actualPersistentStatusRepository;
 
     @Override
     public List<Issue> findAll() {
@@ -48,15 +52,21 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
-    public Issue create(ProjectCode projectCode, IssueType type, Summary summary, Description description) {
-        var issuePersistent = new IssuePersistent(projectCode, type, summary, description);
+    public Issue create(ProjectCode projectCode, StatusCode statusCode, IssueType type, Summary summary, Description description) {
+        var issuePersistent = new IssuePersistent(
+                projectCode,
+                actualPersistentStatusRepository.getReferenceById(statusCode.value()),
+                type,
+                summary,
+                description);
         return actualRepository.save(issuePersistent)
                 .toIssue();
     }
 
     @Override
     public Issue save(Issue issue) {
-        var issuePersistent = IssuePersistent.of(issue);
+        var status = actualPersistentStatusRepository.getReferenceById(issue.getStatusCode().value());
+        var issuePersistent = IssuePersistent.of(issue, status);
         return actualRepository.save(issuePersistent).toIssue();
     }
 
