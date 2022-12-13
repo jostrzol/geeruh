@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.StatusPersistent;
@@ -20,7 +21,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Primary
 @Component
-@Transactional(readOnly = true)
 class PersistentStatusRepository implements StatusRepository {
 
     ActualPersistentStatusRepository actualRepository;
@@ -42,7 +42,7 @@ class PersistentStatusRepository implements StatusRepository {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.MANDATORY)
     public Status save(Status issue) {
         var statusPersistent = StatusPersistent.of(issue);
         return actualRepository.save(statusPersistent).toStatus();

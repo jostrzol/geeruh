@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
@@ -29,7 +30,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Primary
 @Component
-@Transactional(readOnly = true)
 class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
@@ -53,7 +53,7 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.MANDATORY)
     public Issue create(ProjectCode projectCode, StatusCode statusCode, IssueType type, Summary summary, Description description) {
         var issuePersistent = new IssuePersistent(
                 projectCode,
@@ -66,7 +66,7 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.MANDATORY)
     public Issue save(Issue issue) {
         var status = actualPersistentStatusRepository.getReferenceById(issue.getStatusCode().value());
         var issuePersistent = IssuePersistent.of(issue, status);
