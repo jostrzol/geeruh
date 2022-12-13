@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Primary
 @Component
+@Transactional(readOnly = true)
 class PersistentStatusRepository implements StatusRepository {
 
     ActualPersistentStatusRepository actualRepository;

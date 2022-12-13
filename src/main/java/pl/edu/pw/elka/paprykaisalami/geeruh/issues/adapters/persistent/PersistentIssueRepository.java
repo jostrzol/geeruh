@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Primary
 @Component
+@Transactional(readOnly = true)
 class PersistentIssueRepository implements IssueRepository {
 
     ActualPersistentIssueRepository actualRepository;
@@ -52,6 +53,7 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
+    @Transactional
     public Issue create(ProjectCode projectCode, StatusCode statusCode, IssueType type, Summary summary, Description description) {
         var issuePersistent = new IssuePersistent(
                 projectCode,
@@ -64,6 +66,7 @@ class PersistentIssueRepository implements IssueRepository {
     }
 
     @Override
+    @Transactional
     public Issue save(Issue issue) {
         var status = actualPersistentStatusRepository.getReferenceById(issue.getStatusCode().value());
         var issuePersistent = IssuePersistent.of(issue, status);
