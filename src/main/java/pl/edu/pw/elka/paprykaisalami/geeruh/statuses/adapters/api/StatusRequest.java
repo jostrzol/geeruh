@@ -11,5 +11,6 @@ public class StatusRequest {
     @NotBlank
     String name;
 
+    @NotNull
     Integer orderNumber;
 }
