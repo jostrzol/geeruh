@@ -9,7 +9,7 @@ pipeline {
         HOME = '/home/azureuser'
         GRADLE_CACHE = '/tmp/gradle-user-home'
         NEXUS = credentials('nexus-user-credentials')
-        LAUNCH = credentials('launch-azure')
+        LAUNCH = credentials('launch-be-azure')
     }
     stages {
         stage('Load cache') {
