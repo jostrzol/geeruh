@@ -9,6 +9,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -47,6 +48,15 @@ public class IssueAssert extends AbstractAssert<IssueAssert, Issue> {
 
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("issueId", issueId);
+
+        return myself;
+    }
+
+    public IssueAssert hasStatusCode(String statusCode) {
+        isNotNull();
+
+        assertThat(actual)
+                .hasFieldOrPropertyWithValue("statusCode", new StatusCode(statusCode));
 
         return myself;
     }

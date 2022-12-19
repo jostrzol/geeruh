@@ -15,9 +15,6 @@ class IssueRequest {
     IssueType type;
 
     @NotBlank
-    String statusCode;
-
-    @NotBlank
     String summary;
 
     String description = "";

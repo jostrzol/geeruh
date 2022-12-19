@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 
 import static pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode.PROJECT_CODE_REGEX;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode.STATUS_CODE_REGEX;
 
 @Validated
 @AllArgsConstructor
@@ -53,11 +54,20 @@ class IssueEndpoint {
         return issueFacade.update(issueId, issueRequest);
     }
 
+    @PutMapping("{issueId}/status")
+    public IssueResponse changeStatus(
+            @PathVariable @Pattern(regexp = ISSUE_ID) final String issueId,
+            @Valid @RequestBody final IssueChangeStatusRequest issueChangeStatusRequest
+    ) {
+        return issueFacade.changeStatus(issueId, issueChangeStatusRequest);
+    }
+
     @PostMapping
     public IssueResponse create(
             @NotNull @Pattern(regexp = PROJECT_CODE_REGEX) @Size(min = 2, max = 5) final String projectCode,
+            @NotNull @Pattern(regexp = STATUS_CODE_REGEX) final String statusCode,
             @Valid @RequestBody final IssueRequest issueRequest
     ) {
-        return issueFacade.create(projectCode, issueRequest);
+        return issueFacade.create(projectCode, statusCode, issueRequest);
     }
 }

@@ -34,11 +34,11 @@ class IssueFacade {
         return IssueResponse.of(issue);
     }
 
-    public IssueResponse create(String projectCode, IssueRequest issueRequest) {
+    public IssueResponse create(String projectCode, String statusCode, IssueRequest issueRequest) {
         var description = issueRequest.getDescription();
         var issue = issueService.create(
                 new ProjectCode(projectCode),
-                new StatusCode(issueRequest.getStatusCode()),
+                new StatusCode(statusCode),
                 issueRequest.getType(),
                 new Summary(issueRequest.getSummary()),
                 new Description(description == null ? "" : description)
@@ -50,10 +50,17 @@ class IssueFacade {
     public IssueResponse update(String rawIssueId, IssueRequest issueRequest) {
         var issue = issueService.update(
                 parseIssueId(rawIssueId),
-                new StatusCode(issueRequest.statusCode),
                 issueRequest.getType(),
                 new Summary(issueRequest.getSummary()),
                 new Description(issueRequest.getDescription())
+        ).getOrElseThrow(DomainError::toException);
+        return IssueResponse.of(issue);
+    }
+
+    public IssueResponse changeStatus(String rawIssueId, IssueChangeStatusRequest issueChangeStatusRequest) {
+        var issue = issueService.changeStatus(
+                parseIssueId(rawIssueId),
+                new StatusCode(issueChangeStatusRequest.statusCode)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
