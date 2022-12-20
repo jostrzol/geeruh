@@ -28,6 +28,7 @@ public class IssueInMemoryRepository extends BaseInMemoryRepository<Issue, Issue
         var issue = Issue.builder()
                 .issueId(issueId)
                 .type(type)
+                .statusCode(statusCode)
                 .summary(summary)
                 .description(description)
                 .build();

@@ -6,10 +6,13 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.*;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.SECOND_STATUS_CODE;
 
 public class IssueDataset {
 
@@ -24,6 +27,7 @@ public class IssueDataset {
         return Issue.builder()
                 .issueId(firstIssueId())
                 .type(IssueType.valueOf(FIRST_ISSUE_TYPE))
+                .statusCode(new StatusCode(FIRST_STATUS_CODE))
                 .summary(new Summary(FIRST_ISSUE_SUMMARY))
                 .description(new Description(FIRST_ISSUE_DESCRIPTION))
                 .build();
@@ -40,6 +44,7 @@ public class IssueDataset {
         return Issue.builder()
                 .issueId(secondIssueId())
                 .type(IssueType.valueOf(SECOND_ISSUE_TYPE))
+                .statusCode(new StatusCode(SECOND_STATUS_CODE))
                 .summary(new Summary(SECOND_ISSUE_SUMMARY))
                 .description(new Description(SECOND_ISSUE_DESCRIPTION))
                 .build();

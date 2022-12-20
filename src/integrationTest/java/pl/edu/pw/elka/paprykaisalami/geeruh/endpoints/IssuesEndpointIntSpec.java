@@ -53,6 +53,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         // when
         val request = post("/issues")
                 .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
                 .content(FIRST_ISSUE_STRING);
 
         // then
@@ -73,6 +74,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         // when
         val request = post("/issues")
                 .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
                 .content(THIRD_ISSUE_NO_DESCRIPTION_STRING);
 
 
@@ -171,6 +173,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
 
         val request = post("/issues")
                 .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
                 .content(body.toString());
 
         val reader = mockMvc.perform(request)

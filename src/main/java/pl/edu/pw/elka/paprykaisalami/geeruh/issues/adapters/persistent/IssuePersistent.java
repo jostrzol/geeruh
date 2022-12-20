@@ -52,7 +52,7 @@ public class IssuePersistent {
     @JoinColumn(name = "projectCode", insertable = false, updatable = false)
     private ProjectPersistent project;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "statusCode")
     @Audited(targetAuditMode=RelationTargetAuditMode.NOT_AUDITED)
     private StatusPersistent status;

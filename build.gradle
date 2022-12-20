@@ -90,7 +90,7 @@ tasks.named('integrationTest') {
 publishing {
     publications {
         maven(MavenPublication) {
-            artifact ("./build/libs/geeruh-0.0.1-SNAPSHOT.jar")
+            artifact ("./build/libs/geeruh-${version}.jar")
             components.java
         }
     }

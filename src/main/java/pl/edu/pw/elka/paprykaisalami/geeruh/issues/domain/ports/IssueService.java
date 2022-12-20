@@ -63,7 +63,6 @@ public class IssueService {
     @Transactional
     public Either<DomainError, Issue> update(
             IssueId issueId,
-            StatusCode statusCode,
             IssueType type,
             Summary summary,
             Description description
@@ -71,7 +70,6 @@ public class IssueService {
         return issueRepository.findById(issueId).map(
                 issue -> {
                     issue.setType(type);
-                    issue.setStatusCode(statusCode);
                     issue.setSummary(summary);
                     issue.setDescription(description);
                     return issueRepository.save(issue);
@@ -80,5 +78,19 @@ public class IssueService {
 
     public List<IssueHistoryEntry> getHistory(IssueId issueId) {
         return issueRepository.getHistory(issueId);
+    }
+
+    @Transactional
+    @Valid
+    public Either<DomainError, Issue> changeStatus(IssueId issueId, StatusCode statusCode) {
+        var status = statusService.get(statusCode);
+        if(status.isLeft()){
+            return Either.left(status.getLeft());
+        }
+        return issueRepository.findById(issueId).map(
+                issue -> {
+                    issue.setStatusCode(statusCode);
+                    return issueRepository.save(issue);
+                });
     }
 }

@@ -60,7 +60,6 @@ public class InitialData implements ApplicationRunner {
 
         issueService.update(
                 firstIssue.getIssueId(),
-                openStatus.getStatusCode(),
                 IssueType.BUG,
                 new Summary("Zmiana koloru guzików"),
                 new Description("Guziki trzeba pilnie zmienić na zielony.")
@@ -74,14 +73,12 @@ public class InitialData implements ApplicationRunner {
         ).get();
         issueService.update(
                 secondIssue.getIssueId(),
-                inProgressStatus.getStatusCode(),
                 IssueType.TASK,
                 new Summary("Wycentrowanie logo"),
                 new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
         );
         issueService.update(
                 secondIssue.getIssueId(),
-                closedStatus.getStatusCode(),
                 IssueType.TASK,
                 new Summary("Wycentrowanie logo"),
                 new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
