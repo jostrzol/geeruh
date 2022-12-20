@@ -3,6 +3,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.support;
 import org.json.JSONObject;
 
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
 
 public class IssueDataset {
 

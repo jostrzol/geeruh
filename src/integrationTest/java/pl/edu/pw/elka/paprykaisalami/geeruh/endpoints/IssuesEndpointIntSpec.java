@@ -21,6 +21,8 @@ import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueDataset.*;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.*;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusDataset.FIRST_STATUS;
 
 public class IssuesEndpointIntSpec extends BaseIntSpec {
 
@@ -46,10 +48,12 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldCreateIssue() throws Exception {
         // given
         thereIsProject(FIRST_PROJECT_CODE, FIRST_PROJECT);
+        thereIsStatus(FIRST_STATUS_CODE, FIRST_STATUS);
 
         // when
         val request = post("/issues")
                 .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
                 .content(FIRST_ISSUE_STRING);
 
         // then
@@ -65,10 +69,12 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
     void shouldCreateIssue_whenNoDescriptionProvided() throws Exception {
         // given
         thereIsProject(FIRST_PROJECT_CODE, FIRST_PROJECT);
+        thereIsStatus(FIRST_STATUS_CODE, FIRST_STATUS);
 
         // when
         val request = post("/issues")
                 .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
                 .content(THIRD_ISSUE_NO_DESCRIPTION_STRING);
 
 
@@ -162,9 +168,12 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
 
     private IssueResponse thereIsIssue(Object body) throws Exception {
         thereIsProject(FIRST_PROJECT_CODE, FIRST_PROJECT);
+        thereIsStatus(FIRST_STATUS_CODE, FIRST_STATUS);
+
 
         val request = post("/issues")
                 .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
                 .content(body.toString());
 
         val reader = mockMvc.perform(request)

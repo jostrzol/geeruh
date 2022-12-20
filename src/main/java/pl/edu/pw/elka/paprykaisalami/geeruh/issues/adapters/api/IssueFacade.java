@@ -8,6 +8,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
@@ -33,10 +34,11 @@ class IssueFacade {
         return IssueResponse.of(issue);
     }
 
-    public IssueResponse create(String projectCode, IssueRequest issueRequest) {
+    public IssueResponse create(String projectCode, String statusCode, IssueRequest issueRequest) {
         var description = issueRequest.getDescription();
         var issue = issueService.create(
                 new ProjectCode(projectCode),
+                new StatusCode(statusCode),
                 issueRequest.getType(),
                 new Summary(issueRequest.getSummary()),
                 new Description(description == null ? "" : description)
@@ -51,6 +53,14 @@ class IssueFacade {
                 issueRequest.getType(),
                 new Summary(issueRequest.getSummary()),
                 new Description(issueRequest.getDescription())
+        ).getOrElseThrow(DomainError::toException);
+        return IssueResponse.of(issue);
+    }
+
+    public IssueResponse changeStatus(String rawIssueId, IssueChangeStatusRequest issueChangeStatusRequest) {
+        var issue = issueService.changeStatus(
+                parseIssueId(rawIssueId),
+                new StatusCode(issueChangeStatusRequest.statusCode)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
