@@ -33,17 +33,17 @@ public class StatusPersistent {
 
     public Status toStatus() {
         return Status.builder()
-                .statusCode(new StatusCode(code))
-                .name(name)
-                .orderNumber(orderNumber)
-                .build();
+            .statusCode(new StatusCode(code))
+            .name(name)
+            .orderNumber(orderNumber)
+            .build();
     }
 
     public static StatusPersistent of(Status status) {
         return new StatusPersistent(
-                status.getStatusCode().value(),
-                status.getName(),
-                status.getOrderNumber()
+            status.getStatusCode().value(),
+            status.getName(),
+            status.getOrderNumber()
         );
     }
 }
