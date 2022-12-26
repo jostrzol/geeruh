@@ -11,12 +11,19 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainErro
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_SUMMARY;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_DESCRIPTION;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.SECOND_STATUS_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.assertions.GeeruhAssertions.assertThat;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.IssueDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.IssueDataset.firstIssue;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.IssueDataset.firstIssueId;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.IssueDataset.secondIssue;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.IssueDataset.secondIssueId;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.ProjectDataset.firstProject;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.StatusDataset.firstStatus;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.StatusDataset.secondStatus;

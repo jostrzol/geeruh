@@ -16,8 +16,14 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.array;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.easyJson;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.*;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.THIRD_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT_STRING;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.SECOND_PROJECT;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.SECOND_PROJECT_STRING;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.THIRD_PROJECT_NO_DESCRIPTION_STRING;
 
 public class ProjectEndpointIntSpec extends BaseIntSpec {
 
@@ -34,8 +40,7 @@ public class ProjectEndpointIntSpec extends BaseIntSpec {
                 arguments(get("/projects")),
                 arguments(get("/projects/TST")),
                 arguments(put("/projects/TST")),
-                arguments(post("/projects"))
-        );
+                arguments(post("/projects")));
     }
 
     @Test
@@ -58,7 +63,6 @@ public class ProjectEndpointIntSpec extends BaseIntSpec {
         // given
         val request = post("/projects/{projectCode}", THIRD_PROJECT_CODE)
                 .content(THIRD_PROJECT_NO_DESCRIPTION_STRING);
-
 
         // expect
         mockMvc.perform(request)

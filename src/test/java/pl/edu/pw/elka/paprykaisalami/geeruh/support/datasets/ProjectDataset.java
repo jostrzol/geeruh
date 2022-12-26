@@ -3,7 +3,12 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_NAME;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_NAME;
 
 public class ProjectDataset {
 

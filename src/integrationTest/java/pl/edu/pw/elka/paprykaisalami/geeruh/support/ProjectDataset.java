@@ -2,7 +2,11 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.support;
 
 import org.json.JSONObject;
 
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_NAME;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_NAME;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.THIRD_PROJECT_NAME;
 
 public class ProjectDataset {
 

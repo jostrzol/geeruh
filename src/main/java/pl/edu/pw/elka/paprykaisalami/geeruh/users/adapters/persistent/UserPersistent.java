@@ -1,7 +1,12 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.persistent;
 
-import lombok.*;
 import org.hibernate.annotations.Type;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.User;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 
