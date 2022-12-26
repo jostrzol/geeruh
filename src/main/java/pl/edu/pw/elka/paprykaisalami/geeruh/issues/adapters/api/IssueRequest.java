@@ -6,8 +6,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-;
-
 @Data
 class IssueRequest {
 

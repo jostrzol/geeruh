@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.errors;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.errors;
 
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -28,7 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static pl.edu.pw.elka.paprykaisalami.geeruh.errors.ApiError.internalServerError;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.spring.errors.ApiError.internalServerError;
 
 @Slf4j
 @ControllerAdvice

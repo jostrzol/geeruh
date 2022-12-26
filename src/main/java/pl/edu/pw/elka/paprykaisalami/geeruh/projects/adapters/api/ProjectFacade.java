@@ -2,7 +2,6 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ErrorsException;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
