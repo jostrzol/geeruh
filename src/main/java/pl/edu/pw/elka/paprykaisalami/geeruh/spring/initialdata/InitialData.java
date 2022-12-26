@@ -1,6 +1,5 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.initialdata;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -13,6 +12,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserService;
 
 @Component
 @AllArgsConstructor
@@ -20,12 +20,32 @@ public class InitialData implements ApplicationRunner {
 
     private final IssueService issueService;
 
+    private final UserService userService;
+
     private final ProjectService projectService;
 
     private final StatusService statusService;
 
     @Override
     public void run(ApplicationArguments args) {
+        userService.create(
+                "user",
+                "password",
+                "user@mail.com",
+                "first",
+                null,
+                "user"
+        );
+
+        userService.create(
+                "admin",
+                "password",
+                "admin@mail.com",
+                "first",
+                null,
+                "admin"
+        );
+
         var firstProject = projectService.create(
                 new ProjectCode("PIS"),
                 "Strona sklepu 'Papryka i Salami'",

@@ -32,6 +32,10 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+    public Either<DomainError, User> getByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
+
     @Valid
     @Transactional
     public User create(

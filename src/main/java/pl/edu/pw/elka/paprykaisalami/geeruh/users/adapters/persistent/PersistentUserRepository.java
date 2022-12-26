@@ -15,6 +15,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,14 @@ class PersistentUserRepository implements UserRepository {
     }
 
     @Override
+    public Either<DomainError, User> findByLogin(String login) {
+        return actualRepository.findByLogin(login)
+                .<Either<DomainError, UserPersistent>>map(Either::right)
+                .orElseGet(NotFoundDomainError.supplier(User.class, login))
+                .map(UserPersistent::toUser);
+    }
+
+    @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public User save(User issue) {
         var userPersistent = UserPersistent.of(issue);
@@ -51,4 +60,6 @@ class PersistentUserRepository implements UserRepository {
 
 @Component
 interface ActualPersistentUserRepository extends JpaRepository<UserPersistent, UUID> {
+
+    Optional<UserPersistent> findByLogin(String login);
 }

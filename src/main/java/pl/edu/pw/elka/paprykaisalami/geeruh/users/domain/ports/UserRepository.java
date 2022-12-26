@@ -14,5 +14,7 @@ public interface UserRepository {
 
     Either<DomainError, User> findById(UserId userId);
 
+    Either<DomainError, User> findByLogin(String login);
+
     User save(User user);
 }
