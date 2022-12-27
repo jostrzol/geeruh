@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.config;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
