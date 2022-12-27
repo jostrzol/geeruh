@@ -13,6 +13,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserService;
 
 @Component
 @AllArgsConstructor
@@ -24,8 +25,13 @@ public class InitialData implements ApplicationRunner {
 
     private final StatusService statusService;
 
+    private final UserService userService;
+
     @Override
     public void run(ApplicationArguments args) {
+        userService.create("user", "password", "user@mail.com", "First", null, "User");
+        userService.create("admin", "password", "admin@mail.com", "First", null, "Admin");
+
         var firstProject = projectService.create(
                 new ProjectCode("PIS"),
                 "Strona sklepu 'Papryka i Salami'",
