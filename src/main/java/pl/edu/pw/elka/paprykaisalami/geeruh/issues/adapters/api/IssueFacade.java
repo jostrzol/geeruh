@@ -2,7 +2,6 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ErrorsException;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
@@ -12,7 +11,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor

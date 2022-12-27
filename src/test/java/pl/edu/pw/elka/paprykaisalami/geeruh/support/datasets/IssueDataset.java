@@ -8,7 +8,12 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_SUMMARY;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_SUMMARY;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_DESCRIPTION;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;

@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.errors;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;

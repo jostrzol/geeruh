@@ -7,9 +7,14 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainErro
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.vavr.api.VavrAssertions.assertThat;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_NAME;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.SECOND_PROJECT_NAME;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.assertions.GeeruhAssertions.assertThat;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.ProjectDataset.*;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.ProjectDataset.firstProject;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.ProjectDataset.secondProject;
 
 public class ProjectServiceSpec extends BaseSpec {
 

@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.errors;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.errors;
 
 enum ErrorCodes {
     VALIDATION_ERROR,

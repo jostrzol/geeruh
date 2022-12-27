@@ -6,7 +6,10 @@ import net.javacrumbs.jsonunit.spring.JsonUnitResultMatchers;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.List;
+
 import static net.javacrumbs.jsonunit.spring.JsonUnitResultMatchers.json;
+import static org.assertj.core.util.Streams.stream;
 
 public class JsonUtils {
 
@@ -18,6 +21,19 @@ public class JsonUtils {
 
     public static JsonUnitResultMatchers easyJson() {
         return json().when(Option.IGNORING_EXTRA_FIELDS).when(Option.IGNORING_ARRAY_ORDER);
+    }
+
+    public static JSONObject copy(JSONObject obj) {
+        var names = stream(obj.names()).map(Object::toString).toArray(String[]::new);
+        return new JSONObject(obj, names);
+    }
+
+    public static JSONObject omit(JSONObject obj, String ... names) {
+        var newObj = copy(obj);
+        for (var name : names) {
+            newObj.remove(name);
+        }
+        return newObj;
     }
 
     public static String jsonUnitRegex(String regex) {

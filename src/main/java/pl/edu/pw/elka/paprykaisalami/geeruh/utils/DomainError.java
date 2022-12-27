@@ -3,8 +3,8 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.utils;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ApiError;
-import pl.edu.pw.elka.paprykaisalami.geeruh.errors.ErrorsException;
+import pl.edu.pw.elka.paprykaisalami.geeruh.spring.errors.ApiError;
+import pl.edu.pw.elka.paprykaisalami.geeruh.spring.errors.ErrorsException;
 
 import java.util.function.Supplier;
 

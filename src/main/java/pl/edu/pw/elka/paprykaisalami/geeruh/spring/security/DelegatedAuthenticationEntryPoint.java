@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.security;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.security;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;

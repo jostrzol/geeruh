@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.initialdata;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.initialdata;
 
 
 import lombok.AllArgsConstructor;

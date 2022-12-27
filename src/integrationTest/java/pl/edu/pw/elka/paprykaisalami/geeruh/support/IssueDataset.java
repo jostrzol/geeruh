@@ -2,8 +2,14 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.support;
 
 import org.json.JSONObject;
 
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.*;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_SUMMARY;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.FIRST_ISSUE_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_SUMMARY;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.SECOND_ISSUE_DESCRIPTION;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.THIRD_ISSUE_TYPE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueAttributeDataset.THIRD_ISSUE_SUMMARY;
 
 public class IssueDataset {
 
