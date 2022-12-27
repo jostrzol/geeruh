@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.security;
+package pl.edu.pw.elka.paprykaisalami.geeruh.spring.security;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.NotImplementedException;

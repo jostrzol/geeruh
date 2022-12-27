@@ -15,6 +15,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api.ProjectResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.api.StatusResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.TestDbService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.api.UserResponse;
 
 import java.io.IOException;
 
@@ -84,5 +85,19 @@ public abstract class BaseIntSpec {
             .getContentAsByteArray();
 
         return mapContent(reader, StatusResponse.class);
+    }
+
+
+    public UserResponse thereIsUser(Object body) throws Exception {
+        var request = post("/users")
+                .content(body.toString());
+
+        var reader = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        return mapContent(reader, UserResponse.class);
     }
 }
