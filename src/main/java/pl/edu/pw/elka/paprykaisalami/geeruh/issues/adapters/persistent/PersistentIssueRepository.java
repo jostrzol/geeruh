@@ -20,6 +20,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.ActualPersistentStatusRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.persistent.ActualPersistentUserRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
@@ -35,6 +36,8 @@ class PersistentIssueRepository implements IssueRepository {
     ActualPersistentIssueRepository actualRepository;
 
     ActualPersistentStatusRepository actualPersistentStatusRepository;
+
+    ActualPersistentUserRepository actualPersistentUserRepository;
 
     @Override
     public List<Issue> findAll() {
@@ -54,7 +57,12 @@ class PersistentIssueRepository implements IssueRepository {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public Issue create(ProjectCode projectCode, StatusCode statusCode, IssueType type, Summary summary, Description description) {
+    public Issue create(
+            ProjectCode projectCode,
+            StatusCode statusCode,
+            IssueType type,
+            Summary summary,
+            Description description) {
         var issuePersistent = new IssuePersistent(
                 projectCode,
                 actualPersistentStatusRepository.getReferenceById(statusCode.value()),
@@ -69,7 +77,9 @@ class PersistentIssueRepository implements IssueRepository {
     @Transactional(propagation = Propagation.MANDATORY)
     public Issue save(Issue issue) {
         var status = actualPersistentStatusRepository.getReferenceById(issue.getStatusCode().value());
-        var issuePersistent = IssuePersistent.of(issue, status);
+        var assigneeId = issue.getAssigneeUserId();
+        var assignee = assigneeId == null ? null : actualPersistentUserRepository.getReferenceById(assigneeId.value());
+        var issuePersistent = IssuePersistent.of(issue, status, assignee);
         return actualRepository.save(issuePersistent).toIssue();
     }
 

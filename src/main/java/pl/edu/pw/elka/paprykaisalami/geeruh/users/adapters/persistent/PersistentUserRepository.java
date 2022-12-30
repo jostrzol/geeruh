@@ -3,7 +3,6 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.persistent;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,8 +14,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError.NotFoundDomainError;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -56,10 +53,4 @@ class PersistentUserRepository implements UserRepository {
         var userPersistent = UserPersistent.of(issue);
         return actualRepository.save(userPersistent).toUser();
     }
-}
-
-@Component
-interface ActualPersistentUserRepository extends JpaRepository<UserPersistent, UUID> {
-
-    Optional<UserPersistent> findByLogin(String login);
 }

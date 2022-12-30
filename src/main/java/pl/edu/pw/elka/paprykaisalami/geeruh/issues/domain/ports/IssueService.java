@@ -2,6 +2,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports;
 
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import javax.validation.Valid;
@@ -29,6 +32,8 @@ public class IssueService {
     private final ProjectService projectService;
 
     private final StatusService statusService;
+
+    private final UserService userService;
 
     private final IssueRepository issueRepository;
 
@@ -52,7 +57,7 @@ public class IssueService {
             Description description
     ) {
         var status = statusService.get(statusCode);
-        if(status.isLeft()){
+        if (status.isLeft()) {
             return Either.left(status.getLeft());
         }
         return projectService.get(projectCode)
@@ -84,12 +89,28 @@ public class IssueService {
     @Valid
     public Either<DomainError, Issue> changeStatus(IssueId issueId, StatusCode statusCode) {
         var status = statusService.get(statusCode);
-        if(status.isLeft()){
+        if (status.isLeft()) {
             return Either.left(status.getLeft());
         }
         return issueRepository.findById(issueId).map(
                 issue -> {
                     issue.setStatusCode(statusCode);
+                    return issueRepository.save(issue);
+                });
+    }
+
+    @Transactional
+    @Valid
+    public Either<DomainError, Issue> assignUser(IssueId issueId, @Nullable UserId userId) {
+        if (userId != null) {
+            var user = userService.get(userId);
+            if (user.isLeft()) {
+                return Either.left(user.getLeft());
+            }
+        }
+        return issueRepository.findById(issueId).map(
+                issue -> {
+                    issue.setAssigneeUserId(userId);
                     return issueRepository.save(issue);
                 });
     }
