@@ -11,16 +11,19 @@ public record IssueResponse(
         IssueType type,
         String summary,
         String description,
-        UUID assigneeUserId) {
+        UUID assigneeUserId,
+        String relatedIssueId) {
 
     public static IssueResponse of(Issue issue) {
         var assigneeUserId = issue.getAssigneeUserId();
+        var relatedIssueId = issue.getRelatedIssueId();
         return new IssueResponse(
                 issue.getIssueId().toString(),
                 issue.getStatusCode().value(),
                 issue.getType(),
                 issue.getSummary().value(),
                 issue.getDescription().value(),
-                assigneeUserId == null ? null : assigneeUserId.value());
+                assigneeUserId == null ? null : assigneeUserId.value(),
+                relatedIssueId == null ? null : relatedIssueId.toString());
     }
 }

@@ -38,4 +38,8 @@ public class Issue {
     @Valid
     @Setter
     UserId assigneeUserId;
+
+    @Valid
+    @Setter
+    IssueId relatedIssueId;
 }

@@ -114,4 +114,15 @@ public class IssueService {
                     return issueRepository.save(issue);
                 });
     }
+
+    @Transactional
+    @Valid
+    public Either<DomainError, Issue> relateIssue(IssueId issueId, IssueId relatedIssueId) {
+        return issueRepository.findById(issueId).map(
+                issue -> {
+                    issue.setRelatedIssueId(relatedIssueId);
+                    return issueRepository.save(issue);
+                });
+    }
+
 }

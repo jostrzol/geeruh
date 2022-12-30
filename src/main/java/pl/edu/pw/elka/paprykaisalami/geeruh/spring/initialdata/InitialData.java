@@ -89,5 +89,6 @@ public class InitialData implements ApplicationRunner {
                 new Summary("Wycentrowanie logo"),
                 new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
         );
+        issueService.relateIssue(firstIssue.getIssueId(), secondIssue.getIssueId());
     }
 }

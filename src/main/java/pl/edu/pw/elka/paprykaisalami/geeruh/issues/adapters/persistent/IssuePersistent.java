@@ -11,12 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import lombok.AllArgsConstructor;
@@ -45,6 +45,7 @@ public class IssuePersistent {
 
     @Id
     @GeneratedValue
+    @Column(name = "issue_index")
     private Integer issueIndex;
 
     @Id
@@ -56,6 +57,14 @@ public class IssuePersistent {
     @JoinColumn(name = "status_code")
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private StatusPersistent status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(referencedColumnName = "project_code", name = "related_issue_project_code"),
+            @JoinColumn(referencedColumnName = "issue_index", name = "related_issue_index")
+    })
+    @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    private IssuePersistent relatedIssue;
 
     @Column(length = 120)
     private String summary;
@@ -83,6 +92,7 @@ public class IssuePersistent {
         this.type = type;
         this.description = description.value();
         this.assignee = null;
+        this.relatedIssue = null;
     }
 
     IssuePersistent(
@@ -92,7 +102,8 @@ public class IssuePersistent {
             IssueType type,
             Summary summary,
             Description description,
-            UserPersistent assignee) {
+            UserPersistent assignee,
+            IssuePersistent relatedIssue) {
         this.project = project;
         this.status = status;
         this.issueIndex = issueIndex;
@@ -100,10 +111,13 @@ public class IssuePersistent {
         this.type = type;
         this.description = description.value();
         this.assignee = assignee;
+        this.relatedIssue = relatedIssue;
     }
 
     public Issue toIssue() {
         var assigneeUserId = assignee == null ? null : new UserId(assignee.getUserId());
+        var relatedIssueId = relatedIssue == null ? null : new IssueId(new ProjectCode(relatedIssue.getProject()
+                .getCode()), relatedIssue.getIssueIndex());
         return Issue.builder()
                 .issueId(new IssueId(new ProjectCode(project.getCode()), issueIndex))
                 .statusCode(new StatusCode(status.getCode()))
@@ -111,10 +125,11 @@ public class IssuePersistent {
                 .summary(new Summary(summary))
                 .description(new Description(description))
                 .assigneeUserId(assigneeUserId)
+                .relatedIssueId(relatedIssueId)
                 .build();
     }
 
-    public static IssuePersistent of(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee) {
+    public static IssuePersistent of(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee, IssuePersistent relatedIssue) {
         return new IssuePersistent(
                 project,
                 status,
@@ -122,7 +137,8 @@ public class IssuePersistent {
                 issue.getType(),
                 issue.getSummary(),
                 issue.getDescription(),
-                assignee);
+                assignee,
+                relatedIssue);
     }
 
     @AllArgsConstructor

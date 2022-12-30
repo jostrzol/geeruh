@@ -70,6 +70,14 @@ class IssueEndpoint {
         return issueFacade.assignUser(issueId, issueAssignUserRequest);
     }
 
+    @PutMapping("{issueId}/related-issue")
+    public IssueResponse relateIssue(
+            @PathVariable @Pattern(regexp = ISSUE_ID) final String issueId,
+            @Valid @RequestBody final IssueRelateRequest issueRelateRequest
+    ) {
+        return issueFacade.relateIssue(issueId, issueRelateRequest);
+    }
+
     @PostMapping
     public IssueResponse create(
             @NotNull @Pattern(regexp = PROJECT_CODE_REGEX) @Size(min = 2, max = 5) final String projectCode,
