@@ -8,6 +8,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
@@ -59,6 +60,15 @@ class IssueFacade {
         var issue = issueService.changeStatus(
                 parseIssueId(rawIssueId),
                 new StatusCode(issueChangeStatusRequest.statusCode)
+        ).getOrElseThrow(DomainError::toException);
+        return IssueResponse.of(issue);
+    }
+
+    public IssueResponse assignUser(String rawIssueId, IssueAssignUserRequest issueAssignUserRequest) {
+        var assigneeUserId = issueAssignUserRequest.assigneeUserId;
+        var issue = issueService.assignUser(
+                parseIssueId(rawIssueId),
+                assigneeUserId == null ? null : new UserId(assigneeUserId)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }

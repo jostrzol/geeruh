@@ -62,6 +62,14 @@ class IssueEndpoint {
         return issueFacade.changeStatus(issueId, issueChangeStatusRequest);
     }
 
+    @PutMapping("{issueId}/assignee")
+    public IssueResponse assignUser(
+            @PathVariable @Pattern(regexp = ISSUE_ID) final String issueId,
+            @Valid @RequestBody final IssueAssignUserRequest issueAssignUserRequest
+    ) {
+        return issueFacade.assignUser(issueId, issueAssignUserRequest);
+    }
+
     @PostMapping
     public IssueResponse create(
             @NotNull @Pattern(regexp = PROJECT_CODE_REGEX) @Size(min = 2, max = 5) final String projectCode,

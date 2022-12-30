@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.endpoints;
 
 import lombok.val;
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +11,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.RequestBuilder;
 import pl.edu.pw.elka.paprykaisalami.geeruh.BaseIntSpec;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
+import pl.edu.pw.elka.paprykaisalami.geeruh.support.UserDataset;
 
 import java.util.stream.Stream;
 
@@ -30,6 +32,7 @@ import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDatas
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusDataset.FIRST_STATUS;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.UserDataset.FIRST_USER;
 
 public class IssuesEndpointIntSpec extends BaseIntSpec {
 
@@ -68,7 +71,8 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
                 .andExpect(status().isOk())
                 .andExpect(easyJson().isEqualTo(FIRST_ISSUE_STRING))
                 .andExpect(json().node("issueId")
-                                   .matches(matchesPattern(FIRST_PROJECT_CODE + "-[0-9]+")));
+                                   .matches(matchesPattern(FIRST_PROJECT_CODE + "-[0-9]+")))
+                .andExpect(json().node("assigneeUserId").isNull());
     }
 
     @Test
@@ -106,7 +110,8 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(easyJson().isEqualTo(FIRST_ISSUE_STRING))
-                .andExpect(json().node("issueId").isEqualTo(issueId));
+                .andExpect(json().node("issueId").isEqualTo(issueId))
+                .andExpect(json().node("assigneeUserId").isNull());
     }
 
     @Test
@@ -147,6 +152,49 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
 
     @Test
     @WithMockUser
+    void shouldAssignUser() throws Exception {
+        // given
+        val issue = thereIsIssue(FIRST_ISSUE);
+        val issueId = issue.issueId().toString();
+
+        // and
+        val user = thereIsUser(FIRST_USER);
+        val userId = user.userId().toString();
+
+        // when
+        val request = put("/issues/{id}/assignee", issueId)
+                .content(assignUserRequest(userId));
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(easyJson().isEqualTo(FIRST_ISSUE))
+                .andExpect(json().node("issueId").isEqualTo(issueId))
+                .andExpect(json().node("assigneeUserId").isEqualTo(userId));
+    }
+
+
+    @Test
+    @WithMockUser
+    void shouldUnassignUser() throws Exception {
+        // given
+        val issue = thereIsIssueAssigned(FIRST_ISSUE, FIRST_USER);
+        val issueId = issue.issueId().toString();
+
+        // when
+        val request = put("/issues/{id}/assignee", issue.issueId())
+                .content(assignUserRequest(null));
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(easyJson().isEqualTo(FIRST_ISSUE))
+                .andExpect(json().node("issueId").isEqualTo(issueId))
+                .andExpect(json().node("assigneeUserId").isNull());
+    }
+
+    @Test
+    @WithMockUser
     void shouldReportHistory() throws Exception {
         // given
         val issue = thereIsIssue(FIRST_ISSUE);
@@ -171,6 +219,22 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
                                 .put("type", "UPDATE")
                                 .put("timestamp", jsonUnitRegex(DATE_REGEX))
                 )));
+    }
+
+    private IssueResponse thereIsIssueAssigned(Object issueBody, Object assigneeBody) throws Exception {
+        val issue = thereIsIssue(issueBody);
+        val assignee = thereIsUser(assigneeBody);
+
+        val request = put("/issues/{id}/assignee", issue.issueId())
+                .content(assignUserRequest(assignee.userId()));
+
+        val reader = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        return mapContent(reader, IssueResponse.class);
     }
 
     private IssueResponse thereIsIssue(Object body) throws Exception {
@@ -198,5 +262,11 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
+    }
+
+    private String assignUserRequest(@Nullable Object userId) {
+        return new JSONObject()
+                .put("assigneeUserId", userId == null ? null : userId.toString())
+                .toString();
     }
 }
