@@ -15,7 +15,7 @@ public abstract class BaseInMemoryRepository<T, IdT> {
 
     private final Class<T> clazz;
 
-    private final Map<IdT, T> map = new HashMap<>();
+    protected final Map<IdT, T> map = new HashMap<>();
 
     private final Function<T, IdT> idExtractor;
 

@@ -12,9 +12,14 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.Status;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.support.FakePasswordEncoder;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.IssueInMemoryRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.ProjectInMemoryRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.StatusInMemoryRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.support.inmemory.UserInMemoryRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.User;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserService;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -33,6 +38,9 @@ public abstract class BaseSpec {
     protected IssueRepository issueRepository;
     protected IssueService issueService;
 
+    protected UserRepository userRepository;
+    protected UserService userService;
+
     @BeforeEach
     protected void initialize() {
         projectRepository = new ProjectInMemoryRepository();
@@ -41,8 +49,11 @@ public abstract class BaseSpec {
         statusRepository = new StatusInMemoryRepository();
         statusService = new StatusService(statusRepository);
 
+        userRepository = new UserInMemoryRepository();
+        userService = new UserService(userRepository, new FakePasswordEncoder());
+
         issueRepository = new IssueInMemoryRepository();
-        issueService = new IssueService(projectService, statusService, issueRepository);
+        issueService = new IssueService(projectService, statusService, userService, issueRepository);
     }
 
     protected void thereAreProjects(Project... projects) {
@@ -57,5 +68,10 @@ public abstract class BaseSpec {
 
     protected void thereAreIssues(Issue... issues) {
         Arrays.stream(issues).forEach(issueRepository::save);
+    }
+
+    protected void thereAreUsers(User... users) {
+        Arrays.stream(users)
+                .forEach(userRepository::save);
     }
 }
