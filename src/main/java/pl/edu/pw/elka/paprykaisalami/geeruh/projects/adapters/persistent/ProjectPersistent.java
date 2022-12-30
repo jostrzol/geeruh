@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.envers.Audited;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 @Setter
 @ToString
 @Entity
+@Audited
 @Table(name = "Projects")
 public class ProjectPersistent {
 

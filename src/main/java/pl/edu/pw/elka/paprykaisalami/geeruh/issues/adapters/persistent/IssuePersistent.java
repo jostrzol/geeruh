@@ -44,14 +44,11 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 public class IssuePersistent {
 
     @Id
-    private String projectCode;
-
-    @Id
     @GeneratedValue
     private Integer issueIndex;
 
-    @ManyToOne
-    @NotAudited
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_code", insertable = false, updatable = false)
     private ProjectPersistent project;
 
@@ -75,12 +72,12 @@ public class IssuePersistent {
     private UserPersistent assignee;
 
     IssuePersistent(
-            ProjectCode projectCode,
+            ProjectPersistent project,
             StatusPersistent status,
             IssueType type,
             Summary summary,
             Description description) {
-        this.projectCode = projectCode.value();
+        this.project = project;
         this.status = status;
         this.summary = summary.value();
         this.type = type;
@@ -89,14 +86,14 @@ public class IssuePersistent {
     }
 
     IssuePersistent(
-            ProjectCode projectCode,
+            ProjectPersistent project,
             StatusPersistent status,
             Integer issueIndex,
             IssueType type,
             Summary summary,
             Description description,
             UserPersistent assignee) {
-        this.projectCode = projectCode.value();
+        this.project = project;
         this.status = status;
         this.issueIndex = issueIndex;
         this.summary = summary.value();
@@ -108,7 +105,7 @@ public class IssuePersistent {
     public Issue toIssue() {
         var assigneeUserId = assignee == null ? null : new UserId(assignee.getUserId());
         return Issue.builder()
-                .issueId(new IssueId(new ProjectCode(projectCode), issueIndex))
+                .issueId(new IssueId(new ProjectCode(project.getCode()), issueIndex))
                 .statusCode(new StatusCode(status.getCode()))
                 .type(type)
                 .summary(new Summary(summary))
@@ -117,9 +114,9 @@ public class IssuePersistent {
                 .build();
     }
 
-    public static IssuePersistent of(Issue issue, StatusPersistent status, UserPersistent assignee) {
+    public static IssuePersistent of(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee) {
         return new IssuePersistent(
-                issue.getIssueId().projectCode(),
+                project,
                 status,
                 issue.getIssueId().issueIndex(),
                 issue.getType(),
@@ -133,7 +130,7 @@ public class IssuePersistent {
     @Data
     static class IssuePersistentId implements Serializable {
 
-        String projectCode;
+        String project;
 
         Integer issueIndex;
 
