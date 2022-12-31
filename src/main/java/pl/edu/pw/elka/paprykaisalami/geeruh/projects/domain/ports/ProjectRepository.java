@@ -7,7 +7,6 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProjectRepository {
 
