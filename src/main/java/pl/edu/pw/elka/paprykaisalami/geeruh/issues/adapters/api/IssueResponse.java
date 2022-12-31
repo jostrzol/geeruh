@@ -1,8 +1,11 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 
 public record IssueResponse(
@@ -12,11 +15,11 @@ public record IssueResponse(
         String summary,
         String description,
         UUID assigneeUserId,
-        String relatedIssueId) {
+        Set<String> relatedIssues) {
 
     public static IssueResponse of(Issue issue) {
         var assigneeUserId = issue.getAssigneeUserId();
-        var relatedIssueId = issue.getRelatedIssueId();
+        var relatedIssueId = issue.getRelatedIssues();
         return new IssueResponse(
                 issue.getIssueId().toString(),
                 issue.getStatusCode().value(),
@@ -24,6 +27,6 @@ public record IssueResponse(
                 issue.getSummary().value(),
                 issue.getDescription().value(),
                 assigneeUserId == null ? null : assigneeUserId.value(),
-                relatedIssueId == null ? null : relatedIssueId.toString());
+                relatedIssueId.stream().map(IssueId::toString).collect(Collectors.toSet()));
     }
 }

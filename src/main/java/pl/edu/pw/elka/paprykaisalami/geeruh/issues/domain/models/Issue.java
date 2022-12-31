@@ -8,6 +8,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -41,5 +43,6 @@ public class Issue {
 
     @Valid
     @Setter
-    IssueId relatedIssueId;
+    @Builder.Default
+    Set<IssueId> relatedIssues = new HashSet<>();
 }
