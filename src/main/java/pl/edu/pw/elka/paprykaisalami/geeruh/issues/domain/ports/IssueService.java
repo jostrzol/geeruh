@@ -125,4 +125,14 @@ public class IssueService {
                 });
     }
 
+    @Transactional
+    @Valid
+    public Either<DomainError, Issue> unRelateIssue(IssueId issueId, IssueId relatedIssueId) {
+        return issueRepository.findById(issueId).map(
+                issue -> {
+                    issue.getRelatedIssues().remove(relatedIssueId);
+                    return issueRepository.save(issue);
+                });
+    }
+
 }
