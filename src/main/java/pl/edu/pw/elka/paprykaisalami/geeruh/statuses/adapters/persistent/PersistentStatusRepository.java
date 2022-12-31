@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.ProjectPersistent;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.StatusPersistent;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.Status;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
@@ -44,11 +43,8 @@ class PersistentStatusRepository implements StatusRepository {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public Status save(Status status) {
-        var existingStatusPersistent = actualRepository.findById(status.getStatusCode().value());
-        var statusPersistent = existingStatusPersistent.isPresent() ?
-                existingStatusPersistent.get().setFrom(status) :
-                StatusPersistent.of(status);
+    public Status save(Status issue) {
+        var statusPersistent = StatusPersistent.of(issue);
         return actualRepository.save(statusPersistent).toStatus();
     }
 }

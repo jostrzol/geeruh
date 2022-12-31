@@ -83,10 +83,7 @@ class PersistentIssueRepository implements IssueRepository {
         var assigneeId = issue.getAssigneeUserId();
         var assignee = assigneeId == null ? null : actualPersistentUserRepository.getReferenceById(assigneeId.value());
         var project = actualPersistentProjectRepository.getReferenceById(issue.getIssueId().projectCode().value());
-        var existingIssuePersistent = actualRepository.findById(IssuePersistentId.of(issue.getIssueId()));
-        var issuePersistent = existingIssuePersistent.isPresent() ?
-                existingIssuePersistent.get().setFrom(issue, project, status, assignee) :
-                IssuePersistent.of(issue, project, status, assignee);
+        var issuePersistent = IssuePersistent.of(issue, project, status, assignee);
         return actualRepository.save(issuePersistent).toIssue();
     }
 

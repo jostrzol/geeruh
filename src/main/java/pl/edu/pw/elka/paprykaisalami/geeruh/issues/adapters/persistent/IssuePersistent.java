@@ -18,6 +18,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
 import lombok.AllArgsConstructor;
@@ -114,17 +115,6 @@ public class IssuePersistent {
                 .description(new Description(description))
                 .assigneeUserId(assigneeUserId)
                 .build();
-    }
-
-    public IssuePersistent setFrom(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee) {
-        this.setProject(project);
-        this.setStatus(status);
-        this.setIssueIndex(issue.getIssueId().issueIndex());
-        this.setSummary(issue.getSummary().value());
-        this.setType(issue.getType());
-        this.setDescription(issue.getDescription().value());
-        this.setAssignee(assignee);
-        return this;
     }
 
     public static IssuePersistent of(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee) {

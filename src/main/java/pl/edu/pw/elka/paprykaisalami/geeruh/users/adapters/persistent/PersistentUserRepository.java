@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.StatusPersistent;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.User;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserRepository;
@@ -50,11 +49,8 @@ class PersistentUserRepository implements UserRepository {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public User save(User user) {
-        var existingUserPersistent = actualRepository.findById(user.getUserId().value());
-        var userPersistent = existingUserPersistent.isPresent() ?
-                existingUserPersistent.get().setFrom(user) :
-                UserPersistent.of(user);
+    public User save(User issue) {
+        var userPersistent = UserPersistent.of(issue);
         return actualRepository.save(userPersistent).toUser();
     }
 }

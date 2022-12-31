@@ -39,13 +39,6 @@ public class StatusPersistent {
             .build();
     }
 
-    public StatusPersistent setFrom(Status status) {
-        this.setCode(status.getStatusCode().value());
-        this.setName(status.getName());
-        this.setOrderNumber(status.getOrderNumber());
-        return this;
-    }
-
     public static StatusPersistent of(Status status) {
         return new StatusPersistent(
             status.getStatusCode().value(),
