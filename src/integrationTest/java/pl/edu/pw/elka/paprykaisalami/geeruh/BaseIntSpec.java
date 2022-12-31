@@ -52,6 +52,12 @@ public abstract class BaseIntSpec {
                 .accept(MediaType.APPLICATION_JSON);
     }
 
+    protected static MockHttpServletRequestBuilder delete(String url, Object ... uriVariables) {
+        return MockMvcRequestBuilders.delete(url, uriVariables)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+    }
+
     protected <T> T mapContent(byte[] content, Class<T> clazz) throws IOException {
         return objectMapper.readValue(content, clazz);
     }

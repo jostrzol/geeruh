@@ -1,6 +1,7 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.endpoints;
 
 import lombok.val;
+import org.hamcrest.Matchers;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -185,34 +186,34 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         val secondIssueId = secondIssue.issueId().toString();
 
         // when
-        val request = put("/issues/{id}/related-issue", issueId)
-                .content(relateIssueRequest(secondIssueId));
+        val request = post("/issues/{id}/related-to/{id2}", issueId, secondIssueId);
 
         // then
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(easyJson().isEqualTo(FIRST_ISSUE))
                 .andExpect(json().node("issueId").isEqualTo(issueId))
-                .andExpect(json().node("relatedIssueId").isEqualTo(secondIssueId));
+                .andExpect(json().node("relatedIssues").matches(Matchers.contains(secondIssueId)));
     }
 
     @Test
     @WithMockUser
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     void shouldUnRelateIssue() throws Exception {
         // given
         val issue =  thereIsIssueRelated(FIRST_ISSUE, SECOND_ISSUE);
         val issueId = issue.issueId().toString();
+        val secondIssueId = issue.relatedIssues().stream().findFirst().get();
 
         // when
-        val request = put("/issues/{id}/related-issue", issueId)
-                .content(relateIssueRequest(null));
+        val request = delete("/issues/{id}/related-to/{id2}", issueId, secondIssueId);
 
         // then
         mockMvc.perform(request)
                 .andExpect(status().isOk())
                 .andExpect(easyJson().isEqualTo(FIRST_ISSUE))
                 .andExpect(json().node("issueId").isEqualTo(issueId))
-                .andExpect(json().node("relatedIssueId").isNull());
+                .andExpect(json().node("relatedIssues").matches(Matchers.empty()));
     }
 
     @Test
@@ -282,8 +283,7 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         val issue = thereIsIssue(issueBody);
         val relatedIssue = thereIsIssue(relatedIssueBody);
 
-        val request = put("/issues/{id}/related-issue", issue.issueId())
-                .content(relateIssueRequest(relatedIssue.issueId()));
+        val request = post("/issues/{id}/related-to/{id2}", issue.issueId(), relatedIssue.issueId());
 
         val reader = mockMvc.perform(request)
                 .andExpect(status().isOk())
@@ -326,11 +326,4 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
                 .put("assigneeUserId", userId == null ? null : userId.toString())
                 .toString();
     }
-
-    private String relateIssueRequest(@Nullable Object relatedIssue) {
-        return new JSONObject()
-                .put("relatedIssueId", relatedIssue == null ? null : relatedIssue.toString())
-                .toString();
-    }
-
 }
