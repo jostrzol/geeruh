@@ -61,6 +61,15 @@ public class IssueAssert extends AbstractAssert<IssueAssert, Issue> {
         return myself;
     }
 
+    public IssueAssert hasRelatedIssue(IssueId relatedIssueId) {
+        isNotNull();
+
+        assertThat(actual)
+                .hasFieldOrPropertyWithValue("relatedIssueId", relatedIssueId);
+
+        return myself;
+    }
+
     public IssueAssert hasType(String type) {
         isNotNull();
 

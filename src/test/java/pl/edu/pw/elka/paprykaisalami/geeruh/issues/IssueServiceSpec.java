@@ -202,6 +202,26 @@ public class IssueServiceSpec extends BaseSpec {
     }
 
     @Test
+    void shouldRelateIssue() {
+        // given
+        thereAreIssues(firstIssue());
+        thereAreIssues(secondIssue());
+
+        // when
+        var issue = issueService.relateIssue(firstIssueId(), secondIssueId());
+
+        // expect
+        assertThat(issue).hasRightValueSatisfying(p -> assertThat(p)
+                .hasIssueId(firstIssueId())
+                .hasType(FIRST_ISSUE_TYPE)
+                .hasStatusCode(FIRST_STATUS_CODE)
+                .hasSummary(FIRST_ISSUE_SUMMARY)
+                .hasDescription(FIRST_ISSUE_DESCRIPTION)
+                .hasRelatedIssue(secondIssueId())
+        );
+    }
+
+    @Test
     void shouldNotChangeStatus_whenStatusDoesNotExists() {
         // given
         thereAreIssues(firstIssue());

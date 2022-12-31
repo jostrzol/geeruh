@@ -173,6 +173,47 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
                 .andExpect(json().node("assigneeUserId").isEqualTo(userId));
     }
 
+    @Test
+    @WithMockUser
+    void shouldRelateIssue() throws Exception {
+        // given
+        val issue = thereIsIssue(FIRST_ISSUE);
+        val issueId = issue.issueId().toString();
+
+        // and
+        val secondIssue = thereIsIssue(SECOND_ISSUE);
+        val secondIssueId = secondIssue.issueId().toString();
+
+        // when
+        val request = put("/issues/{id}/related-issue", issueId)
+                .content(relateIssueRequest(secondIssueId));
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(easyJson().isEqualTo(FIRST_ISSUE))
+                .andExpect(json().node("issueId").isEqualTo(issueId))
+                .andExpect(json().node("relatedIssueId").isEqualTo(secondIssueId));
+    }
+
+    @Test
+    @WithMockUser
+    void shouldUnRelateIssue() throws Exception {
+        // given
+        val issue =  thereIsIssueRelated(FIRST_ISSUE, SECOND_ISSUE);
+        val issueId = issue.issueId().toString();
+
+        // when
+        val request = put("/issues/{id}/related-issue", issueId)
+                .content(relateIssueRequest(null));
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(easyJson().isEqualTo(FIRST_ISSUE))
+                .andExpect(json().node("issueId").isEqualTo(issueId))
+                .andExpect(json().node("relatedIssueId").isNull());
+    }
 
     @Test
     @WithMockUser
@@ -237,6 +278,22 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         return mapContent(reader, IssueResponse.class);
     }
 
+    private IssueResponse thereIsIssueRelated(Object issueBody, Object relatedIssueBody) throws Exception {
+        val issue = thereIsIssue(issueBody);
+        val relatedIssue = thereIsIssue(relatedIssueBody);
+
+        val request = put("/issues/{id}/related-issue", issue.issueId())
+                .content(relateIssueRequest(relatedIssue.issueId()));
+
+        val reader = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        return mapContent(reader, IssueResponse.class);
+    }
+
     private IssueResponse thereIsIssue(Object body) throws Exception {
         thereIsProject(FIRST_PROJECT_CODE, FIRST_PROJECT);
         thereIsStatus(FIRST_STATUS_CODE, FIRST_STATUS);
@@ -269,4 +326,11 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
                 .put("assigneeUserId", userId == null ? null : userId.toString())
                 .toString();
     }
+
+    private String relateIssueRequest(@Nullable Object relatedIssue) {
+        return new JSONObject()
+                .put("relatedIssueId", relatedIssue == null ? null : relatedIssue.toString())
+                .toString();
+    }
+
 }
