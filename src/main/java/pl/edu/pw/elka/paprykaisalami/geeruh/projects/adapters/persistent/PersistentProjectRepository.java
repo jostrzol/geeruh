@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.Project;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectRepository;
@@ -41,8 +42,11 @@ class PersistentProjectRepository implements ProjectRepository {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public Project save(Project issue) {
-        var projectPersistent = ProjectPersistent.of(issue);
+    public Project save(Project project) {
+        var existingProjectPersistent = actualRepository.findById(project.getProjectCode().value());
+        var projectPersistent = existingProjectPersistent.isPresent() ?
+                existingProjectPersistent.get().setFrom(project) :
+                ProjectPersistent.of(project);
         return actualRepository.save(projectPersistent).toProject();
     }
 }

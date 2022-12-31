@@ -58,6 +58,17 @@ public class UserPersistent {
                 .build();
     }
 
+    public UserPersistent setFrom(User user) {
+        this.setUserId(user.getUserId().value());
+        this.setLogin(user.getLogin());
+        this.setPasswordHash(user.getPasswordHash());
+        this.setEmail(user.getEmail());
+        this.setFirstName(user.getFirstName());
+        this.setSecondName(user.getSecondName());
+        this.setSurname(user.getSurname());
+        return this;
+    }
+
     public static UserPersistent of(User user) {
         return new UserPersistent(
                 user.getUserId().value(),

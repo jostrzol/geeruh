@@ -40,6 +40,13 @@ public class ProjectPersistent {
                 .build();
     }
 
+    public ProjectPersistent setFrom(Project project) {
+        this.setCode(project.getProjectCode().value());
+        this.setName(project.getName());
+        this.setDescription(project.getDescription());
+        return this;
+    }
+
     public static ProjectPersistent of(Project project) {
         return new ProjectPersistent(
                 project.getProjectCode().value(),
