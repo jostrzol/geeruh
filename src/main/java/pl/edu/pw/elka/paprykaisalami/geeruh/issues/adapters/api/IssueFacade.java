@@ -74,9 +74,10 @@ class IssueFacade {
     }
 
     public IssueResponse relateIssue(String rawIssueId, IssueRelateRequest issueRelateRequest) {
+        var relatedIssueId = issueRelateRequest.getRelatedIssueId();
         var issue = issueService.relateIssue(
                 parseIssueId(rawIssueId),
-                parseIssueId(issueRelateRequest.getRelatedIssueId())
+                relatedIssueId == null ? null : parseIssueId(relatedIssueId)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
