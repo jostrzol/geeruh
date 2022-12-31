@@ -15,11 +15,11 @@ public record IssueResponse(
         String summary,
         String description,
         UUID assigneeUserId,
-        Set<String> relatedIssues) {
+        Set<String> relatedIssues,
+        Set<String> relatedIssuesChildren) {
 
     public static IssueResponse of(Issue issue) {
         var assigneeUserId = issue.getAssigneeUserId();
-        var relatedIssueId = issue.getRelatedIssues();
         return new IssueResponse(
                 issue.getIssueId().toString(),
                 issue.getStatusCode().value(),
@@ -27,6 +27,7 @@ public record IssueResponse(
                 issue.getSummary().value(),
                 issue.getDescription().value(),
                 assigneeUserId == null ? null : assigneeUserId.value(),
-                relatedIssueId.stream().map(IssueId::toString).collect(Collectors.toSet()));
+                issue.getRelatedIssues().stream().map(IssueId::toString).collect(Collectors.toSet()),
+                issue.getRelatedIssuesChildren().stream().map(IssueId::toString).collect(Collectors.toSet()));
     }
 }

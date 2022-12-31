@@ -45,4 +45,9 @@ public class Issue {
     @Setter
     @Builder.Default
     Set<IssueId> relatedIssues = new HashSet<>();
+
+    @Valid
+    @Setter
+    @Builder.Default
+    Set<IssueId> relatedIssuesChildren = new HashSet<>();
 }

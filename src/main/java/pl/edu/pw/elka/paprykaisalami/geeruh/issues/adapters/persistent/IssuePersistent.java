@@ -15,13 +15,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -66,14 +68,27 @@ public class IssuePersistent {
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private StatusPersistent status;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumns({
-            @JoinColumn(referencedColumnName = "project_code", name = "related_issue_project_code"),
-            @JoinColumn(referencedColumnName = "issue_index", name = "related_issue_index")
-    })
-    // @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+    @JoinTable(name = "related_issues",
+            joinColumns = {
+                    @JoinColumn(referencedColumnName = "project_code", name = "related_issue_project_code"),
+                    @JoinColumn(referencedColumnName = "issue_index", name = "related_issue_index")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(referencedColumnName = "project_code", name = "related_issue_project_code_child"),
+                    @JoinColumn(referencedColumnName = "issue_index", name = "related_issue_index_child")
+            }
+    )
     @NotAudited
     private Set<IssuePersistent> relatedIssues = new HashSet<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "relatedIssues", fetch = FetchType.LAZY)
+    @NotAudited
+    private Set<IssuePersistent> relatedIssuesChildren = new HashSet<>();
 
     @Column(length = 120)
     private String summary;
@@ -132,6 +147,13 @@ public class IssuePersistent {
                 .description(new Description(description))
                 .assigneeUserId(assigneeUserId)
                 .relatedIssues(relatedIssues
+                        .stream()
+                        .map(ri -> new IssueId(
+                                new ProjectCode(ri.getProject().getCode()), ri.getIssueIndex())
+                        )
+                        .collect(Collectors.toSet())
+                )
+                .relatedIssuesChildren(relatedIssuesChildren
                         .stream()
                         .map(ri -> new IssueId(
                                 new ProjectCode(ri.getProject().getCode()), ri.getIssueIndex())
