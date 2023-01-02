@@ -28,7 +28,7 @@ class IssueFacade {
     }
 
     public IssueResponse get(String rawIssueId) {
-        var issue = issueService.get(parseIssueId(rawIssueId))
+        var issue = issueService.get(IssueId.of(rawIssueId))
                 .getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
@@ -48,7 +48,7 @@ class IssueFacade {
 
     public IssueResponse update(String rawIssueId, IssueRequest issueRequest) {
         var issue = issueService.update(
-                parseIssueId(rawIssueId),
+                IssueId.of(rawIssueId),
                 issueRequest.getType(),
                 new Summary(issueRequest.getSummary()),
                 new Description(issueRequest.getDescription())
@@ -58,7 +58,7 @@ class IssueFacade {
 
     public IssueResponse changeStatus(String rawIssueId, IssueChangeStatusRequest issueChangeStatusRequest) {
         var issue = issueService.changeStatus(
-                parseIssueId(rawIssueId),
+                IssueId.of(rawIssueId),
                 new StatusCode(issueChangeStatusRequest.statusCode)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
@@ -67,23 +67,14 @@ class IssueFacade {
     public IssueResponse assignUser(String rawIssueId, IssueAssignUserRequest issueAssignUserRequest) {
         var assigneeUserId = issueAssignUserRequest.assigneeUserId;
         var issue = issueService.assignUser(
-                parseIssueId(rawIssueId),
+                IssueId.of(rawIssueId),
                 assigneeUserId == null ? null : new UserId(assigneeUserId)
         ).getOrElseThrow(DomainError::toException);
         return IssueResponse.of(issue);
     }
 
     public List<IssueHistoryResponse> getHistory(String rawIssueId) {
-        var history = issueService.getHistory(parseIssueId(rawIssueId));
+        var history = issueService.getHistory(IssueId.of(rawIssueId));
         return history.stream().map(IssueHistoryResponse::of).collect(Collectors.toList());
-    }
-
-    private IssueId parseIssueId(String text) {
-        var parts = text.split("-", 2);
-
-        var projectCode = parts[0];
-        var issueNumber = Integer.parseUnsignedInt(parts[1]);
-
-        return new IssueId(new ProjectCode(projectCode), issueNumber);
     }
 }

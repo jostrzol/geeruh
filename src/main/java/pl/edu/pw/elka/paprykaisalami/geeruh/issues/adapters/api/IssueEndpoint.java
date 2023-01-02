@@ -17,6 +17,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+import static pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId.ISSUE_ID_REGEX;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode.PROJECT_CODE_REGEX;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode.STATUS_CODE_REGEX;
 
@@ -27,8 +28,6 @@ import static pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.Status
 @Tag(name = "Issues")
 class IssueEndpoint {
 
-    private static final String ISSUE_ID = "^[A-Z]{2,5}-[0-9]+$";
-
     private final IssueFacade issueFacade;
 
     @GetMapping
@@ -37,18 +36,18 @@ class IssueEndpoint {
     }
 
     @GetMapping("{issueId}")
-    public IssueResponse get(@PathVariable @Pattern(regexp = ISSUE_ID) final String issueId) {
+    public IssueResponse get(@PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId) {
         return issueFacade.get(issueId);
     }
 
     @GetMapping("{issueId}/history")
-    public List<IssueHistoryResponse> getHistory(@PathVariable @Pattern(regexp = ISSUE_ID) final String issueId) {
+    public List<IssueHistoryResponse> getHistory(@PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId) {
         return issueFacade.getHistory(issueId);
     }
 
     @PutMapping("{issueId}")
     public IssueResponse update(
-            @PathVariable @Pattern(regexp = ISSUE_ID) final String issueId,
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId,
             @Valid @RequestBody final IssueRequest issueRequest
     ) {
         return issueFacade.update(issueId, issueRequest);
@@ -56,7 +55,7 @@ class IssueEndpoint {
 
     @PutMapping("{issueId}/status")
     public IssueResponse changeStatus(
-            @PathVariable @Pattern(regexp = ISSUE_ID) final String issueId,
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId,
             @Valid @RequestBody final IssueChangeStatusRequest issueChangeStatusRequest
     ) {
         return issueFacade.changeStatus(issueId, issueChangeStatusRequest);
@@ -64,7 +63,7 @@ class IssueEndpoint {
 
     @PutMapping("{issueId}/assignee")
     public IssueResponse assignUser(
-            @PathVariable @Pattern(regexp = ISSUE_ID) final String issueId,
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId,
             @Valid @RequestBody final IssueAssignUserRequest issueAssignUserRequest
     ) {
         return issueFacade.assignUser(issueId, issueAssignUserRequest);
