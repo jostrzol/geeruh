@@ -1,6 +1,9 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,11 +15,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -46,8 +53,9 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 public class IssuePersistent {
 
     @Id
-    @SequenceGenerator(name="issue_index_seq")
+    @SequenceGenerator(name = "issue_index_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_index_seq")
+    @Column(name = "issue_index")
     private Integer issueIndex;
 
     @Id
@@ -59,6 +67,28 @@ public class IssuePersistent {
     @JoinColumn(name = "status_code")
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private StatusPersistent status;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "related_issues",
+            joinColumns = {
+                    @JoinColumn(referencedColumnName = "project_code", name = "related_issue_project_code"),
+                    @JoinColumn(referencedColumnName = "issue_index", name = "related_issue_index")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(referencedColumnName = "project_code", name = "related_issue_project_code_child"),
+                    @JoinColumn(referencedColumnName = "issue_index", name = "related_issue_index_child")
+            }
+    )
+    @NotAudited
+    private Set<IssuePersistent> relatedIssues = new HashSet<>();
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(mappedBy = "relatedIssues", fetch = FetchType.LAZY)
+    @NotAudited
+    private Set<IssuePersistent> relatedIssuesChildren = new HashSet<>();
 
     @Column(length = 120)
     private String summary;
@@ -95,7 +125,8 @@ public class IssuePersistent {
             IssueType type,
             Summary summary,
             Description description,
-            UserPersistent assignee) {
+            UserPersistent assignee,
+            Set<IssuePersistent> relatedIssues) {
         this.project = project;
         this.status = status;
         this.issueIndex = issueIndex;
@@ -103,6 +134,7 @@ public class IssuePersistent {
         this.type = type;
         this.description = description.value();
         this.assignee = assignee;
+        this.relatedIssues = relatedIssues;
     }
 
     public IssueId getIssueId() {
@@ -118,10 +150,20 @@ public class IssuePersistent {
                 .summary(new Summary(summary))
                 .description(new Description(description))
                 .assigneeUserId(assigneeUserId)
+                .relatedIssues(relatedIssues
+                        .stream()
+                        .map(IssuePersistent::getIssueId)
+                        .collect(Collectors.toSet())
+                )
+                .relatedIssuesChildren(relatedIssuesChildren
+                        .stream()
+                        .map(IssuePersistent::getIssueId)
+                        .collect(Collectors.toSet())
+                )
                 .build();
     }
 
-    public static IssuePersistent of(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee) {
+    public static IssuePersistent of(Issue issue, ProjectPersistent project, StatusPersistent status, UserPersistent assignee, Set<IssuePersistent> relatedIssues) {
         return new IssuePersistent(
                 project,
                 status,
@@ -129,7 +171,8 @@ public class IssuePersistent {
                 issue.getType(),
                 issue.getSummary(),
                 issue.getDescription(),
-                assignee);
+                assignee,
+                relatedIssues);
     }
 
     @AllArgsConstructor

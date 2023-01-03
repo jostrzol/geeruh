@@ -73,6 +73,22 @@ class IssueFacade {
         return IssueResponse.of(issue);
     }
 
+    public IssueResponse relateIssue(String rawIssueId, String issueRelateRequest) {
+        var issue = issueService.relateIssue(
+                IssueId.of(rawIssueId),
+                IssueId.of(issueRelateRequest)
+        ).getOrElseThrow(DomainError::toException);
+        return IssueResponse.of(issue);
+    }
+
+    public IssueResponse unRelateIssue(String rawIssueId, String issueRelateRequest) {
+        var issue = issueService.unRelateIssue(
+                IssueId.of(rawIssueId),
+                IssueId.of(issueRelateRequest)
+        ).getOrElseThrow(DomainError::toException);
+        return IssueResponse.of(issue);
+    }
+
     public List<IssueHistoryResponse> getHistory(String rawIssueId) {
         var history = issueService.getHistory(IssueId.of(rawIssueId));
         return history.stream().map(IssueHistoryResponse::of).collect(Collectors.toList());

@@ -89,5 +89,16 @@ public class InitialData implements ApplicationRunner {
                 new Summary("Wycentrowanie logo"),
                 new Description("Logo nie jest wycentrowane, proszę je wyśrodkować.")
         );
+
+        var thirdIssue = issueService.create(
+                firstProject.getProjectCode(),
+                openStatus.getStatusCode(),
+                IssueType.BUG,
+                new Summary("Zablokowanie portu na PostgreSQL"),
+                new Description("Kolejny raz zainstalowali nam koparkę na produkcyjnej maszynie. Może zablokujmy port na DB?")
+        ).get();
+
+        issueService.relateIssue(firstIssue.getIssueId(), secondIssue.getIssueId());
+        issueService.relateIssue(firstIssue.getIssueId(), thirdIssue.getIssueId());
     }
 }

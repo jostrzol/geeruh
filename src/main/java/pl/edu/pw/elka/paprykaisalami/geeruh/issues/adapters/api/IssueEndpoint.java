@@ -3,6 +3,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,6 +68,22 @@ class IssueEndpoint {
             @Valid @RequestBody final IssueAssignUserRequest issueAssignUserRequest
     ) {
         return issueFacade.assignUser(issueId, issueAssignUserRequest);
+    }
+
+    @PostMapping("{issueId}/related-to/{relatedIssueId}")
+    public IssueResponse relateIssue(
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId,
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String relatedIssueId
+    ) {
+        return issueFacade.relateIssue(issueId, relatedIssueId);
+    }
+
+    @DeleteMapping("{issueId}/related-to/{relatedIssueId}")
+    public IssueResponse unRelateIssue(
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId,
+            @PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String relatedIssueId
+    ) {
+        return issueFacade.unRelateIssue(issueId, relatedIssueId);
     }
 
     @PostMapping

@@ -2,7 +2,6 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.support.assertions;
 
 
 import org.assertj.core.api.AbstractAssert;
-import org.assertj.core.api.Assertions;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
@@ -11,6 +10,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 
+import java.util.Collections;
+import java.util.HashSet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IssueAssert extends AbstractAssert<IssueAssert, Issue> {
@@ -57,6 +58,15 @@ public class IssueAssert extends AbstractAssert<IssueAssert, Issue> {
 
         assertThat(actual)
                 .hasFieldOrPropertyWithValue("statusCode", new StatusCode(statusCode));
+
+        return myself;
+    }
+
+    public IssueAssert hasRelatedIssue(IssueId relatedIssueId) {
+        isNotNull();
+
+        assertThat(actual)
+                .hasFieldOrPropertyWithValue("relatedIssues", new HashSet<>(Collections.singletonList(relatedIssueId)));
 
         return myself;
     }

@@ -8,6 +8,8 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -38,4 +40,23 @@ public class Issue {
     @Valid
     @Setter
     UserId assigneeUserId;
+
+    @Valid
+    @Setter
+    @Builder.Default
+    Set<IssueId> relatedIssues = new HashSet<>();
+
+    @Valid
+    @Setter
+    @Builder.Default
+    Set<IssueId> relatedIssuesChildren = new HashSet<>();
+
+    public void relateTo(IssueId relatedIssueId) {
+        this.getRelatedIssues().add(relatedIssueId);
+    }
+
+    public void breakRelationWith(IssueId relatedIssueId) {
+        this.getRelatedIssues().remove(relatedIssueId);
+    }
+
 }
