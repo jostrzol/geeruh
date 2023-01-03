@@ -152,16 +152,12 @@ public class IssuePersistent {
                 .assigneeUserId(assigneeUserId)
                 .relatedIssues(relatedIssues
                         .stream()
-                        .map(ri -> new IssueId(
-                                new ProjectCode(ri.getProject().getCode()), ri.getIssueIndex())
-                        )
+                        .map(IssuePersistent::getIssueId)
                         .collect(Collectors.toSet())
                 )
                 .relatedIssuesChildren(relatedIssuesChildren
                         .stream()
-                        .map(ri -> new IssueId(
-                                new ProjectCode(ri.getProject().getCode()), ri.getIssueIndex())
-                        )
+                        .map(IssuePersistent::getIssueId)
                         .collect(Collectors.toSet())
                 )
                 .build();

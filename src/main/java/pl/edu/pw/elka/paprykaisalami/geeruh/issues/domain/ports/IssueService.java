@@ -120,7 +120,7 @@ public class IssueService {
     public Either<DomainError, Issue> relateIssue(IssueId issueId, IssueId relatedIssueId) {
         return issueRepository.findById(issueId).map(
                 issue -> {
-                    issue.getRelatedIssues().add(relatedIssueId);
+                    issue.relateTo(relatedIssueId);
                     return issueRepository.save(issue);
                 });
     }
@@ -130,7 +130,7 @@ public class IssueService {
     public Either<DomainError, Issue> unRelateIssue(IssueId issueId, IssueId relatedIssueId) {
         return issueRepository.findById(issueId).map(
                 issue -> {
-                    issue.getRelatedIssues().remove(relatedIssueId);
+                    issue.breakRelationWith(relatedIssueId);
                     return issueRepository.save(issue);
                 });
     }

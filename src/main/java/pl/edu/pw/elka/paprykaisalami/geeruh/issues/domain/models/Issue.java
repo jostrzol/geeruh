@@ -50,4 +50,13 @@ public class Issue {
     @Setter
     @Builder.Default
     Set<IssueId> relatedIssuesChildren = new HashSet<>();
+
+    public void relateTo(IssueId relatedIssueId) {
+        this.getRelatedIssues().add(relatedIssueId);
+    }
+
+    public void breakRelationWith(IssueId relatedIssueId) {
+        this.getRelatedIssues().remove(relatedIssueId);
+    }
+
 }
