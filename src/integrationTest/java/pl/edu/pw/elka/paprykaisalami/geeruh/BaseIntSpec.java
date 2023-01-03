@@ -20,6 +20,10 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.api.UserResponse;
 import java.io.IOException;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_PROJECT;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusAttributeDataset.FIRST_STATUS_CODE;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.StatusDataset.FIRST_STATUS;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
@@ -106,4 +110,24 @@ public abstract class BaseIntSpec {
 
         return mapContent(reader, UserResponse.class);
     }
+
+    protected IssueResponse thereIsIssue(Object body) throws Exception {
+        thereIsProject(FIRST_PROJECT_CODE, FIRST_PROJECT);
+        thereIsStatus(FIRST_STATUS_CODE, FIRST_STATUS);
+
+
+        val request = post("/issues")
+                .param("projectCode", FIRST_PROJECT_CODE)
+                .param("statusCode", FIRST_STATUS_CODE)
+                .content(body.toString());
+
+        val reader = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        return mapContent(reader, IssueResponse.class);
+    }
+
 }
