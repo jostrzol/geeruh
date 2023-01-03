@@ -28,7 +28,7 @@ import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.ProjectDatas
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.StatusDataset.firstStatus;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.datasets.StatusDataset.secondStatus;
 
-public class IssueServiceSpec extends BaseSpec {
+public class CommentServiceSpec extends BaseSpec {
 
     @Test
     void shouldCreateIssue() {

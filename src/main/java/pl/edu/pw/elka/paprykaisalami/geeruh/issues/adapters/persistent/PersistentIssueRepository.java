@@ -3,8 +3,6 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,10 +95,4 @@ class PersistentIssueRepository implements IssueRepository {
                 .type(IssueHistoryEntryType.values()[rev.getMetadata().getRevisionType().ordinal()])
                 .build()).collect(Collectors.toList());
     }
-}
-
-@Component
-interface ActualPersistentIssueRepository extends
-        JpaRepository<IssuePersistent, IssuePersistentId>,
-        RevisionRepository<IssuePersistent, IssuePersistentId, Long> {
 }

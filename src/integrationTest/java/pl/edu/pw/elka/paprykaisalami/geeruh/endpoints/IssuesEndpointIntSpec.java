@@ -237,25 +237,6 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
         return mapContent(reader, IssueResponse.class);
     }
 
-    private IssueResponse thereIsIssue(Object body) throws Exception {
-        thereIsProject(FIRST_PROJECT_CODE, FIRST_PROJECT);
-        thereIsStatus(FIRST_STATUS_CODE, FIRST_STATUS);
-
-
-        val request = post("/issues")
-                .param("projectCode", FIRST_PROJECT_CODE)
-                .param("statusCode", FIRST_STATUS_CODE)
-                .content(body.toString());
-
-        val reader = mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsByteArray();
-
-        return mapContent(reader, IssueResponse.class);
-    }
-
     private void thereIsIssueUpdate(Object body, Object issueId) throws Exception {
         val request = put("/issues/{issueId}", issueId.toString())
                 .content(body.toString());

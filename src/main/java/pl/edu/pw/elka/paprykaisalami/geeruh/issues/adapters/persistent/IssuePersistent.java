@@ -105,6 +105,10 @@ public class IssuePersistent {
         this.assignee = assignee;
     }
 
+    public IssueId getIssueId() {
+        return new IssueId(new ProjectCode(projectCode), issueIndex);
+    }
+
     public Issue toIssue() {
         var assigneeUserId = assignee == null ? null : new UserId(assignee.getUserId());
         return Issue.builder()
@@ -131,7 +135,7 @@ public class IssuePersistent {
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
-    static class IssuePersistentId implements Serializable {
+    public static class IssuePersistentId implements Serializable {
 
         String project;
 
