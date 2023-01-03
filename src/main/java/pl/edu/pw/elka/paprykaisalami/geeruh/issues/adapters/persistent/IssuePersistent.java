@@ -106,7 +106,7 @@ public class IssuePersistent {
     }
 
     public IssueId getIssueId() {
-        return new IssueId(new ProjectCode(projectCode), issueIndex);
+        return new IssueId(new ProjectCode(project.getCode()), issueIndex);
     }
 
     public Issue toIssue() {
