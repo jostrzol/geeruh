@@ -46,7 +46,3 @@ class PersistentProjectRepository implements ProjectRepository {
         return actualRepository.save(projectPersistent).toProject();
     }
 }
-
-@Component
-interface ActualPersistentProjectRepository extends JpaRepository<ProjectPersistent, String> {
-}

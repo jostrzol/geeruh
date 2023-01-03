@@ -17,6 +17,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports.IssueRepository;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.ActualPersistentProjectRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.ActualPersistentStatusRepository;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
@@ -38,6 +39,8 @@ class PersistentIssueRepository implements IssueRepository {
     ActualPersistentStatusRepository actualPersistentStatusRepository;
 
     ActualPersistentUserRepository actualPersistentUserRepository;
+
+    ActualPersistentProjectRepository actualPersistentProjectRepository;
 
     @Override
     public List<Issue> findAll() {
@@ -64,7 +67,7 @@ class PersistentIssueRepository implements IssueRepository {
             Summary summary,
             Description description) {
         var issuePersistent = new IssuePersistent(
-                projectCode,
+                actualPersistentProjectRepository.getReferenceById(projectCode.value()),
                 actualPersistentStatusRepository.getReferenceById(statusCode.value()),
                 type,
                 summary,
@@ -79,7 +82,8 @@ class PersistentIssueRepository implements IssueRepository {
         var status = actualPersistentStatusRepository.getReferenceById(issue.getStatusCode().value());
         var assigneeId = issue.getAssigneeUserId();
         var assignee = assigneeId == null ? null : actualPersistentUserRepository.getReferenceById(assigneeId.value());
-        var issuePersistent = IssuePersistent.of(issue, status, assignee);
+        var project = actualPersistentProjectRepository.getReferenceById(issue.getIssueId().projectCode().value());
+        var issuePersistent = IssuePersistent.of(issue, project, status, assignee);
         return actualRepository.save(issuePersistent).toIssue();
     }
 
