@@ -6,8 +6,9 @@ plugins {
     id 'checkstyle'
     id 'org.springframework.boot' version '2.7.5'
     id 'java'
-    id "io.freefair.lombok" version "6.5.1"
+    id 'io.freefair.lombok' version '6.5.1'
     id 'java-test-fixtures'
+    id 'org.liquibase.gradle' version '2.1.1'
 }
 
 apply plugin: 'maven-publish'
@@ -35,6 +36,8 @@ configurations {
     integrationTestRuntimeOnly.extendsFrom runtimeOnly
 
     compileOnly.extendsFrom annotationProcessor
+
+    liquibaseRuntime.extendsFrom runtime
 }
 
 dependencies {
@@ -56,6 +59,17 @@ dependencies {
     // Database Drivers
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
+
+    // Liquibase
+    liquibaseRuntime 'org.liquibase:liquibase-core:4.16.1'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.0'
+    liquibaseRuntime 'info.picocli:picocli:4.6.1'
+    liquibaseRuntime 'org.postgresql:postgresql'
+    liquibaseRuntime 'javax.xml.bind:jaxb-api:2.3.1'
+    liquibaseRuntime 'ch.qos.logback:logback-core:1.2.3'
+    liquibaseRuntime 'ch.qos.logback:logback-classic:1.2.3'
+    liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:3.6'
+    liquibaseRuntime sourceSets.main.output
 
     // Unit tests
     testImplementation sourceSets.testFixtures.output
@@ -85,6 +99,27 @@ tasks.named('test') {
 
 tasks.named('integrationTest') {
     useJUnitPlatform()
+}
+
+liquibase {
+    activities {
+        main {
+            changelogFile 'src/main/db/main.groovy'
+            url 'postgresql://localhost:5432/geeruh'
+            username 'geeruh'
+            password 'njkYnrPnGyc89Ey34CKb'
+            referenceUrl 'hibernate:spring:pl.edu.pw.elka.paprykaisalami.geeruh?dialect=org.hibernate.dialect.PostgreSQL95Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
+//            referenceDriver 'liquibase.ext.hibernate.database.connection.HibernateDriver'
+        }
+//        diffMain {
+//            changelogFile 'src/main/db/main.groovy'
+//            url 'postgresql://localhost:5432/geeruh'
+//            username 'geeruh'
+//            password 'njkYnrPnGyc89Ey34CKb'
+//            difftypes 'data'
+//        }
+    }
+//    runList = project.ext.runList
 }
 
 publishing {
