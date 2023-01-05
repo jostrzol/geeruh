@@ -54,19 +54,19 @@ public class InitialData implements ApplicationRunner {
         );
 
         var openStatus = statusService.create(
-                new StatusCode("OPEN"),
+                new StatusCode(firstProject.getProjectCode() + "OPEN"),
                 "Open",
                 1
         );
 
         var inProgressStatus = statusService.create(
-                new StatusCode("INP"),
+                new StatusCode(firstProject.getProjectCode() + "INP"),
                 "In Progress",
                 2
         );
 
         var closedStatus = statusService.create(
-                new StatusCode("CLOSED"),
+                new StatusCode(firstProject.getProjectCode() + "CLS"),
                 "Closed",
                 3
         );
