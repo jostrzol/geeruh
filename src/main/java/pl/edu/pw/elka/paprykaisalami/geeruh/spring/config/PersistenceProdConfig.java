@@ -45,8 +45,7 @@ public class PersistenceProdConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
         Properties properties = new Properties();
-        // `update` seems to work pretty well for incremental changes in DB
-        properties.setProperty("hibernate.hbm2ddl.auto", "create"); // create = drop-create
+
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");

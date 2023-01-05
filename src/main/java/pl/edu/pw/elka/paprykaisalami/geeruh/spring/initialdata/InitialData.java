@@ -4,6 +4,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.spring.initialdata;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
@@ -15,6 +16,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.ports.StatusService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.ports.UserService;
 
+@Profile("!prod")
 @Component
 @AllArgsConstructor
 public class InitialData implements ApplicationRunner {
