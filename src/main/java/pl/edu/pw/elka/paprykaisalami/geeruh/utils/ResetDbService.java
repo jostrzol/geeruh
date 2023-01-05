@@ -1,4 +1,4 @@
-package pl.edu.pw.elka.paprykaisalami.geeruh.support;
+package pl.edu.pw.elka.paprykaisalami.geeruh.utils;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.envers.Audited;
@@ -6,17 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Table;
 import javax.persistence.metamodel.EntityType;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Service
-public class TestDbService {
+public class ResetDbService {
 
     EntityManager entityManager;
 

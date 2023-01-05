@@ -15,7 +15,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.comments.adapters.api.CommentRespons
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api.ProjectResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.api.StatusResponse;
-import pl.edu.pw.elka.paprykaisalami.geeruh.support.TestDbService;
+import pl.edu.pw.elka.paprykaisalami.geeruh.utils.ResetDbService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.api.UserResponse;
 
 import java.io.IOException;
@@ -37,7 +37,7 @@ public abstract class BaseIntSpec {
     protected ObjectMapper objectMapper;
 
     @Autowired
-    protected TestDbService testDbService;
+    protected ResetDbService resetDbService;
 
     protected static MockHttpServletRequestBuilder get(String url, Object... uriVariables) {
         return MockMvcRequestBuilders.get(url, uriVariables)
@@ -69,7 +69,7 @@ public abstract class BaseIntSpec {
 
     @BeforeEach
     protected void clearDb() {
-        testDbService.resetDatabase();
+        resetDbService.resetDatabase();
     }
 
     public ProjectResponse thereIsProject(String code, Object body) throws Exception {
