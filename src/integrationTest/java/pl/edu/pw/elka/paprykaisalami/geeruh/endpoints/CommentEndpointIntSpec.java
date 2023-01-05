@@ -6,11 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.RequestBuilder;
 import pl.edu.pw.elka.paprykaisalami.geeruh.BaseIntSpec;
-import pl.edu.pw.elka.paprykaisalami.geeruh.comments.adapters.api.CommentResponse;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
 
 import java.util.stream.Stream;
 
@@ -19,13 +16,13 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.CommentDataset.FIRST_COMMENT;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.CommentDataset.FIRST_COMMENT_STRING;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.CommentDataset.SECOND_COMMENT;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.CommentDataset.SECOND_COMMENT_STRING;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueDataset.FIRST_ISSUE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueDataset.SECOND_ISSUE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.array;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.easyJson;
-import static pl.edu.pw.elka.paprykaisalami.geeruh.support.CommentDataset.FIRST_COMMENT_STRING;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.UserAttributeDataset.FIRST_USER_LOGIN;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.UserDataset.FIRST_USER;
 
@@ -153,24 +150,5 @@ public class CommentEndpointIntSpec extends BaseIntSpec {
         // then
         mockMvc.perform(request)
                 .andExpect(status().isNotFound());
-    }
-
-    private CommentResponse thereIsComment(Object commentBody, Object issueBody, Object userBody) throws Exception {
-        var issue = thereIsIssue(issueBody);
-        if (userBody != null) {
-            thereIsUser(userBody);
-        }
-
-        val request = post("/comments")
-                .param("issueId", issue.issueId())
-                .content(commentBody.toString());
-
-        val reader = mockMvc.perform(request)
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsByteArray();
-
-        return mapContent(reader, CommentResponse.class);
     }
 }

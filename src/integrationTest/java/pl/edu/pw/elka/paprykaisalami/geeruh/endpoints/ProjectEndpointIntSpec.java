@@ -14,6 +14,8 @@ import java.util.stream.Stream;
 import static net.javacrumbs.jsonunit.spring.JsonUnitResultMatchers.json;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.CommentDataset.FIRST_COMMENT;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.IssueDataset.FIRST_ISSUE;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.array;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.JsonUtils.easyJson;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectAttributeDataset.FIRST_PROJECT_CODE;
@@ -24,6 +26,8 @@ import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.FIRST_
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.SECOND_PROJECT;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.SECOND_PROJECT_STRING;
 import static pl.edu.pw.elka.paprykaisalami.geeruh.support.ProjectDataset.THIRD_PROJECT_NO_DESCRIPTION_STRING;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.UserAttributeDataset.FIRST_USER_LOGIN;
+import static pl.edu.pw.elka.paprykaisalami.geeruh.support.UserDataset.FIRST_USER;
 
 public class ProjectEndpointIntSpec extends BaseIntSpec {
 
@@ -120,5 +124,29 @@ public class ProjectEndpointIntSpec extends BaseIntSpec {
                 .andExpect(status().isOk())
                 .andExpect(easyJson().isEqualTo(SECOND_PROJECT_STRING))
                 .andExpect(json().node("code").isEqualTo(FIRST_PROJECT_CODE));
+    }
+
+
+    @Test
+    @WithMockUser(username = FIRST_USER_LOGIN)
+    void shouldDeleteProject() throws Exception {
+        // given
+        thereIsComment(FIRST_COMMENT, FIRST_ISSUE, FIRST_USER);
+
+        // when
+        val request = delete("/projects/{projectCode}", FIRST_PROJECT_CODE)
+                .content(SECOND_PROJECT_STRING);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        // and when
+        val getRequest = get("/projects/{projectCode}", FIRST_PROJECT_CODE)
+                .content(SECOND_PROJECT_STRING);
+
+        // then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isNotFound());
     }
 }
