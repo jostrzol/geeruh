@@ -15,6 +15,6 @@ public class InitialDataAutoLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        initialDataService.insert();
+        initialDataService.create();
     }
 }
