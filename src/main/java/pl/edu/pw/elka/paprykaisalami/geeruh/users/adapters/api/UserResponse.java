@@ -13,7 +13,7 @@ public record UserResponse(
         String surname
 ) {
 
-    static UserResponse of(User user) {
+    public static UserResponse of(User user) {
         return new UserResponse(
                 user.getUserId().value(),
                 user.getLogin(),
