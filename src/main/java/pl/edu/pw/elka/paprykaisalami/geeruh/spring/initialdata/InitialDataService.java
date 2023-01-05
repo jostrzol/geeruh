@@ -28,7 +28,7 @@ public class InitialDataService {
 
     private final CommentService commentService;
 
-    public void insert() {
+    public void create() {
         var user = userService.create("user",
                 "password",
                 "user@mail.com",
