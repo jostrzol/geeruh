@@ -44,4 +44,9 @@ public abstract class BaseInMemoryRepository<T, IdT> {
         map.put(id, entity);
         return entity;
     }
+
+    public void delete(T entity) {
+        var id = idExtractor.apply(entity);
+        map.remove(id, entity);
+    }
 }

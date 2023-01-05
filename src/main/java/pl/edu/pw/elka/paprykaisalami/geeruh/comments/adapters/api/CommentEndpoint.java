@@ -34,7 +34,7 @@ class CommentEndpoint {
 
     @GetMapping
     public List<CommentResponse> list(
-            @RequestParam @Pattern(regexp = ISSUE_ID_REGEX) @Size(min = 2, max = 5) @Nullable final String issueId
+            @RequestParam @Pattern(regexp = ISSUE_ID_REGEX) @Nullable final String issueId
     ) {
         return commentFacade.list(issueId);
     }
@@ -55,7 +55,7 @@ class CommentEndpoint {
     @PostMapping
     public CommentResponse create(
             Principal principal,
-            @RequestParam @NotNull @Pattern(regexp = ISSUE_ID_REGEX) @Size(min = 2, max = 5) final String issueId,
+            @RequestParam @NotNull @Pattern(regexp = ISSUE_ID_REGEX) final String issueId,
             @Valid @RequestBody final CommentRequest commentRequest
     ) {
         return commentFacade.create(issueId, principal.getName(), commentRequest);
