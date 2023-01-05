@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -88,8 +89,8 @@ class IssueEndpoint {
 
     @PostMapping
     public IssueResponse create(
-            @NotNull @Pattern(regexp = PROJECT_CODE_REGEX) @Size(min = 2, max = 5) final String projectCode,
-            @NotNull @Pattern(regexp = STATUS_CODE_REGEX) final String statusCode,
+            @RequestParam @NotNull @Pattern(regexp = PROJECT_CODE_REGEX) @Size(min = 2, max = 5) final String projectCode,
+            @RequestParam @NotNull @Pattern(regexp = STATUS_CODE_REGEX) final String statusCode,
             @Valid @RequestBody final IssueRequest issueRequest
     ) {
         return issueFacade.create(projectCode, statusCode, issueRequest);
