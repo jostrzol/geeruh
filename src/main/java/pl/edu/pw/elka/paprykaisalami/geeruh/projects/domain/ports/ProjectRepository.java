@@ -15,4 +15,6 @@ public interface ProjectRepository {
     Either<DomainError, Project> findByCode(ProjectCode projectCode);
 
     Project save(Project project);
+
+    void delete(Project project);
 }

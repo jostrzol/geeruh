@@ -11,6 +11,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Validated
@@ -50,4 +51,14 @@ public class ProjectService {
                 });
     }
 
+    @Valid
+    @Transactional
+    public Optional<DomainError> delete(ProjectCode projectCode) {
+        return projectRepository.findByCode(projectCode)
+                .map(project -> {
+                    projectRepository.delete(project);
+                    return null;
+                })
+                .swap().toJavaOptional();
+    }
 }

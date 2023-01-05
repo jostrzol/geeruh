@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import pl.edu.pw.elka.paprykaisalami.geeruh.comments.adapters.api.CommentResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.api.IssueResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api.ProjectResponse;
 import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.api.StatusResponse;
@@ -38,25 +39,25 @@ public abstract class BaseIntSpec {
     @Autowired
     protected TestDbService testDbService;
 
-    protected static MockHttpServletRequestBuilder get(String url, Object ... uriVariables) {
+    protected static MockHttpServletRequestBuilder get(String url, Object... uriVariables) {
         return MockMvcRequestBuilders.get(url, uriVariables)
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
     }
 
-    protected static MockHttpServletRequestBuilder put(String url, Object ... uriVariables) {
+    protected static MockHttpServletRequestBuilder put(String url, Object... uriVariables) {
         return MockMvcRequestBuilders.put(url, uriVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
     }
 
-    protected static MockHttpServletRequestBuilder post(String url, Object ... uriVariables) {
+    protected static MockHttpServletRequestBuilder post(String url, Object... uriVariables) {
         return MockMvcRequestBuilders.post(url, uriVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
     }
 
-    protected static MockHttpServletRequestBuilder delete(String url, Object ... uriVariables) {
+    protected static MockHttpServletRequestBuilder delete(String url, Object... uriVariables) {
         return MockMvcRequestBuilders.delete(url, uriVariables)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -86,13 +87,13 @@ public abstract class BaseIntSpec {
 
     public StatusResponse thereIsStatus(String code, Object body) throws Exception {
         var request = post("/statuses/{code}", code)
-            .content(body.toString());
+                .content(body.toString());
 
         var reader = mockMvc.perform(request)
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse()
-            .getContentAsByteArray();
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
 
         return mapContent(reader, StatusResponse.class);
     }
@@ -130,4 +131,22 @@ public abstract class BaseIntSpec {
         return mapContent(reader, IssueResponse.class);
     }
 
+    protected CommentResponse thereIsComment(Object commentBody, Object issueBody, Object userBody) throws Exception {
+        var issue = thereIsIssue(issueBody);
+        if (userBody != null) {
+            thereIsUser(userBody);
+        }
+
+        val request = post("/comments")
+                .param("issueId", issue.issueId())
+                .content(commentBody.toString());
+
+        val reader = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsByteArray();
+
+        return mapContent(reader, CommentResponse.class);
+    }
 }

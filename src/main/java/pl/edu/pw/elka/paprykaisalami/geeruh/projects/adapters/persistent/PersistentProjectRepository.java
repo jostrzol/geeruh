@@ -45,4 +45,9 @@ class PersistentProjectRepository implements ProjectRepository {
         var projectPersistent = ProjectPersistent.of(issue);
         return actualRepository.save(projectPersistent).toProject();
     }
+
+    @Override
+    public void delete(Project project) {
+        actualRepository.deleteById(project.getProjectCode().value());
+    }
 }

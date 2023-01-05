@@ -1,9 +1,26 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.comments.adapters.persistent.CommentPersistent;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
+import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.ProjectPersistent;
+import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.StatusPersistent;
+import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.persistent.UserPersistent;
+import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,30 +36,16 @@ import javax.persistence.JoinTable;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
-import org.hibernate.envers.RelationTargetAuditMode;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.adapters.persistent.IssuePersistent.IssuePersistentId;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Issue;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueId;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
-import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
-import pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.persistent.ProjectPersistent;
-import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
-import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.adapters.persistent.StatusPersistent;
-import pl.edu.pw.elka.paprykaisalami.geeruh.statuses.domain.models.StatusCode;
-import pl.edu.pw.elka.paprykaisalami.geeruh.users.adapters.persistent.UserPersistent;
-import pl.edu.pw.elka.paprykaisalami.geeruh.users.domain.models.UserId;
+import static javax.persistence.CascadeType.REMOVE;
 
 @NoArgsConstructor
 @Data
@@ -103,6 +106,11 @@ public class IssuePersistent {
     @JoinColumn(name = "user_id")
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     private UserPersistent assignee;
+
+
+    @OneToMany(cascade = REMOVE, mappedBy = "issue", fetch = FetchType.LAZY)
+    @NotAudited
+    private List<CommentPersistent> comments;
 
     IssuePersistent(
             ProjectPersistent project,

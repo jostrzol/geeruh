@@ -6,6 +6,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import pl.edu.pw.elka.paprykaisalami.geeruh.comments.domain.ports.CommentService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Description;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.IssueType;
 import pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.models.Summary;
@@ -29,10 +30,22 @@ public class InitialData implements ApplicationRunner {
 
     private final UserService userService;
 
+    private final CommentService commentService;
+
     @Override
     public void run(ApplicationArguments args) {
-        userService.create("user", "password", "user@mail.com", "First", null, "User");
-        userService.create("admin", "password", "admin@mail.com", "First", null, "Admin");
+        var user = userService.create("user",
+                "password",
+                "user@mail.com",
+                "First",
+                null,
+                "User");
+        var admin = userService.create("admin",
+                "password",
+                "admin@mail.com",
+                "First",
+                null,
+                "Admin");
 
         var firstProject = projectService.create(
                 new ProjectCode("PIS"),
@@ -102,5 +115,20 @@ public class InitialData implements ApplicationRunner {
 
         issueService.relateIssue(firstIssue.getIssueId(), secondIssue.getIssueId());
         issueService.relateIssue(firstIssue.getIssueId(), thirdIssue.getIssueId());
+
+        var firstComment = commentService.create(
+                firstIssue.getIssueId(),
+                user.getLogin(),
+                "Bardzo nietuzinkowy problem."
+        ).get();
+        commentService.update(
+                firstComment.getCommentId(),
+                "Bardzo tuzinkowy problem."
+        );
+        commentService.create(
+                firstIssue.getIssueId(),
+                admin.getLogin(),
+                "Zgłoszenie narusza paragraf 3 regulaminu projektu."
+        );
     }
 }
