@@ -3,6 +3,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,11 @@ class ProjectEndpoint {
             @Valid @RequestBody final ProjectRequest projectRequest
     ) {
         return projectFacade.update(projectCode, projectRequest);
+    }
+
+    @DeleteMapping("{projectCode}")
+    public void delete(@PathVariable final String projectCode) {
+        projectFacade.delete(projectCode);
     }
 
     @PostMapping("{projectCode}")

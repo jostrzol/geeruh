@@ -2,6 +2,7 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.projects.adapters.api;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import pl.edu.pw.elka.paprykaisalami.geeruh.comments.domain.models.CommentId;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.models.ProjectCode;
 import pl.edu.pw.elka.paprykaisalami.geeruh.projects.domain.ports.ProjectService;
 import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
@@ -42,5 +43,12 @@ public class ProjectFacade {
                 projectRequest.getDescription()
         );
         return ProjectResponse.of(project);
+    }
+
+    public void delete(String projectCode) {
+        projectService.delete(new ProjectCode(projectCode))
+                .map(error -> {
+                    throw error.toException();
+                });
     }
 }
