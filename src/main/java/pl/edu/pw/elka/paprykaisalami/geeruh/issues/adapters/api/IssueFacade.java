@@ -93,4 +93,11 @@ class IssueFacade {
         var history = issueService.getHistory(IssueId.of(rawIssueId));
         return history.stream().map(IssueHistoryResponse::of).collect(Collectors.toList());
     }
+
+    public void delete(String issueId) {
+        issueService.delete(IssueId.of(issueId))
+                .map(error -> {
+                    throw error.toException();
+                });
+    }
 }

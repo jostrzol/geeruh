@@ -91,6 +91,7 @@ class PersistentCommentRepository implements CommentRepository {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public void delete(Comment comment) {
         actualRepository.deleteById(comment.getCommentId().value());
     }

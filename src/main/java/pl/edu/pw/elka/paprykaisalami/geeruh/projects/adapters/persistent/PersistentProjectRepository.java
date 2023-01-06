@@ -47,6 +47,7 @@ class PersistentProjectRepository implements ProjectRepository {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public void delete(Project project) {
         actualRepository.deleteById(project.getProjectCode().value());
     }
