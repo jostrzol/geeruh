@@ -1,3 +1,5 @@
+package db.changes
+
 databaseChangeLog {
   changeSet(id: '''1672916108337-1''', author: '''tuco (generated)''') {
     createSequence(incrementBy: 1, sequenceName: '''hibernate_sequence''', startValue: 1)

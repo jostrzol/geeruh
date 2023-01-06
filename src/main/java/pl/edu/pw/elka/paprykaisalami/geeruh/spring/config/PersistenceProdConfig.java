@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.spring.config;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,50 +23,50 @@ import java.util.Properties;
 @EnableTransactionManagement
 @Profile("prod")
 public class PersistenceProdConfig {
-
-    @Value("${PROD_DB_URL}")
-    private String prodDbUrl;
-
-    @Value("${PROD_DB_USERNAME}")
-    private String prodDbUsername;
-
-    @Value("${PROD_DB_PASSWORD}")
-    private String prodDbPassword;
-
-    @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUsername(prodDbUsername);
-        dataSource.setPassword(prodDbPassword);
-        dataSource.setUrl(prodDbUrl);
-        return dataSource;
-    }
-
-    @Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-        Properties properties = new Properties();
-
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
-
-        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-        hibernateJpaVendorAdapter.setGenerateDdl(true);
-        hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
-
-        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setDataSource(dataSource);
-        entityManagerFactory.setPackagesToScan("pl.edu.pw.elka.paprykaisalami.geeruh");
-        entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter);
-        entityManagerFactory.setJpaProperties(properties);
-        return entityManagerFactory;
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(entityManagerFactory);
-        return txManager;
-    }
+//
+//    @Value("${PROD_DB_URL}")
+//    private String prodDbUrl;
+//
+//    @Value("${PROD_DB_USERNAME}")
+//    private String prodDbUsername;
+//
+//    @Value("${PROD_DB_PASSWORD}")
+//    private String prodDbPassword;
+//
+//    @Bean
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        dataSource.setDriverClassName("org.postgresql.Driver");
+//        dataSource.setUsername(prodDbUsername);
+//        dataSource.setPassword(prodDbPassword);
+//        dataSource.setUrl(prodDbUrl);
+//        return dataSource;
+//    }
+//
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+//        Properties properties = new Properties();
+//
+//        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL94Dialect");
+//        properties.setProperty("hibernate.show_sql", "true");
+//        properties.setProperty("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
+//
+//        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+//        hibernateJpaVendorAdapter.setGenerateDdl(true);
+//        hibernateJpaVendorAdapter.setDatabase(Database.POSTGRESQL);
+//
+//        LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
+//        entityManagerFactory.setDataSource(dataSource);
+//        entityManagerFactory.setPackagesToScan("pl.edu.pw.elka.paprykaisalami.geeruh");
+//        entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter);
+//        entityManagerFactory.setJpaProperties(properties);
+//        return entityManagerFactory;
+//    }
+//
+//    @Bean
+//    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+//        JpaTransactionManager txManager = new JpaTransactionManager();
+//        txManager.setEntityManagerFactory(entityManagerFactory);
+//        return txManager;
+//    }
 }
