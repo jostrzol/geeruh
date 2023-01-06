@@ -263,6 +263,28 @@ public class IssuesEndpointIntSpec extends BaseIntSpec {
                 )));
     }
 
+    @Test
+    @WithMockUser
+    void shouldDeleteIssue() throws Exception {
+        // given
+        val issue = thereIsIssueAssigned(FIRST_ISSUE, FIRST_USER);
+        val issueId = issue.issueId().toString();
+
+        // when
+        val request = delete("/issues/{id}", issueId);
+
+        // then
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        // and when
+        val getRequest = get("/issues/{id}", issueId);
+
+        // then
+        mockMvc.perform(getRequest)
+                .andExpect(status().isNotFound());
+    }
+
     private IssueResponse thereIsIssueAssigned(Object issueBody, Object assigneeBody) throws Exception {
         val issue = thereIsIssue(issueBody);
         val assignee = thereIsUser(assigneeBody);

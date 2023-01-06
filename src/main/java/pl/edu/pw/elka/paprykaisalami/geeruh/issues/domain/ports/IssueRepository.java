@@ -25,4 +25,6 @@ public interface IssueRepository {
     Issue save(Issue issue);
 
     List<IssueHistoryEntry> getHistory(IssueId issueId);
+
+    void delete(Issue issue);
 }
