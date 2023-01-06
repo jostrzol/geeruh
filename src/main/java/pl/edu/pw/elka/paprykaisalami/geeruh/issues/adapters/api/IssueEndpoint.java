@@ -95,4 +95,9 @@ class IssueEndpoint {
     ) {
         return issueFacade.create(projectCode, statusCode, issueRequest);
     }
+
+    @DeleteMapping("{issueId}")
+    public void deleteIssue(@PathVariable @Pattern(regexp = ISSUE_ID_REGEX) final String issueId) {
+        issueFacade.delete(issueId);
+    }
 }

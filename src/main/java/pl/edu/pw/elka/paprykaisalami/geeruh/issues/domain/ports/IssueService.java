@@ -1,5 +1,6 @@
 package pl.edu.pw.elka.paprykaisalami.geeruh.issues.domain.ports;
 
+import io.vavr.Tuple1;
 import io.vavr.control.Either;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.Nullable;
@@ -22,6 +23,7 @@ import pl.edu.pw.elka.paprykaisalami.geeruh.utils.DomainError;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @AllArgsConstructor
@@ -135,4 +137,14 @@ public class IssueService {
                 });
     }
 
+    @Transactional
+    @Valid
+    public Optional<DomainError> delete(IssueId issueId) {
+        return issueRepository.findById(issueId)
+                .map(issue -> {
+                    issueRepository.delete(issue);
+                    return null;
+                })
+                .swap().toJavaOptional();
+    }
 }

@@ -96,4 +96,10 @@ class PersistentIssueRepository implements IssueRepository {
                 .type(IssueHistoryEntryType.values()[rev.getMetadata().getRevisionType().ordinal()])
                 .build()).collect(Collectors.toList());
     }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void delete(Issue issue) {
+       actualRepository.deleteById(IssuePersistentId.of(issue.getIssueId()));
+    }
 }
