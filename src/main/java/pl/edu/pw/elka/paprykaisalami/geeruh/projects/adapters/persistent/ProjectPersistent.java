@@ -40,6 +40,8 @@ public class ProjectPersistent {
 
     private String description;
 
+    private Integer lastIssueIndex;
+
     ProjectPersistent(
             String code,
             String name,
@@ -48,6 +50,11 @@ public class ProjectPersistent {
         this.code = code;
         this.name = name;
         this.description = description;
+        this.lastIssueIndex = 0;
+    }
+
+    public Integer incrementLastIssueIndex(){
+        return ++this.lastIssueIndex;
     }
 
     public Project toProject() {

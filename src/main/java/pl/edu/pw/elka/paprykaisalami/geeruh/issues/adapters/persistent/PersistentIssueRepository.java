@@ -64,8 +64,13 @@ class PersistentIssueRepository implements IssueRepository {
             IssueType type,
             Summary summary,
             Description description) {
+        var projectPersistent = actualPersistentProjectRepository.getReferenceById(projectCode.value());
+        var issueIndex = projectPersistent.incrementLastIssueIndex();
+        var projectPersistentUpdated = actualPersistentProjectRepository.save(projectPersistent);
+        assert issueIndex.equals(projectPersistentUpdated.getLastIssueIndex());
         var issuePersistent = new IssuePersistent(
-                actualPersistentProjectRepository.getReferenceById(projectCode.value()),
+                projectPersistentUpdated.getLastIssueIndex(),
+                projectPersistentUpdated,
                 actualPersistentStatusRepository.getReferenceById(statusCode.value()),
                 type,
                 summary,
