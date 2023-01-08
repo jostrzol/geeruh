@@ -3,7 +3,6 @@ package pl.edu.pw.elka.paprykaisalami.geeruh.utils;
 import lombok.AllArgsConstructor;
 import org.hibernate.envers.Audited;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Table;
@@ -14,23 +13,13 @@ import java.util.stream.Stream;
 
 @AllArgsConstructor
 @Service
-public class ResetDbService {
+public abstract class ResetDbService {
 
     EntityManager entityManager;
 
-    @Transactional
-    public void resetDatabase() {
-        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
+    abstract public void resetDatabase();
 
-        for (String tableName : tableNames()) {
-            entityManager.createNativeQuery("TRUNCATE TABLE " + tableName)
-                    .executeUpdate();
-        }
-
-        entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();
-    }
-
-    private List<String> tableNames() {
+    protected List<String> tableNames() {
         var entityTypes = entityManager.getMetamodel()
                 .getEntities().stream()
                 .map(EntityType::getJavaType)
