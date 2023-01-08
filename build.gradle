@@ -110,7 +110,7 @@ if (project.hasProperty("changelogName") && project.hasProperty("dbPassword")) {
     liquibase {
         activities {
             main {
-                changelogFile "src/main/db/changes/${project.getProperty("changelogName")}.groovy"
+                changelogFile "src/main/resources/db/changes/${project.getProperty("changelogName")}.groovy"
                 url 'jdbc:postgresql://localhost:5432/geeruh'
                 driver 'org.postgresql.Driver'
                 username 'geeruh'
