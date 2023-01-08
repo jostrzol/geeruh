@@ -1,5 +1,3 @@
-package db.changes
-
 databaseChangeLog {
   changeSet(id: '''1673098908879-3''', author: '''iaPC (generated)''') {
     addColumn(tableName: '''projects''') {
