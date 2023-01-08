@@ -41,8 +41,11 @@ class PersistentProjectRepository implements ProjectRepository {
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public Project save(Project issue) {
-        var projectPersistent = ProjectPersistent.of(issue);
+    public Project save(Project project) {
+        var projectPersistent = ProjectPersistent.of(project);
+        actualRepository.findById(projectPersistent.getCode()).ifPresent(
+                existingProject -> projectPersistent.setLastIssueIndex(existingProject.getLastIssueIndex())
+        );
         return actualRepository.save(projectPersistent).toProject();
     }
 

@@ -56,8 +56,6 @@ import static javax.persistence.CascadeType.REMOVE;
 public class IssuePersistent {
 
     @Id
-    @SequenceGenerator(name = "issue_index_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "issue_index_seq")
     @Column(name = "issue_index")
     private Integer issueIndex;
 
@@ -113,11 +111,13 @@ public class IssuePersistent {
     private List<CommentPersistent> comments;
 
     IssuePersistent(
+            Integer issueIndex,
             ProjectPersistent project,
             StatusPersistent status,
             IssueType type,
             Summary summary,
             Description description) {
+        this.issueIndex = issueIndex;
         this.project = project;
         this.status = status;
         this.summary = summary.value();
